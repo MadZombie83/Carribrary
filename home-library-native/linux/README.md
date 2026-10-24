@@ -1,4 +1,4 @@
-# Carribrary for Linux and Raspberry Pi — 2.0.36 preview
+# Carribrary for Linux and Raspberry Pi — 2.0.37 preview
 
 LOCAL ADMINISTRATOR SIGN-IN AND SEPARATE ACCOUNTS
 
@@ -16,7 +16,7 @@ restart. Sign out explicitly when finished. Recover local administrator access
 uses your saved recovery code, not your Windows or borrower password. Lost-code
 recovery is documented in Help and requires protected server-data access.
 Revoked devices immediately lose server access; downloaded offline data is not
-erased remotely. Automatic program recovery permits only 2.0.36 multi-account
+erased remotely. Automatic program recovery permits only 2.0.36–2.0.37 multi-account
 programs; earlier binaries cannot decrypt upgraded credentials. Back up before updating.
 Physical Windows service/ACL/installer and Pi/Safari device checks remain necessary.
 
@@ -26,7 +26,7 @@ Same catalog, borrowers, loans, receipts, requests, covers, colors, sorting, sha
 ## Linux desktop: Flatpak (x86_64)
 
 1. Install Flatpak support through your distribution's software manager if needed.
-2. Open **Carribrary-Linux-x86_64-2.0.36-preview.flatpak** with Discover/GNOME Software or your Flatpak installer. It may download the Freedesktop runtime from Flathub.
+2. Open **Carribrary-Linux-x86_64-2.0.37-preview.flatpak** with Discover/GNOME Software or your Flatpak installer. It may download the Freedesktop runtime from Flathub.
 3. Launch **Carribrary** from your applications menu. It starts the server and opens **http://localhost:4173** in your normal browser.
 4. The server keeps running when the browser closes so the phone can connect. Launching Carribrary again reopens the existing library. Use the launcher’s **Stop library server** desktop action to stop it. Desktop logout/reboot stops it; add Carribrary in your desktop's Autostart settings if desired.
 5. Restore a JSON backup if migrating. Use **Paired phones** in the admin page to create a private QR for the new host.
@@ -34,7 +34,7 @@ Same catalog, borrowers, loans, receipts, requests, covers, colors, sorting, sha
 Terminal alternatives, if your software manager cannot open a bundle:
 
 ```sh
-flatpak install --user ./Carribrary-Linux-x86_64-2.0.36-preview.flatpak
+flatpak install --user ./Carribrary-Linux-x86_64-2.0.37-preview.flatpak
 flatpak run --user com.household.HomeLibrary
 flatpak run --user com.household.HomeLibrary --stop
 ```
@@ -47,11 +47,11 @@ The browser admin’s backup restore/upload and backup downloads work through yo
 
 Use 64-bit Raspberry Pi OS Bookworm or newer (Debian 12/13), **arm64**. This package does not support a 32-bit OS.
 
-1. Copy **Carribrary-Pi-ARM64-2.0.36-preview.deb** to the Pi.
+1. Copy **Carribrary-Pi-ARM64-2.0.37-preview.deb** to the Pi.
 2. Open it with the Pi’s graphical package installer if available. Otherwise, open a terminal in the downloaded file’s folder and run this one installation command:
 
 ```sh
-sudo apt install ./Carribrary-Pi-ARM64-2.0.36-preview.deb
+sudo apt install ./Carribrary-Pi-ARM64-2.0.37-preview.deb
 ```
 
 3. The installer creates a dedicated service user, starts Carribrary and enables it at boot.
@@ -191,7 +191,7 @@ and saves verified server/tray programs and the complete library-data directory.
 Updates do this automatically, then verify new files, startup and catalog access.
 Compatible failed updates attempt program recovery. Select a prior point and
 Restore selected application to keep CURRENT data while restoring compatible
-program files. Only multi-administrator 2.0.36 program compatibility is supported here. Historical data
+program files. Only multi-administrator 2.0.36–2.0.37 program compatibility is supported here. Historical data
 is never automatically restored; incompatible schema rollback remains planned.
 
 Points live under ProgramData/HomeLibraryNative/recovery, accessible only to
@@ -236,3 +236,6 @@ Complete snapshot recovery warning: Restoring an earlier complete snapshot rewin
 2.0.36 source iteration: responsive administrator sidebar/mobile navigation and Home dashboard; Catalog remains the starting view. Home summaries show the whole active library. Quick Actions open existing workflows; Backup Now opens backup options, not an immediate backup. More / All tools retains existing tools. Borrower and native Android layout redesign follows separately. Build packages locally; this source handoff does not include rebuilt installers.
 
 2.0.36: Back up before updating. Existing local administrator credentials are upgraded safely to support separate dashboard accounts. Earlier programs cannot decrypt the new credentials; do not downgrade. Existing inventory, borrower vaults, original username/password/recovery and approved-device tokens stay intact. All tools → Dashboard accounts manages additional full administrators. All tools / Library settings → Sidebar artwork uploads/removes your PNG; no default illustration is embedded.
+
+
+2.0.37 borrower navigation source update: approved borrowers start in Catalog. My reading remains second; My loans includes borrowing requests and confirmation-based cancellation. Account groups private-list controls, install, optional notifications, help, data/history/deletion and sign-out. Pending accounts retain help, install and deletion access. The server delivers this update to borrower browsers/PWAs; no new borrower install is needed. Native Android administrator styling is unchanged. Current library format 3, administrator credential format 2, and pairings remain. Program recovery supports 2.0.36–2.0.37; earlier programs remain incompatible. Build packages locally; this source update does not install them.

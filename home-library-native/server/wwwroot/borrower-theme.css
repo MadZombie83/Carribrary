@@ -6,3 +6,84 @@
 :root[data-theme="ocean"]{--ink:#174b73;--accent:#aee9ef;--line:#cedeea;--page:#eff6fb;--soft:#e0f0f8}
 a{color:var(--ink)}header a{color:var(--accent)}
 header>#library-brand-icon{float:left;margin-right:.8rem}
+/* Borrower account-only layout. Public catalog and legacy personal links keep their roles. */
+.borrower-shell{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#27273d;line-height:1.5;background:var(--page)}
+.borrower-shell [hidden]{display:none!important}
+.borrower-skip{position:fixed;top:-6rem;left:1rem;z-index:20;padding:.8rem;background:white;border:2px solid var(--ink);border-radius:8px}
+.borrower-skip:focus{top:1rem}
+.borrower-shell header{padding:1rem max(1rem,calc((100vw - 1120px)/2));background:linear-gradient(120deg,var(--ink),color-mix(in srgb,var(--ink) 75%,#211637));gap:1rem}
+.borrower-shell .brand{min-width:0;font:1.4rem/1.25 Georgia,serif;gap:.7rem}
+.borrower-shell .brand>div{min-width:0;overflow-wrap:anywhere}
+.borrower-shell .brand small{font:.8rem/1.5 system-ui;color:#fff}
+.borrower-shell #library-brand-icon{border-radius:0;object-fit:contain;background:transparent;flex-shrink:0}
+.borrower-shell #account-menu{background:#ffffff16;border-color:#ffffff70;color:white;font-size:.8rem;flex-shrink:0}
+.borrower-shell main{max-width:1120px;padding:1rem 1.25rem 2rem;min-width:0}
+.borrower-shell #borrower-nav{display:flex;gap:.5rem;border-bottom:1px solid var(--line);padding:.3rem 0 .8rem;margin:0 0 1.5rem}
+.borrower-shell #borrower-nav button{display:flex;align-items:center;gap:.5rem;min-height:44px;min-width:0;border:1px solid transparent;border-radius:10px;padding:.65rem 1rem;color:var(--ink);background:transparent;font-size:.86rem}
+.borrower-shell #borrower-nav button svg{flex-shrink:0}
+.borrower-shell #borrower-nav button[aria-current]{background:var(--soft);border-color:var(--line)}
+.borrower-view-heading{display:flex;align-items:center;justify-content:space-between;gap:1rem;scroll-margin-top:1rem}
+.borrower-view-heading .eyebrow{margin:0;font-size:.65rem;color:var(--ink)}
+.borrower-view-heading h1{margin:.15rem 0 0;font:600 2rem/1.25 Georgia,serif;color:var(--ink)}
+.borrower-shell #refresh{font-size:.8rem;padding:.5rem .8rem;flex-shrink:0}
+.borrower-shell #notice{font-size:.8rem;color:#55596a;margin:.6rem 0 1rem;overflow-wrap:anywhere}
+.borrower-shell .toolbar{margin:0 0 1rem;align-items:end;gap:.7rem}
+.borrower-shell .toolbar label{font-size:.8rem;display:grid;gap:.35rem;min-width:0}
+.borrower-shell .toolbar .search{min-width:min(100%,190px)}
+.borrower-shell input,.borrower-shell select,.borrower-shell textarea{border-color:var(--line);border-radius:10px;min-height:44px}
+.borrower-shell .grid{grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:1rem}
+.borrower-shell .book{padding:1rem;border-radius:14px;box-shadow:0 4px 18px #32204d06;min-width:0}
+.borrower-shell .book-top{margin:0 0 .7rem;gap:.8rem}
+.borrower-shell .book-top>div{min-width:0}
+.borrower-shell .cover{width:60px;height:88px;object-fit:contain;flex-shrink:0}
+.borrower-shell .book h2{font:600 1.1rem/1.35 Georgia,serif;color:var(--ink);overflow-wrap:anywhere;margin:0 0 .4rem}
+.borrower-shell .book p{font-size:.8rem;margin:.35rem 0;overflow-wrap:anywhere}
+.borrower-shell .book-top p{color:#55596a}
+.borrower-shell .copy-id{font-size:.72rem;overflow-wrap:anywhere}
+.borrower-shell .borrower-book-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin-top:auto;padding-top:.6rem;border-top:1px solid var(--line)}
+.borrower-shell .borrower-book-actions button{min-height:44px;font-size:.78rem;padding:.5rem .65rem;white-space:normal}
+.borrower-shell .borrower-book-actions [data-request]{order:1;background:var(--ink);color:white;flex:1 1 100%;border-color:var(--ink)}
+.borrower-shell .borrower-book-actions [data-edit]{order:2;background:white;color:var(--ink);border-color:var(--line);flex:1 1 60%}
+.borrower-shell .borrower-book-actions [data-about]{order:3;background:transparent;border-color:transparent;padding:.4rem 0}
+.borrower-shell .borrower-book-actions [data-finish]{order:4}
+.borrower-shell .borrower-book-actions [data-remove]{order:5}
+.borrower-shell .borrower-book-actions>p{order:0;flex:1 1 100%;font-weight:600;color:var(--ink)}
+.borrower-shell .pagination{gap:.6rem;margin:1.2rem 0}
+.borrower-shell .pagination button{font-size:.8rem;background:white;color:var(--ink);border-color:var(--line)}
+.borrower-shell .pagination span{font-size:.8rem}
+.borrower-shell #my-requests{margin-top:1.5rem;padding:1.1rem;background:white;border:1px solid var(--line);border-radius:14px}
+.borrower-shell #my-requests h2{font:600 1.25rem Georgia,serif;color:var(--ink);margin:0 0 .5rem}
+.borrower-shell #requests p{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.7rem;font-size:.86rem;border-top:1px solid var(--line);padding:.8rem 0;margin:.6rem 0 0;overflow-wrap:anywhere}
+.borrower-shell #requests button{font-size:.78rem}
+.borrower-lock-state{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.7rem;background:var(--soft);border:1px solid var(--line);border-radius:12px;padding:1rem;margin-bottom:1rem}
+.borrower-lock-state p{font-size:.8rem;flex:1 1 200px;margin:0}
+.borrower-lock-state button{font-size:.8rem}
+.borrower-settings-card{padding:1.1rem;background:white;border:1px solid var(--line);border-radius:14px;margin:1rem 0;min-width:0;box-shadow:0 3px 16px #32204d05}
+.borrower-settings-card h2{font:600 1.2rem Georgia,serif;color:var(--ink);margin:0 0 .6rem}
+.borrower-settings-card .help{color:#55596a;font-size:.8rem}
+.borrower-settings-card button{font-size:.83rem;margin:.4rem .4rem .4rem 0;max-width:100%;white-space:normal;overflow-wrap:anywhere;min-height:44px}
+.borrower-shell #private-vault-controls{display:flex;gap:.4rem;align-items:start;flex-wrap:wrap;margin:.7rem 0 0}
+.borrower-shell #private-vault-controls>span{flex-basis:100%;font-size:.85rem;color:var(--ink);font-weight:600;margin-bottom:.3rem}
+.borrower-shell #private-vault-controls>button{background:white;color:var(--ink);border-color:var(--line);margin:0}
+.borrower-shell #private-vault-controls>[data-unlock]{background:var(--ink);color:white;border-color:var(--ink)}
+.borrower-shell #my-data-controls>summary,.borrower-help summary{cursor:pointer;min-height:44px;display:flex;align-items:center;color:var(--ink);font-weight:600}
+.borrower-help p{font-size:.85rem;line-height:1.7;overflow-wrap:anywhere}
+.borrower-shell dialog{max-height:calc(100dvh - 2rem);border-radius:15px;border:1px solid var(--line);z-index:10}
+.borrower-shell dialog :is(input,textarea){min-width:0}
+.borrower-shell :is(button,input,textarea,select,summary,a):focus-visible{outline:3px solid #a87800;outline-offset:3px}
+.borrower-shell #auth-panel{max-width:480px;margin:1rem auto;padding:1.25rem;background:white;border:1px solid var(--line);border-radius:16px}
+.borrower-shell #auth-panel h2{font:1.5rem Georgia,serif;color:var(--ink)}
+@media(max-width:700px){.borrower-shell header{padding:.85rem 1rem;padding-top:max(.85rem,env(safe-area-inset-top));gap:.6rem}.borrower-shell .brand{font-size:1.15rem}.borrower-shell main{padding:1rem 1rem calc(6.5rem + env(safe-area-inset-bottom))}.borrower-shell #borrower-nav{position:fixed;inset:auto 0 0;z-index:5;margin:0;padding:.4rem .4rem calc(.4rem + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.2rem;background:#fffffff5;border:0;border-top:1px solid var(--line);backdrop-filter:blur(12px)}.borrower-shell #borrower-nav button{flex-direction:column;justify-content:center;gap:.2rem;padding:.4rem .15rem;min-height:58px;font-size:.7rem;border-radius:9px;line-height:1.4}.borrower-shell #borrower-nav button span{overflow-wrap:anywhere}.borrower-shell .grid{grid-template-columns:1fr}.borrower-view-heading h1{font-size:1.7rem}.borrower-shell .toolbar label:not(.search){width:100%}.borrower-shell .toolbar .search{flex:1 1 100%}.borrower-settings-card{padding:1rem}.borrower-shell dialog{padding:1rem}.borrower-shell #account-menu{font-size:.72rem;padding:.5rem .65rem}.borrower-shell .book{padding:1rem}.borrower-shell .borrower-book-actions [data-edit]{flex:1 1 60%}}
+@media(prefers-reduced-motion:reduce){.borrower-shell *{scroll-behavior:auto!important;transition:none!important}}
+@media(forced-colors:active){.borrower-shell header,.borrower-shell #borrower-nav{background:Canvas;color:CanvasText}.borrower-shell .brand small{color:CanvasText}.borrower-shell button[aria-current],.borrower-settings-card{border:1px solid CanvasText}}
+/* Reflow at enlarged text sizes and keep destructive settings clearly distinct. */
+.borrower-shell :is(button,input,select,textarea){min-width:0;max-width:100%;overflow-wrap:anywhere}
+.borrower-shell #borrower-nav button span{min-width:0}
+.borrower-shell #delete-my-account{background:white;color:#9b3225;border-color:#d8a8a1}
+.borrower-shell .borrower-skip{top:1rem;clip-path:inset(50%);width:1px;height:1px;overflow:hidden}
+.borrower-shell .borrower-skip:focus{clip-path:none;width:auto;height:auto;overflow:visible}
+.borrower-shell :is(#my-data-controls,.borrower-help details)>summary::after{content:'+';margin-left:auto;padding-left:.7rem}
+.borrower-shell :is(#my-data-controls,.borrower-help details)[open]>summary::after{content:'−'}
+.borrower-shell header{background-color:var(--ink)}
+.borrower-view-heading{flex-wrap:wrap}
+.borrower-view-heading>div{min-width:0;overflow-wrap:anywhere}

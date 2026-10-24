@@ -33,7 +33,7 @@ function Get-CarribraryHash([string]$Path) {
 }
 function Test-CarribraryCompatible([string]$Version) {
     # Multi-account credential boundary: older programs cannot read the upgraded protected store.
-    return $Version -match '^2\.0\.36(?:[.+-].*)?$'
+    return $Version -match '^2\.0\.(?:36|37)(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

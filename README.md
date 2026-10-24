@@ -4,8 +4,10 @@ Self-hosted household book lending: catalog physical copies, manage borrowers an
 
 ## Source status
 
-Private development repository. Current source: **2.0.36**, including the administrator visual-fidelity iteration. Previously built installers are not rebuilt by committing this source. No installer, APK, AAB or signing material is included here.
+Private development repository. Current source: **2.0.37**, including the borrower account/PWA navigation update. Previously built installers are not rebuilt by committing this source. No installer, APK, AAB or signing material is included here.
 
+- [What changed in 2.0.37](home-library-native/distribution/RELEASE-2.0.37.md)
+- [Current help guide](Carribrary-Help-2.0.37.md)
 - [Build packages locally](home-library-native/BUILD-LOCALLY.md)
 - [Server setup and architecture](home-library-native/README.md)
 - [Windows installer instructions](home-library-native/INSTALLER-GUIDE.txt)
@@ -15,7 +17,7 @@ Private development repository. Current source: **2.0.36**, including the admini
 
 The server uses ASP.NET Core/.NET 10 and SQLite. Android is a Kotlin companion; iPhone/browser companions can use the server-hosted PWA. Native iPhone source requires a Mac/Xcode and has not been verified as an iPhone build.
 
-Keep the `home-library-native` folder: the local builder places tool caches and output alongside it. First create a private, complete backup before updating an existing installation. The 2.0.36 protected administrator-credential format is incompatible with older programs; do not downgrade.
+Keep the `home-library-native` folder: the local builder places tool caches and output alongside it. First create a private, complete backup before updating an existing installation. The protected administrator-credential format introduced in 2.0.36 is incompatible with earlier programs. The 2.0.37 interface uses the same library and credential formats; compatible program-only recovery supports 2.0.36–2.0.37.
 
 ## Privacy and credentials
 

@@ -98,3 +98,8 @@ Use this source tree (or extract the entire 2.0.35 source ZIP) before running th
 ## 2.0.36 account/artwork source update
 
 Build from the entire 2.0.36 source tree. Server/tray/Android metadata and all help are aligned; native iPhone source is 0.1.20/build 21 (still requires Xcode verification). No distributable 2.0.36 packages were built here. Back up before installing your build. This upgrades the protected local administrator credentials to format 2; the original sign-in/recovery survives, but earlier programs cannot decrypt the new store. Recovery is restricted to 2.0.36; a supervised return to an earlier release requires a complete matching pre-update backup, not old programs over current data. Existing paired-device tokens remain independent.
+
+
+## 2.0.37 borrower interface source update
+
+Use a fresh complete source download for 2.0.37; do not overwrite a source folder while it is building. The repository root includes Carribrary-Help-2.0.37.md, required by the synchronized-help check. Build locally as before. This source changes the server-hosted borrower account/PWA and help; native Android administrator layout is unchanged. Source package metadata is 2.0.37 (Android code 20037); iPhone source 0.1.21/build 22 still requires Xcode verification. No packages are built here. Library format 3 and local credential format 2 stay; compatible program recovery is 2.0.36–2.0.37, with pre-2.0.36 programs still rejected.
