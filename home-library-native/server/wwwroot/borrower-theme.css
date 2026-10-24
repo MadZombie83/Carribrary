@@ -1,0 +1,8 @@
+:root{--ink:#493276;--accent:#c5dcff;--line:#d9d4ec;--page:#f2f1fc;--soft:#e7eafb}
+:root[data-theme="classic"]{--ink:#153e46;--accent:#f7d58b;--line:#d7e1e2;--page:#f3f5f5;--soft:#edf3f3}
+:root[data-theme="purple-blue"]{--ink:#493276;--accent:#c5dcff;--line:#d9d4ec;--page:#f2f1fc;--soft:#e7eafb}
+:root[data-theme="forest"]{--ink:#244d36;--accent:#d9e7b8;--line:#ccddcc;--page:#f0f5ef;--soft:#e5efe2}
+:root[data-theme="rose"]{--ink:#683a58;--accent:#ffd0dc;--line:#e7d2dc;--page:#fcf2f6;--soft:#f7e6ee}
+:root[data-theme="ocean"]{--ink:#174b73;--accent:#aee9ef;--line:#cedeea;--page:#eff6fb;--soft:#e0f0f8}
+a{color:var(--ink)}header a{color:var(--accent)}
+header>#library-brand-icon{float:left;margin-right:.8rem}

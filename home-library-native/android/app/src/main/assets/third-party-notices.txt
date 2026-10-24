@@ -1,0 +1,15 @@
+Carribrary Native uses third-party components. Their original licenses and notices remain applicable.
+
+.NET / ASP.NET Core / Windows Forms: https://github.com/dotnet/runtime and https://github.com/dotnet/aspnetcore
+Microsoft.Data.Sqlite / SQLitePCLRaw: https://github.com/dotnet/efcore and https://github.com/ericsink/SQLitePCL.raw
+SQLite: https://www.sqlite.org/copyright.html
+Nayuki QR generator: full MIT notice retained in server/wwwroot/qrcodegen.js. https://www.nayuki.io/page/qr-code-generator-library
+Kotlin / kotlinx.coroutines: https://github.com/JetBrains/kotlin and https://github.com/Kotlin/kotlinx.coroutines
+AndroidX / Compose / CameraX: https://android.googlesource.com/platform/frameworks/support/
+Google ML Kit bundled barcode scanner and Google Android libraries: https://developers.google.com/ml-kit/terms
+Gradle wrapper: Apache License 2.0 and upstream notices are included in licenses/.
+Optional Caddy is downloaded separately from its official website: https://github.com/caddyserver/caddy
+
+Build tools, SDK downloads and private signing material are not included in the source or Windows distribution. The APK includes the declared Android dependencies; Windows binaries include their .NET runtime.
+
+ZXing Core 3.5.3 (Android QR generation): Apache License 2.0. https://github.com/zxing/zxing

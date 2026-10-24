@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+if [ -d /run/systemd/system ]; then
+ case "${1:-}" in
+  remove) systemctl stop home-library.service; systemctl disable home-library.service ;;
+  upgrade|deconfigure) systemctl stop home-library.service ;;
+ esac
+fi
+# /var/lib/home-library remains untouched on removal/purge.

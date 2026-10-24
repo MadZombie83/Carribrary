@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';import fs from 'node:fs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright'),local=process.env.LIBRARY_TEST_URL,origin=process.env.PUBLIC_TEST_URL,fixture=process.env.HOME_LIBRARY_DATA;
+assert(fixture?.startsWith('/tmp/hl-local-auth-'));
+const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+try{
+ const context=await browser.newContext({ignoreHTTPSErrors:true}),page=await context.newPage();await page.goto(local);await page.waitForURL('**/login');assert.equal((await context.request.get(local+'/api/state')).status(),401);
+ await page.waitForFunction(()=>document.querySelector('#heading').textContent==='Administrator sign-in');
+ assert.equal((await(await context.request.get(local+'/local-auth/status')).json()).configured,true,'Upgrade/restart cannot silently re-enroll');
+ const survivor=fs.readFileSync(fixture+'/test-survivor.txt','utf8');await context.addCookies([{name:'__Secure-hl-admin',value:survivor,url:origin+'/companion/',httpOnly:true,secure:true,sameSite:'Strict'}]);
+ assert.equal((await context.request.get(origin+'/companion/api/state')).status(),200,'Paired browser survives restart without local login');
+ const recovery=fs.readFileSync(fixture+'/local-admin-setup.txt','utf8').trim();await page.locator('#recover').click();await page.locator('[name=username]').fill('Recovered Admin');await page.locator('[name=password]').fill('Recovered administrator password 33');await page.locator('[name=confirmPassword]').fill('Recovered administrator password 33');await page.locator('[name=code]').fill(recovery);await page.locator('#submit').click();await page.locator('#saved-code').waitFor({state:'visible'});await page.locator('#saved').check();await page.locator('#continue').click();await page.waitForSelector('#local-admin-signout');
+ const state=await(await context.request.get(local+'/api/state')).json();assert.equal(state.state.books[0].title,'Authentication fixture book');assert.equal((await context.request.get(origin+'/companion/api/state')).status(),200,'Owner recovery preserves approved pairing');
+ let throttled=false;for(let i=0;i<21;i++){const attempt=await context.request.post(local+'/local-auth/login',{headers:{Origin:local},data:{username:'Unknown',password:'Incorrect password 33'}});if(attempt.status()===429){assert(Number(attempt.headers()['retry-after'])>0);assert.match((await attempt.json()).error,/Too many attempts/);throttled=true;break;}assert.equal(attempt.status(),401);}assert(throttled,'Local login attempts must be rate limited');assert.equal((await context.request.get(local+'/api/state')).status(),200,'Throttling does not revoke a valid session');assert.equal((await context.request.get(origin+'/companion/api/state')).status(),200,'Local login throttling does not block paired companions');
+ console.log('PASS stopped-server owner recovery, protected restart, retained inventory/pairing and local login rate-limit feedback.');
+}finally{await browser.close();}

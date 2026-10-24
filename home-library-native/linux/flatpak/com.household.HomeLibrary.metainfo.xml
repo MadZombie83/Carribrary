@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+ <id>com.household.HomeLibrary</id>
+ <name>Carribrary</name>
+ <summary>Catalog books and manage household loans</summary>
+ <metadata_license>CC0-1.0</metadata_license>
+ <project_license>LicenseRef-proprietary</project_license>
+ <description><p>A local household library server with a browser admin interface and a paired Android scanner companion. Catalog physical copies, manage borrowers, track loans, review borrowing requests, and share a book list.</p><p>The app opens your browser and keeps the library server running. The Android companion connects directly using encrypted, certificate-pinned connections.</p></description>
+ <launchable type="desktop-id">com.household.HomeLibrary.desktop</launchable>
+ <developer id="com.household"><name>Carribrary</name></developer>
+ <content_rating type="oars-1.1"/>
+ <releases><release version="2.0.36-preview" date="2026-10-23"/></releases>
+</component>

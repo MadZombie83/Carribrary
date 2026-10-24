@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+**/build/
+**/.gradle/
+**/local.properties
+release/
+data/
+*.jks
+*.p12
+*.keystore
+signing-password.txt
+
+.build-cache/
+**/__pycache__/

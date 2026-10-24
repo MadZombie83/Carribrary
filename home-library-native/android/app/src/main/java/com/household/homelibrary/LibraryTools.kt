@@ -1,0 +1,55 @@
+package com.household.homelibrary
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
+import kotlinx.coroutines.launch
+import org.json.JSONObject
+import org.json.JSONArray
+
+@Composable fun LibraryToolsDialog(tool:String,api:NativeApi,snapshot:JSONObject,onChanged:(JSONObject)->Unit,onClose:()->Unit){
+ val scope=rememberCoroutineScope();var current by remember{mutableStateOf(snapshot)};var settings by remember{mutableStateOf(JSONObject())};var busy by remember{mutableStateOf(false)};var note by remember{mutableStateOf("")};var confirm by remember{mutableStateOf<JSONObject?>(null)};var password by remember{mutableStateOf("")}
+ var query by remember{mutableStateOf("")};var page by remember{mutableStateOf(1)};var selected by remember{mutableStateOf(setOf<String>())};var changes by remember{mutableStateOf(JSONObject())}
+ fun task(work:suspend()->Unit){scope.launch{busy=true;note="";try{work()}catch(e:Exception){note=e.message?:"Could not complete this action. Reconnect or update the server."}finally{busy=false}}}
+ fun update(action:String,input:JSONObject){task{current=api.mutate(action,input,current.optLong("revision"));onChanged(current);note="Saved";if(action=="bulkEditBooks"){selected=emptySet();changes=JSONObject()}}}
+ LaunchedEffect(tool){if(tool in listOf("reminders","setup"))task{settings=api.tools(tool)}else task{current=api.refresh();onChanged(current)}}
+ val state=current.optJSONObject("state")?:JSONObject();val books=state.optJSONArray("books")?.objects()?.filter{!it.optBoolean("archived")}?:emptyList();val collections=state.optJSONArray("collections")?.objects()?:emptyList()
+ Dialog(onDismissRequest={if(!busy)onClose()},properties=DialogProperties(usePlatformDefaultWidth=false)){Surface(Modifier.fillMaxSize()){Column(Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp),verticalArrangement=Arrangement.spacedBy(10.dp)){
+ Row{Text(when(tool){"recycle"->"Recycle Bin";"bulk"->"Bulk edit books";"reminders"->"Email reminders";else->"Setup & updates"},style=MaterialTheme.typography.headlineSmall,modifier=Modifier.weight(1f));TextButton(enabled=!busy,onClick=onClose){Text("Close")}}
+ if(busy)LinearProgressIndicator(Modifier.fillMaxWidth());if(note.isNotBlank())Text(note,color=MaterialTheme.colorScheme.primary)
+ Column(Modifier.weight(1f).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)){
+ when(tool){
+ "recycle"->{Text("Restore books and borrowers. A reused catalog number gets a free replacement number. History stays archived after permanent removal of a recovery entry.")
+ val rows=state.optJSONArray("recycleBin")?.objects()?:emptyList();if(rows.isEmpty())Text("The Recycle Bin is empty.");rows.reversed().forEach{record->val item=record.optJSONObject("book")?:record.optJSONObject("borrower")?:JSONObject();Card(Modifier.fillMaxWidth()){Column(Modifier.padding(12.dp)){Text(item.optString("title").ifBlank{item.optString("name")},style=MaterialTheme.typography.titleMedium);Text("${item.optString("id")} · ${record.optString("deletedAt").take(10)}");Button(enabled=!busy,onClick={update("restoreDeleted",JSONObject().put("deletedId",record.optString("id")))}){Text("Restore")};TextButton(enabled=!busy,onClick={confirm=JSONObject().put("action","purgeDeleted").put("deletedId",record.optString("id"))}){Text("Delete permanently")}}}}
+ }
+ "bulk"->{Text("Select up to 500 physical copies. Only checked fields change; empty text clears that field. ISBNs, titles and loans stay as they are.");OutlinedTextField(query,{query=it;page=1},label={Text("Find books by title, author, series, ISBN or copy ID")},modifier=Modifier.fillMaxWidth());val matches=books.filter{b->listOf("title","author","series","isbn","id").any{b.optString(it).contains(query,true)}}.sortedBy{it.optString("title")};val pages=maxOf(1,(matches.size+24)/25);val shown=matches.drop((page.coerceIn(1,pages)-1)*25).take(25)
+ Text("${selected.size} selected · ${matches.size} matches · Page $page of $pages");Row{TextButton(onClick={selected=(selected+shown.map{it.optString("id")}).take(500).toSet()}){Text("Select this page")};TextButton(onClick={selected=emptySet()}){Text("Clear selection")}}
+ shown.forEach{book->Row(verticalAlignment=Alignment.CenterVertically){val id=book.optString("id");Checkbox(checked=id in selected,onCheckedChange={check->if(!check)selected=selected-id else if(selected.size<500)selected=selected+id});Text("$id · ${book.optString("title")}")}}
+ Row{TextButton(enabled=page>1,onClick={page--}){Text("Previous")};TextButton(enabled=page<pages,onClick={page++}){Text("Next")}}
+ for((key,label) in listOf("collectionId" to "Collection","author" to "Author","publisher" to "Publisher","series" to "Series")){Row(verticalAlignment=Alignment.CenterVertically){Checkbox(checked=changes.has(key),onCheckedChange={checked->val next=JSONObject(changes.toString());if(checked)next.put(key,if(key=="collectionId")"general" else "") else next.remove(key);changes=next});Text("Change $label")};if(changes.has(key)){if(key=="collectionId"){var open by remember{mutableStateOf(false)};Box{OutlinedButton(onClick={open=true}){Text(collections.find{it.optString("id")==changes.optString(key)}?.optString("name")?:"General")};DropdownMenu(expanded=open,onDismissRequest={open=false}){collections.forEach{c->DropdownMenuItem(text={Text(c.optString("name"))},onClick={changes=JSONObject(changes.toString()).put(key,c.optString("id"));open=false})}}}}else OutlinedTextField(changes.optString(key),{changes=JSONObject(changes.toString()).put(key,it)},label={Text("New $label (blank clears)")},modifier=Modifier.fillMaxWidth())}}
+ Button(enabled=!busy&&selected.isNotEmpty()&&changes.length()>0,onClick={confirm=JSONObject().put("action","bulkEditBooks").put("copyIds",JSONArray(selected.toList())).put("changes",JSONObject(changes.toString()))}){Text("Review changes")}
+ }
+ "reminders"->{if(settings.has("enabled")){
+ Text("Optional automatic email, sent by your library server. Record permission under Borrowers → Edit / email reminders. Text messages remain tap-to-send.")
+ Row(verticalAlignment=Alignment.CenterVertically){Switch(checked=settings.optBoolean("enabled"),onCheckedChange={settings=JSONObject(settings.toString()).put("enabled",it)});Text("Enable automatic reminders")}
+ for((key,label)in listOf("host" to "SMTP STARTTLS host","port" to "Port (usually 587; not 465)","username" to "SMTP username","fromEmail" to "Sending email","daysBefore" to "Days before due (1–14)","overdueDays" to "Days overdue (1–30)","sendHour" to "Start hour (0–23, server time)"))OutlinedTextField(settings.optString(key),{settings=JSONObject(settings.toString()).put(key,it)},enabled=!busy,label={Text(label)},modifier=Modifier.fillMaxWidth())
+ OutlinedTextField(password,{password=it},enabled=!busy,label={Text(if(settings.optBoolean("passwordSaved"))"App password (blank keeps saved)" else "SMTP app password")},visualTransformation=PasswordVisualTransformation(),modifier=Modifier.fillMaxWidth())
+ Text("Time zone: ${settings.optString("timeZone")}. One email before due, one on the due date, one after the overdue threshold. Checks every 15 minutes after the start hour. Returned books are excluded. Credentials stay encrypted on the server and out of library exports.")
+ Button(enabled=!busy,onClick={task{val input=JSONObject(settings.toString()).put("password",if(password.isBlank())JSONObject.NULL else password);for(key in listOf("port","daysBefore","overdueDays","sendHour"))input.put(key,settings.optString(key).toIntOrNull()?:throw IllegalArgumentException("Enter a number for $key"));settings=api.tools("reminders",input);password="";note="Reminder settings saved"}}){Text("Save reminder settings")}
+ OutlinedButton(enabled=!busy,onClick={confirm=JSONObject().put("action","test")}){Text("Send test to sending email")}
+ Text("Recent attempts: 'sent' means accepted by the provider. 'check-delivery' may mean an interrupted send; check the mailbox before sending manually. Uncertain deliveries are not automatically retried.")
+ (settings.optJSONArray("history")?.objects()?:emptyList()).forEach{Text("${it.optString("copyId")} · ${it.optString("stage")} · ${it.optString("status")} · ${it.optString("attemptedAt").take(16)}")}
+ }}
+ "setup"->{if(settings.has("version")){Text("Carribrary ${settings.optString("version")} · ${settings.optString("platform")}");Text("${settings.optInt("books")} active books · ${settings.optInt("borrowers")} borrowers · ${settings.optInt("pairedPhones")} paired phones");Text("Backups: ${settings.optInt("backupCount")} · Latest ${settings.optString("latestBackup")}");Text("Private data directory: ${settings.optString("dataDirectory")}");Text("Phone address: ${settings.optString("remoteAddress").ifBlank{"Not configured"}}");Text("Browser sharing: ${settings.optString("publicOrigin").ifBlank{"Not configured"}}");Text(settings.optString("remoteInstructions"));Text("Reserve the server's LAN address in the router. Forward TCP ${settings.optInt("phonePort")} for paired phones, and 80/443 for browser HTTPS. Never forward admin ${settings.optInt("adminPort")}, catalog ${settings.optInt("catalogPort")} or discovery ${settings.optInt("discoveryPort")}.");OutlinedButton(enabled=!busy,onClick={task{note=api.tools("setup/dns",JSONObject()).optString("message")}}){Text("Check saved hostname DNS")};Text("Test actual access with Wi-Fi OFF. A local check cannot verify router forwarding or ISP restrictions.");Text("Updating: Export a library backup first. ${settings.optString("updateInstructions")} Install the new Android APK over the existing app, keeping its data. Do not uninstall. There is no official automatic update feed yet.");Text("Full instructions are in Help. Windows has a Connection setup wizard in its Start/tray menu.")}}
+ }
+ }
+ }}}
+ confirm?.let{pending->val action=pending.optString("action");AlertDialog(onDismissRequest={confirm=null},title={Text(when(action){"purgeDeleted"->"Delete recovery entry permanently?";"bulkEditBooks"->"Update ${pending.optJSONArray("copyIds")?.length()} books?";else->"Send test email?"})},text={Text(when(action){"purgeDeleted"->"This removes the Recycle Bin recovery option. History remains archived where needed.";"bulkEditBooks"->(pending.optJSONObject("changes")?:JSONObject()).toString(2)+"\n\nSelected copies: "+(pending.optJSONArray("copyIds")?.toString()?:"");else->"Send one test using the saved settings, only to the sending email address."})},confirmButton={TextButton(onClick={confirm=null;if(action=="test")task{api.tools("reminders/test",JSONObject());note="Test accepted by provider. Check inbox/spam."}else update(action,pending)}){Text("Confirm")}},dismissButton={TextButton(onClick={confirm=null}){Text("Cancel")}})}
+}

@@ -1,0 +1,10 @@
+'use strict';
+// Injected only into the local dashboard, never the paired companion page.
+const signout=document.createElement('button');signout.className='secondary';signout.textContent='Sign out';signout.id='local-admin-signout';document.querySelector('header').append(signout);
+signout.onclick=async()=>{signout.disabled=true;try{const r=await fetch('/local-auth/logout',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});if(!r.ok)throw Error('Sign-out failed. Try again.');location.replace('/login');}catch(e){signout.disabled=false;alert(e.message);}};
+const identity=document.createElement('span');identity.className='help';identity.id='local-admin-identity';signout.before(identity);
+fetch('/api/local-admin/users',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(data=>{if(data?.current)identity.textContent='Signed in as '+data.current.username;}).catch(()=>{});
+const original=window.fetch.bind(window);window.fetch=async(...args)=>{const response=await original(...args);const input=args[0];if(response.status===401&&typeof input==='string'&&input.startsWith('/api/'))location.replace('/login');return response;};
+if(new URLSearchParams(location.search).get('stop')==='1'){const dialog=document.createElement('dialog');dialog.innerHTML='<h2>Stop Carribrary?</h2><p>Phones and borrowers cannot connect until you start the server again.</p><button id="confirm-stop">Stop server</button> <button id="keep-running" class="secondary">Keep running</button><p role="status"></p>';document.body.append(dialog);dialog.showModal();dialog.querySelector('#keep-running').onclick=()=>{dialog.close();history.replaceState(null,'','/');};dialog.querySelector('#confirm-stop').onclick=async()=>{const r=await fetch('/api/desktop/stop',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});dialog.querySelector('[role=status]').textContent=r.ok?'Carribrary is stopping. You may close this tab.':'Could not stop Carribrary. Check that this is the Flatpak server.';};}
+
+window.addEventListener('pageshow',event=>{if(event.persisted)location.reload();});

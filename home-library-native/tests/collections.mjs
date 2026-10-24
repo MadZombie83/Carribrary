@@ -1,0 +1,4 @@
+import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';const code=await readFile(new URL('../server/wwwroot/library.js',import.meta.url),'utf8');const {validateBackup,circulationCopies,seed}=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+const state=validateBackup(seed());assert.equal(state.collections[0].id,'general');assert.equal(state.books[0].collectionId,'general');
+state.collections.push({id:'kids',name:'Kids'});state.books[3].collectionId='kids';assert.equal(state.books.filter(b=>b.collectionId==='kids').length,1);assert.equal(circulationCopies(state,'9780141439518',false).length,2);assert.equal(circulationCopies(state,'BK-0001',false)[0].id,'BK-0001');
+assert.equal(validateBackup(state).books[3].collectionId,'kids');state.books[3].collectionId='missing';assert.throws(()=>validateBackup(state),/unknown collection/);console.log('Collections migration/filter/backup: PASS');

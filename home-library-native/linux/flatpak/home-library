@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+umask 077
+export HOME_LIBRARY_DATA="${XDG_DATA_HOME:?}/home-library"
+mkdir -p "$HOME_LIBRARY_DATA"
+if [ "${1:-}" = "--stop" ]; then
+    exec /app/lib/home-library/HomeLibrary.Server --stop-desktop
+fi
+exec /app/lib/home-library/HomeLibrary.Server --desktop

@@ -1,0 +1,155 @@
+{
+  "state": {
+    "books": [
+      {
+        "id": "BK-0001",
+        "isbn": "9780140328721",
+        "title": "Matilda",
+        "author": "Roald Dahl",
+        "archived": false
+      },
+      {
+        "id": "BK-0002",
+        "isbn": "0140328726",
+        "title": "Matilda",
+        "author": "Roald Dahl",
+        "archived": false
+      },
+      {
+        "id": "BK-0003",
+        "isbn": "9780140328721",
+        "title": "Matilda",
+        "author": "Roald Dahl",
+        "archived": false
+      },
+      {
+        "id": "BK-0004",
+        "isbn": "9780140328721",
+        "title": "Matilda",
+        "author": "Roald Dahl",
+        "archived": true
+      },
+      {
+        "id": "BK-0005",
+        "isbn": "9780547928227",
+        "title": "Other book",
+        "author": "Roald Dahl",
+        "archived": false
+      }
+    ],
+    "loans": [
+      {
+        "copyId": "BK-0002",
+        "borrowerId": "BR-1",
+        "checkoutDate": "2026-10-01",
+        "returnedDate": null
+      },
+      {
+        "copyId": "BK-0003",
+        "borrowerId": "BR-2",
+        "checkoutDate": "2026-10-02",
+        "returnedDate": null
+      },
+      {
+        "copyId": "BK-0001",
+        "borrowerId": "BR-1",
+        "checkoutDate": "2026-09-01",
+        "returnedDate": "2026-09-02"
+      }
+    ]
+  },
+  "cases": [
+    {
+      "input": "9780140328721",
+      "returning": false,
+      "expected": [
+        "BK-0001"
+      ]
+    },
+    {
+      "input": "9780140328721",
+      "returning": true,
+      "expected": [
+        "BK-0002",
+        "BK-0003"
+      ]
+    },
+    {
+      "input": "0-14-032872-6",
+      "returning": true,
+      "expected": [
+        "BK-0002",
+        "BK-0003"
+      ]
+    },
+    {
+      "input": "BK-0002",
+      "returning": false,
+      "expected": []
+    },
+    {
+      "input": "bk2",
+      "returning": true,
+      "expected": [
+        "BK-0002"
+      ]
+    },
+    {
+      "input": "BK-0001",
+      "returning": true,
+      "expected": []
+    },
+    {
+      "input": "BK-0004",
+      "returning": false,
+      "expected": []
+    },
+    {
+      "input": "9780547928227",
+      "returning": true,
+      "expected": []
+    },
+    {
+      "input": "9780547928227",
+      "returning": false,
+      "expected": [
+        "BK-0005"
+      ]
+    },
+    {
+      "input": "9780140328722",
+      "returning": true,
+      "expected": []
+    },
+    {
+      "input": "",
+      "returning": false,
+      "expected": []
+    },
+    {
+      "input": "Matilda",
+      "returning": false,
+      "expected": [
+        "BK-0001"
+      ]
+    },
+    {
+      "input": "dahl",
+      "returning": true,
+      "expected": [
+        "BK-0002",
+        "BK-0003"
+      ]
+    },
+    {
+      "input": "BK-9999",
+      "returning": true,
+      "expected": []
+    },
+    {
+      "input": "9780000000002",
+      "returning": true,
+      "expected": []
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+HOME LIBRARY ANDROID 2.0.1 UPDATE
+
+Install HomeLibrary-Android-2.0.1-preview.apk over the existing app; choose Update.
+Do not uninstall or transfer private APK signing material to the phone.
+Open Home Library > Connection > Forget connection.
+Generate a new private phone-pairing QR from the Windows library.
+Scan it in the Android app, then Refresh; test with Wi-Fi off over cellular.
+Windows installer 2.0.2 and existing router forwarding remain appropriate.
+
+This update permits the Android Keystore raw RSA signing operation required by
+Conscrypt's hardware-key TLS client authentication, and tests that operation
+before enrollment. TLS 1.2/1.3, server key pinning and mutual authentication
+remain enabled. A new phone key needs new enrollment because hardware-key
+permissions cannot be amended after key creation. Windows library data and
+server identity are unchanged. Actual Galaxy hardware operation still needs
+verification on the user's phone.
+
+Developer references:
+https://github.com/google/conscrypt/blob/master/common/src/main/java/org/conscrypt/CryptoUpcalls.java
+https://github.com/aosp-mirror/platform_frameworks_base/blob/master/keystore/java/android/security/keystore2/AndroidKeyStoreRSACipherSpi.java

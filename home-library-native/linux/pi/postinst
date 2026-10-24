@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+if [ "${1:-}" = configure ]; then
+ if ! getent passwd home-library >/dev/null; then
+  adduser --system --group --home /var/lib/home-library --no-create-home home-library
+ fi
+ install -d -m 700 -o home-library -g home-library /var/lib/home-library
+ # Keep prior data and configuration on upgrades. Data protection keys are private.
+ if [ -d /run/systemd/system ]; then
+  systemctl daemon-reload
+  systemctl enable home-library.service
+  systemctl restart home-library.service
+ fi
+fi

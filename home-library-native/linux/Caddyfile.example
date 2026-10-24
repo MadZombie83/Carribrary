@@ -1,0 +1,11 @@
+# Replace books.example.duckdns.org with your own public catalog hostname.
+books.example.duckdns.org {
+ encode zstd gzip
+ @catalog path /s/* /reading/* /account/* /companion/* /robots.txt
+ handle @catalog {
+  reverse_proxy 127.0.0.1:4174
+ }
+ handle {
+  respond "Not found" 404
+ }
+}

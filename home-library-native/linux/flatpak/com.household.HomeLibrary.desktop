@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=Carribrary
+Comment=Catalog books and manage household loans
+Exec=home-library
+Icon=com.household.HomeLibrary
+Categories=Office;Database;
+Terminal=false
+Actions=Stop;
+
+[Desktop Action Stop]
+Name=Stop library server
+Exec=home-library --stop

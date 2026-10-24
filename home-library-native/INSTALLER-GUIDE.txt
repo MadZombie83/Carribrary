@@ -1,0 +1,209 @@
+CARRIBRARY WINDOWS INSTALLER — 2.0.36 PREVIEW
+
+LOCAL ADMINISTRATOR SIGN-IN AND SEPARATE ACCOUNTS
+
+The local dashboard now requires a Carribrary username and password even when
+Windows is signed in. After installation, open Carribrary and follow the setup
+page. Open the private local-admin-setup.txt file at the data-folder location
+shown there using an authorized server administrator account. Paste its one-time
+code, create your username/password, and save the recovery code privately.
+Do not send either code to support. Existing books, borrower accounts and approved
+phones stay in place. Paired Android/iPhone/browser companions keep their existing
+automatic authorization without another password screen.
+
+Local sessions expire after 30 minutes idle, eight hours total, or a server
+restart. Sign out explicitly when finished. Recover local administrator access
+uses your saved recovery code, not your Windows or borrower password. Lost-code
+recovery is documented in Help and requires protected server-data access.
+Revoked devices immediately lose server access; downloaded offline data is not
+erased remotely. Automatic program recovery permits only 2.0.36 multi-account
+programs; earlier binaries cannot decrypt upgraded credentials. Back up before updating.
+Physical Windows service/ACL/installer and Pi/Safari device checks remain necessary.
+
+
+No terminal commands are required.
+
+1. Export backup from the current library app. Keep it and the old app folder.
+2. Close the old server window. If it runs as a startup task, stop/disable its
+   Carribrary task in Windows Task Scheduler so it does not start again.
+   Plex can keep running.
+3. Double-click Carribrary-Setup-2.0.36-preview.exe and approve the Windows
+   administrator prompt. Choose the installation folder and optionally browse
+   to your JSON backup. Existing native data is retained during upgrades.
+4. Click Install, then Finish. Carribrary opens in the browser.
+
+Installed automatically:
+  - Self-contained Windows server and tray app (no Node/.NET installation).
+  - Automatic Windows service and recovery settings.
+  - Firewall rules for paired phones and local discovery.
+  - Desktop/Start menu shortcuts and optional tray startup.
+  - A Windows Apps uninstall entry. Uninstall retains library data and keys.
+
+For work access:
+  Open Start > Carribrary > Connection setup. Create a free hostname at https://www.duckdns.org/, then return here.
+  Sign in to DuckDNS, choose an available subdomain, then copy the full hostname
+  and token into the setup window and click Save remote connection. If your
+  router already updates DNS, leave the token blank. The token is stored encrypted.
+  Reserve this computer's LAN IP and forward TCP 7443 on your router. The
+  installer cannot configure your router. Your ISP must support inbound access.
+  Click Open library / pair phone, then create a private pairing QR.
+  Install only the Android APK on the phone; no signing folder is needed.
+  Open it, enter a Phone name, tap Scan pairing QR, allow the camera, and
+  scan the private QR on this computer within five minutes. The phone should
+  show Connected to library server and the same catalog. For a local test,
+  use the same home network. See Help > Pair the optional Android admin
+  companion for addresses, manual pairing fallback and iPhone instructions.
+
+For public book-list QR sharing:
+  Connection setup has an optional public-sharing button. It downloads Caddy
+  and requires router ports 80/443. Use Share by QR in the library after public
+  HTTPS works. Friends get book details only, not borrowers or loan records.
+
+Data: %ProgramData%\HomeLibraryNative\data
+Portable backup: Export backup in the library. Keep JSON backups private.
+Private phone pairing QR and public book-list QR are different; never share
+private pairing codes or the Android signing-key backup.
+
+This installer is unsigned and has not been executed on a physical Windows
+computer here. It uses the already built preview app. Keep your working app
+and backup until you have verified Windows startup and Android pairing.
+
+INSTALLER 2.0.1 FIX
+Repairs the native data-folder ACLs and removes copied read-only attributes.
+Configuration metadata is written as text rather than copied with file attributes.
+No database, backup, certificate or pairing-key contents are replaced by repair.
+If startup still fails, a read-only diagnostic report opens automatically.
+
+INSTALLER 2.0.2 FIX
+Prepares the existing HTTPS certificate and its Windows private-key permissions
+during setup. The service reads the prepared key without importing it at startup.
+Existing certificates, paired devices and library data are preserved.
+For a retry after a failed install, leave the optional backup selection blank.
+
+WINDOWS 2.0.3 / ANDROID 2.0.2
+Windows: Library name in the page footer edits the collection name.
+Android: Colors, saved sorting/order/page size, cover thumbnails and Share library.
+Install the Windows update first, leaving backup selection blank. Then install
+APK 2.0.2 as an update. Existing library data, connection settings and pairing
+are retained. Public QR sharing needs the optional HTTPS sharing setup.
+
+BORROWING RECEIPTS — WINDOWS 2.0.4 / ANDROID 2.0.3
+A receipt opens after checkout. Review it, choose Open text or Open email, then
+tap Send in your messaging app. Copy receipt is always available. Borrowing
+receipt on an active book reopens the draft. No messaging accounts or keys
+are needed by Carribrary, and it does not send automatically. Windows
+texting requires a compatible linked-phone application; Android can use
+the phone texting app. Install both updates; existing pairing is preserved.
+
+WINDOWS 2.0.5
+Shared book lists now show cover thumbnails, including ISBN fallback covers.
+That release updated Windows only. Book requests below require Android 2.0.4.
+
+Book requests (Windows 2.0.6 / Android 2.0.4)
+
+Friends open the existing shared QR/link in a browser and choose Request to borrow. They enter a name, phone number or email, and optional message. Contact details are private. The Windows and paired Android Requests inbox can approve or decline. Approval does not reserve a copy or send a notification. Use Hand over when the book is actually collected; choose an optional due date and existing borrower, or let the app find/create the borrower from the request. Checkout then offers the usual receipt composer; tap Send yourself. Requests are included in encrypted backups.
+
+Install the new Windows installer over the existing installation, then install the Android APK as an update. Keep the original signing key, data and certificates; no new pairing or shared QR is needed. Existing public HTTPS/Caddy setup is required for the shared request page. Public submission limits: 10 attempts per IP per 15 minutes, 100 open requests, 8 KB request body. Retries with the same request ID are safe.
+
+Windows 2.0.7 / Android 2.0.5: matching Carribrary artwork for the desktop and Start menu shortcuts, Windows tray/executable/setup, Android launcher and web browser tab. Install over the current versions; data, pairing and sharing links are preserved. If Windows retains a cached shortcut icon, restart Explorer or sign out and back in. The separate Carribrary.ico file can also be selected in Shortcut Properties > Change Icon.
+
+Windows 2.0.23 / Android 2.0.6: trusted paired phones have the same library administration permissions as the Windows admin. Borrowers > Delete borrower and catalog > Edit book / Delete book require confirmation for removal. Outstanding loans block removal; historical records are archived. History includes returned loans and archived records. Manage library offers library renaming, JSON backup export/restore through Android’s file picker, CSV export, book-list text sharing, and private pairing/revocation of phones. Restore requires confirmation, validates on the server, and saves an encrypted rollback backup on Windows. A phone can revoke itself after confirmation and will need pairing again. Initial Windows installation, router/HTTPS configuration and service maintenance still happen on Windows. Install Windows first, then update the APK; pairing and data are preserved.
+
+
+2.0.23: Open Setup and updates in the Start/tray menu for addresses, pairing, backups, DNS and router steps. Updates now save a complete PRIVATE pre-update ZIP under the data parent/upgrade-backups after the server stops. Keep those ZIPs private: they include credentials and key material. They are not automatically pruned. New phone/server tools: Recycle Bin, bulk metadata editing, optional SMTP due reminders and explicit borrower-account unblocking/relinking. SMTP needs a sending account and per-borrower permission; texts remain tap-to-send.
+
+2.0.23: Borrower accounts now includes Delete account / personal information. Account-only deletion keeps loan/reading records. Full deletion is permanent after all active loans are returned. Review the record counts and type the username. Optional backup cleanup removes ALL installation-managed automatic/safety backups. See Help for exact effects and older/offline-copy limitations. Help must accompany every user-visible change.
+
+Borrowers can save the shared library to their Home screen through Chrome. Use the public sharing QR and Install / add to Home screen, not the admin APK or private pairing QR. Help includes Chrome and Safari instructions. Existing public proxy routing is sufficient.
+
+iPhone companion, descriptions, branding and optional push (2.0.23)
+
+The iPhone admin companion is hosted by the server at /companion/. Open it in Safari, Share → Add to Home Screen, open the icon, then pair using a private one-use code from the server’s iPhone companion button or Android Manage library. Codes expire in 10 minutes; browser admin authorization lasts 30 days. Manage/revoke these browsers separately from native paired phones. The shared-library QR grants no admin privileges. Private catalog responses are not cached for offline use. Android stays native. Linux/Pi restrictive Caddy allowlists must add /companion/*; no additional ports. Windows public HTTPS proxy already covers this path.
+
+ZXing Browser 0.2.1 is bundled for Safari barcode scanning with manual fallback; no third-party script CDN. About this book opens a short description, using manual text first, then Open Library and optional Google Books. The popup credits the source; metadata lookup does not save over a book. Library settings can upload a custom image, automatically fit to square PNGs, or restore the default. Server colors now persist across borrower catalog, signup, sign-in, account and Home-screen launch. Android can publish its local colors through Manage library. Custom images and manual descriptions are public library branding/catalog data and included in backups. Native Android’s launcher icon remains Carribrary.
+
+Borrowers can opt into due-date Web Push from an approved account. iPhone admin PWAs can opt into new-request Web Push. iPhone requires iOS 16.4+ and a Home-screen installation. Permission is requested only after a tap. Server creates VAPID keys automatically; no messaging-provider account is needed. Push messages are empty and workers show generic text. Endpoints/keys are protected on the server, no private borrower/book contents are sent through push. Schedule: up to two days before due, due date, and once at least seven days overdue; new admin requests are checked every minute. Returned loans, blocked/deleted accounts and revoked browsers are excluded. Delivery depends on the browser/OS/service, is deduplicated, and is not guaranteed. Email and tap-to-send texts remain independent. Native Android request alerts use the separate periodic scheduler described below.
+
+Android native request alerts: Manage library → Enable background request alerts, then grant notification permission. Android polls the paired server about every 15 minutes, subject to battery/OS scheduling; these are not instant push. Existing pending requests are the initial baseline. Generic alerts open Requests; disable or Forget connection cancels them. No PWA or Firebase account is needed; only request-ID hashes are kept for deduplication.
+
+
+## Carribrary 2.0.26: the new product name
+
+Home Library is now Carribrary. Export a backup and install over the existing server, then update Android with the Carribrary APK. Do not uninstall or clear app data. Library names, custom library icons, books, borrowers, accounts, reading lists, settings, sharing links and phone pairing are preserved. Windows shortcuts and the service display name now use Carribrary; existing installations keep their registered install directory. The book-and-house artwork is unchanged.
+
+Technical identities intentionally stay compatible: Android com.household.homelibrary, Flatpak com.household.HomeLibrary on stable, Pi home-library-server/home-library, Windows HomeLibraryNative, old scheduled task names and data/key directories. These are not separate installations. iPhone and borrower Home-screen apps keep the household library name/icon; reopen or refresh after updating the server. Native iPhone source 0.1.11 still needs Mac/Xcode verification.
+
+
+Carribrary 2.0.27 — private lists, Books to buy and shelf locations
+
+Update the server first, then Android, retaining application data. Borrowers set up
+a separate private-list passphrase and save their recovery code at first use.
+Personal TBR, reading, notes, ratings and wishlists are encrypted on the borrower
+device; admins manage lending but cannot view these through Carribrary. Unlinked
+household reading profiles remain admin-managed. Old plaintext backups, exports
+and device caches are not retroactively encrypted. A host that modifies delivered
+browser code is outside this protection. Keep the recovery code safely: resetting
+the sign-in password cannot unlock private lists.
+
+Library JSON exports and automatic library snapshots exclude borrower vaults and
+credentials. Borrowers can export/import their own encrypted private backup. For
+server disaster recovery, stop the server and privately back up the complete data
+directory and keyring together; platform key protection may prevent portability.
+Account deletion removes the encrypted vault in either deletion scope.
+
+Books to buy holds intended acquisitions without allocating Copy IDs. Confirm
+purchase to add a physical copy. Room, bookcase and shelf are admin-only fields;
+borrower catalogs, shared lists and private reading views omit those locations.
+Use the matching 2.0.27 Help for complete steps.
+
+
+2.0.31 recovery and illustrated onboarding
+Server Help → Illustrated quick start has current fictional-library screenshots,
+short success checks and Print / save as PDF. Normal offline phone Help remains
+available as text. Library JSON exports are not complete account/key/vault backups.
+
+Windows: Start → Carribrary → Update and recovery (administrator prompt) works
+independently of the main server. Create recovery point briefly stops the library
+and saves verified server/tray programs and the complete library-data directory.
+Updates do this automatically, then verify new files, startup and catalog access.
+Compatible failed updates attempt program recovery. Select a prior point and
+Restore selected application to keep CURRENT data while restoring compatible
+program files. Only multi-administrator 2.0.36 program compatibility is supported here. Historical data
+is never automatically restored; incompatible schema rollback remains planned.
+
+Points live under ProgramData/HomeLibraryNative/recovery, accessible only to
+Windows administrators and SYSTEM. Local registry seals bind trusted manifests.
+Recovery-attempt safety copies are retained but not offered as prior versions.
+Use Delete recovery points and type DELETE RECOVERY POINTS to remove them, losing
+rollback capability. Ordinary account/backup cleanup cannot remove these points.
+Old snapshots/external copies can retain historical private data. No automatic
+retention cleanup is applied; monitor disk space. Uninstall keeps recovery data.
+
+These are same-machine core-library recovery points, not complete Windows or
+portable disaster backups. Caddy's external certificate folder and scheduled-task
+definitions are separate; program recovery keeps the current proxy/tasks in place.
+Windows key protection can tie data to the original machine. Keep separate private
+off-device backups. Linux/Pi retain existing stopped-server backups and package
+updates; guided rollback there is planned. Native iPhone source requires Xcode.
+
+2.0.31 FORMAT UPGRADE: Back up the complete stopped server before updating. The library migrates once to format 3 with a permanent internal identity for each physical copy. Visible BK numbers and gap filling stay the same. 2.0.30 and earlier cannot open the migrated library; do not downgrade. Ordinary Windows program recovery is limited to multi-administrator 2.0.36 programs. Current-format JSON backups preserve identities; importing an older backup assigns identities absent from that backup. Keep private database/keyring backups for supervised recovery.
+
+
+2.0.31 — COMPLETE SERVER DATA BACKUP
+Open Backups > Create complete backup on the server. Android: More > Settings & backups > Complete server data backup. Choose and confirm a 12-128-character backup password, save the .carribrary-backup file and wait for completion. Keep the password separately: it cannot be reset. The server briefly pauses changes while capturing current databases consistently, then resumes automatically. No manual shutdown/folder-copying is needed to create this archive. Library export (JSON) remains a smaller books/lending export without sign-ins, private vaults or server keys.
+
+Complete archives include current databases, accounts, encrypted borrower vaults, pairing identities, keyring and saved configuration. They exclude old backups/recovery points, programs, external HTTPS/Caddy certificates, OS service/task definitions and environment-only secrets. Current data limit: 2 GB / 10,000 files. Windows DPAPI keys/settings require the same Windows computer; this is not a guaranteed cross-machine migration. Borrowers still need their own vault passphrase/recovery code. Keep archives private; copies can retain data deleted later.
+
+RECOVERY (OFFLINE, NEW FOLDER ONLY): Stop the server. Keep the existing data folder separately. Run HomeLibrary.Server --unpack-complete-backup ARCHIVE NEW-FOLDER using the compatible server executable (Windows: HomeLibrary.Server.exe). It asks for the password without displaying it, checks encryption, file hashes and database integrity, and unpacks only into a new folder. Follow RECOVERY-READ-ME.txt there. Do not merge individual databases into a live server. Restore library export accepts JSON only, not this archive. Programs and external proxy/service configuration are separate. Get recovery help if unsure.
+
+Complete snapshot recovery warning: Restoring an earlier complete snapshot rewinds account deletions, passwords, device revocations and lending history. Review accounts and paired devices before making the restored server reachable. Compatible program-only recovery keeps current data instead.
+
+2.0.31: Optional permanent-copy QR labels and copy-number allocation choice. Create a complete backup before upgrading. Library format 3 protects the new preference; versions 2.0.30 and earlier cannot open it. Use the matching Help for label printing, sheet alignment and numbering policy. Existing history-linked numbers remain reserved.
+
+2.0.32 repair update: cancellation confirmation/feedback and request status on all borrower tabs are corrected. History safeguards and operational hold rules remain. Registration protection is optional; default local rate limits and librarian approval work without Cloudflare. See the matching Help for private deployment configuration. Library format remains 3, with Windows program recovery compatibility for 2.0.36 multi-account credentials. Back up first and update the server before companion apps.
+
+Windows local setup: Start → Carribrary → Administrator access opens an elevated read-only code viewer. Copy its one-time setup code into the local login page, create credentials and save the recovery code. Finishing setup and opening the library offers this viewer when an unused code exists. It does not reset credentials or bypass Carribrary sign-in.
+
+2.0.36 source iteration: responsive administrator sidebar/mobile navigation and Home dashboard; Catalog remains the starting view. Home summaries show the whole active library. Quick Actions open existing workflows; Backup Now opens backup options, not an immediate backup. More / All tools retains existing tools. Borrower and native Android layout redesign follows separately. Build packages locally; this source handoff does not include rebuilt installers.
+
+2.0.36: Back up before updating. Existing local administrator credentials are upgraded safely to support separate dashboard accounts. Earlier programs cannot decrypt the new credentials; do not downgrade. Existing inventory, borrower vaults, original username/password/recovery and approved-device tokens stay intact. All tools → Dashboard accounts manages additional full administrators. All tools / Library settings → Sidebar artwork uploads/removes your PNG; no default illustration is embedded.

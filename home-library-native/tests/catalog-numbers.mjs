@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+const code=await readFile(new URL('../server/wwwroot/library.js',import.meta.url),'utf8');
+const library=await import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));
+const state={version:1,nextCopy:500,books:[],borrowers:[],loans:[],requests:[]};
+const add=title=>library.addBook(state,{isbn:'9780140328721',title,author:'Author',confirmedDuplicates:state.books.map(b=>b.id)}).id;
+assert.equal(add('First'),'BK-0001');assert.equal(add('Second'),'BK-0002');assert.equal(add('Third'),'BK-0003');
+library.removeBook(state,{copyId:'BK-0002'});library.removeBook(state,{copyId:'BK-0001'});
+assert.equal(add('Replacement one'),'BK-0001');assert.equal(add('Replacement two'),'BK-0002');
+state.requests.push({copyId:'BK-0001'});assert.equal(library.removeBook(state,{copyId:'BK-0001'}).archived,true);
+state.loans.push({id:'loan',copyId:'BK-0002',borrowerId:'BR-0001',checkoutDate:library.today(),returnedDate:library.today()});
+assert.equal(library.removeBook(state,{copyId:'BK-0002'}).archived,true);
+assert.equal(add('Fourth'),'BK-0004');assert.equal(state.nextCopy,500);
+library.removeBook(state,{copyId:'BK-0003'});assert.equal(add('Reused after history'),'BK-0003');
+assert.equal(state.loans[0].copyId,'BK-0002');assert.equal(state.requests[0].copyId,'BK-0001');
+console.log('PASS browser allocator: lowest free ID, legacy high counter, archived loans/requests and retained history');

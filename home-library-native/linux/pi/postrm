@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+if [ -d /run/systemd/system ]; then systemctl daemon-reload; fi
+# Intentionally keep the database, backups, identity and service user.

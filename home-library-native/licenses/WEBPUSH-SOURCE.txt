@@ -1,0 +1,4 @@
+WebPush 1.0.13, unmodified upstream library, MPL-2.0.
+Library source is included in WEBPUSH-SOURCE-1.0.13.zip.
+Exact upstream commit: https://github.com/web-push-libs/web-push-csharp/tree/5f707831ebb2088561a0a4324facced6126e3fa7
+License text: WEBPUSH-LICENSE.txt. Other Home Library files are separate works.

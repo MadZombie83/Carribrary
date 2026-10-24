@@ -1,0 +1,4 @@
+namespace HomeLibrary;
+public static class BorrowerApp {
+ public static IResult Manifest(Store store,bool admin=false){var state=store.Read().State;var name=state.LibraryName;return Results.Json(new{id=admin?"/companion/app":"/account/borrower-app",name=name+(admin?" · Librarian":" · Borrower"),short_name=name,start_url=admin?"/companion/":"/account/launch",scope=admin?"/companion/":"/",display="standalone",background_color=LibraryAppearance.Page(state),theme_color=LibraryAppearance.Ink(state),description="Browse the household's physical books, request to borrow, and sign in for your own loans and reading.",prefer_related_applications=false,icons=new[]{new{src="/account/library-icon-192.png",sizes="192x192",type="image/png",purpose="any"},new{src="/account/library-icon-512.png",sizes="512x512",type="image/png",purpose="any"}}},contentType:"application/manifest+json");}
+}

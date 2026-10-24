@@ -1,0 +1,5 @@
+# Optional public read-only catalog only. Replace hostname before use.
+# Do not proxy /mobile or the private admin port 4173 here.
+yourname.duckdns.org {
+    reverse_proxy 127.0.0.1:4174
+}

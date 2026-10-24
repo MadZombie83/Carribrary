@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+try{
+ const context=await browser.newContext({viewport:{width:412,height:915}}),admin=await context.newPage(),errors=[];
+ context.on('page',p=>p.on('pageerror',e=>errors.push(e.message)));
+ await admin.goto(process.env.LIBRARY_TEST_URL);await admin.waitForSelector('#content');
+ const code=await admin.evaluate(async()=>{let snap=await(await fetch('/api/state')).json();let result=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'addBook',input:{isbn:'9780140328721',title:'Matilda',author:'Roald Dahl'},revision:snap.revision})});if(!result.ok)throw Error(await result.text());return(await(await fetch('/api/browser-admins/pair',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).json()).code;});
+ await context.route('https://library.test/**',async route=>{const u=new URL(route.request().url());await route.fulfill({response:await route.fetch({url:process.env.PUBLIC_TEST_URL+u.pathname+u.search,headers:{...route.request().headers(),origin:'https://library.test'}})});});
+ const phone=await context.newPage();await phone.goto('https://library.test/companion/');await phone.locator('[name=code]').fill(code);await phone.locator('[name=name]').fill('TBR test browser');await phone.locator('#pair button').click();await phone.waitForSelector('#content');await phone.waitForFunction(()=>document.querySelector('#save-status')?.textContent==='Shared library on your home server');
+ await openAdminView(phone,'reading');await phone.locator('#add-reader').click();await phone.locator('[name=name]').fill('Admin reader');await phone.locator('[type=submit]').click();await phone.waitForFunction(()=>!document.querySelector('#form-dialog').open);
+ await phone.locator('#add-reading').click();await phone.locator('[name=notes]').fill('Keep this private note');await phone.locator('[type=submit]').click();await phone.waitForFunction(()=>!document.querySelector('#form-dialog').open);assert.equal(await phone.locator('#reading-status').inputValue(),'tbr');await phone.locator('[data-finish-reading=BK-0001]').click();await phone.waitForFunction(()=>!document.querySelector('[data-finish-reading]'));assert.doesNotMatch(await phone.locator('#content').innerText(),/Keep this private note/);await phone.locator('#reading-status').selectOption('finished');assert.match(await phone.locator('#content').innerText(),/Keep this private note/);assert.deepEqual(errors,[]);
+ console.log('PASS authenticated iPhone PWA TBR module loading, admin profile, completion, preserved private notes and reading history');
+}finally{await browser.close();}
