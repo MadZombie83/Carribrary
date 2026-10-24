@@ -87,3 +87,17 @@ header>#library-brand-icon{float:left;margin-right:.8rem}
 .borrower-shell header{background-color:var(--ink)}
 .borrower-view-heading{flex-wrap:wrap}
 .borrower-view-heading>div{min-width:0;overflow-wrap:anywhere}
+
+/* Named custom palettes: semantic colors never change Google attribution artwork. */
+:root[data-custom-palette] body{color:var(--text);background-color:var(--page)}
+:root[data-custom-palette] :is(article,.book,.person,.empty,dialog,.dashboard-card,.borrower-settings-card,#admin-tools,.preview-book){background:var(--surface);color:var(--text);border-color:var(--line)}
+:root[data-custom-palette] :is(input,select,textarea,button.secondary){background:var(--surface);color:var(--ink);border-color:var(--line)}
+:root[data-custom-palette] :is(.muted,.help,.note,.eyebrow,.stat span,.copy-id,footer){color:var(--muted)}
+:root[data-custom-palette] :is(.borrower-settings-card,.book,.person) h2{color:var(--ink)}
+:root[data-custom-palette] .admin-shell .admin-header{background:var(--surface)}
+:root[data-custom-palette] .admin-shell .admin-mobile-nav{background:var(--surface)!important}
+:root[data-custom-palette] .borrower-shell #borrower-nav{background:var(--surface)}
+:root[data-custom-palette] .borrower-shell{color:var(--text)}
+:root[data-custom-palette] header .brand small,:root[data-custom-palette] .sidebar-brand small{color:white}
+.theme-palette-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem}
+.theme-color-input{display:flex;gap:.5rem;align-items:center}.theme-color-input input[type=color]{width:56px;padding:3px;flex-shrink:0}.theme-preview{background:var(--surface);color:var(--text);border:1px solid var(--line);padding:1rem;border-radius:12px}.theme-preview strong{display:block;background:var(--ink);color:white;padding:1rem}.theme-preview span{color:var(--muted)}.theme-preview button{background:var(--ink);color:white}

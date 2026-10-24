@@ -82,10 +82,10 @@ app.Use(async(context,next)=>{
     var origin=context.Request.Headers.Origin.ToString();if(origin!=adminOrigin&&origin!=$"http://127.0.0.1:{settings.AdminPort}"){context.Response.StatusCode=403;return;}
     if(!context.Request.HasJsonContentType()){context.Response.StatusCode=403;return;}
    }
-   // Public local login assets contain no library or administrator data.
+   // Login assets expose only intentional public name/icon/palette branding, never administrative data.
    var path=context.Request.Path.Value??"/";
    var authenticationRoute=path is "/local-auth/health" or "/local-auth/status" or "/local-auth/login" or "/local-auth/enroll" or "/local-auth/recover" or "/local-auth/logout";
-   var loginAsset=context.Request.Method is "GET" or "HEAD" && path is "/login" or "/local-login.js" or "/styles.css" or "/favicon.ico";
+   var loginAsset=context.Request.Method is "GET" or "HEAD" && path is "/login" or "/local-login.js" or "/styles.css" or "/favicon.ico" or "/branding" or "/branding-icon.png" or "/theme-palette.js" or "/theme-branding.js";
    var companionToken=context.Request.Headers[LocalAdministrators.CompanionHeader].ToString();
    // Revalidate the existing paired-browser credential on the inner proxy request,
    // including reused connections and the interval after outer proxy authorization.
@@ -203,10 +203,12 @@ app.MapMethods("/s/{token}/{**leaf}",new[]{"GET","HEAD"},async(string token,stri
  var filename=leaf switch{null or ""=>"catalog.html","catalog.js"=>"catalog.js","book-about.js"=>"book-about.js","catalog.css"=>"catalog.css","favicon.ico"=>"favicon.ico","powered-by-google.png"=>"powered-by-google.png","cover-credit.js"=>"cover-credit.js",_=>null};
  return filename==null?Results.NotFound():Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",filename),filename.EndsWith(".html")?"text/html":filename.EndsWith(".js")?"text/javascript":filename.EndsWith(".ico")?"image/x-icon":filename.EndsWith(".png")?"image/png":"text/css");
 }).RequireRateLimiting("personal-reading");
-var files=new HashSet<string>{"sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-shell.css","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
+var files=new HashSet<string>{"theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-shell.css","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
 app.MapGet("/{**path}",(string? path,HttpContext c)=>{
- var localLogin=c.Connection.LocalPort==settings.AdminPort&&path is "login" or "local-login.js" or "styles.css" or "favicon.ico";
+ var localLogin=c.Connection.LocalPort==settings.AdminPort&&path is "login" or "local-login.js" or "styles.css" or "favicon.ico" or "branding" or "branding-icon.png" or "theme-palette.js" or "theme-branding.js";
  if(!Admin(c)&&!localLogin)return Results.NotFound();var file=string.IsNullOrEmpty(path)?"index.html":path;
+ if(file=="branding")return Results.Json(new{libraryName=store.Read().State.LibraryName,libraryTheme=LibraryAppearance.Theme(store.Read().State),palette=CustomThemes.Selected(store.Read().State)});
+ if(file=="branding-icon.png")return LibraryAppearance.IconFile(store,192,app.Environment.ContentRootPath);
  if(file=="login")file="local-login.html";
  if(file=="local-login.html"||file=="local-login.js"){
   c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";

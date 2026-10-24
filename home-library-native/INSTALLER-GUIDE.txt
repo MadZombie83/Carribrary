@@ -1,4 +1,4 @@
-CARRIBRARY WINDOWS INSTALLER — 2.0.37 PREVIEW
+CARRIBRARY WINDOWS INSTALLER — 2.0.38 PREVIEW
 
 LOCAL ADMINISTRATOR SIGN-IN AND SEPARATE ACCOUNTS
 
@@ -16,7 +16,7 @@ restart. Sign out explicitly when finished. Recover local administrator access
 uses your saved recovery code, not your Windows or borrower password. Lost-code
 recovery is documented in Help and requires protected server-data access.
 Revoked devices immediately lose server access; downloaded offline data is not
-erased remotely. Automatic program recovery permits only 2.0.36–2.0.37 multi-account
+erased remotely. Automatic program recovery permits only 2.0.38 custom-theme
 programs; earlier binaries cannot decrypt upgraded credentials. Back up before updating.
 Physical Windows service/ACL/installer and Pi/Safari device checks remain necessary.
 
@@ -27,7 +27,7 @@ No terminal commands are required.
 2. Close the old server window. If it runs as a startup task, stop/disable its
    Carribrary task in Windows Task Scheduler so it does not start again.
    Plex can keep running.
-3. Double-click Carribrary-Setup-2.0.37-preview.exe and approve the Windows
+3. Double-click Carribrary-Setup-2.0.38-preview.exe and approve the Windows
    administrator prompt. Choose the installation folder and optionally browse
    to your JSON backup. Existing native data is retained during upgrades.
 4. Click Install, then Finish. Carribrary opens in the browser.
@@ -168,7 +168,7 @@ and saves verified server/tray programs and the complete library-data directory.
 Updates do this automatically, then verify new files, startup and catalog access.
 Compatible failed updates attempt program recovery. Select a prior point and
 Restore selected application to keep CURRENT data while restoring compatible
-program files. Only multi-administrator 2.0.36–2.0.37 program compatibility is supported here. Historical data
+program files. Only custom-theme 2.0.38 program compatibility is supported here. Historical data
 is never automatically restored; incompatible schema rollback remains planned.
 
 Points live under ProgramData/HomeLibraryNative/recovery, accessible only to
@@ -200,7 +200,7 @@ Complete snapshot recovery warning: Restoring an earlier complete snapshot rewin
 
 2.0.31: Optional permanent-copy QR labels and copy-number allocation choice. Create a complete backup before upgrading. Library format 3 protects the new preference; versions 2.0.30 and earlier cannot open it. Use the matching Help for label printing, sheet alignment and numbering policy. Existing history-linked numbers remain reserved.
 
-2.0.32 repair update: cancellation confirmation/feedback and request status on all borrower tabs are corrected. History safeguards and operational hold rules remain. Registration protection is optional; default local rate limits and librarian approval work without Cloudflare. See the matching Help for private deployment configuration. Library format remains 3, with Windows program recovery compatibility for 2.0.36 multi-account credentials. Back up first and update the server before companion apps.
+2.0.32 repair update: cancellation confirmation/feedback and request status on all borrower tabs are corrected. History safeguards and operational hold rules remain. Registration protection is optional; default local rate limits and librarian approval work without Cloudflare. See the matching Help for private deployment configuration. Library format remains 3, with Windows program recovery compatibility for 2.0.36 custom-theme credentials. Back up first and update the server before companion apps.
 
 Windows local setup: Start → Carribrary → Administrator access opens an elevated read-only code viewer. Copy its one-time setup code into the local login page, create credentials and save the recovery code. Finishing setup and opening the library offers this viewer when an unused code exists. It does not reset credentials or bypass Carribrary sign-in.
 
@@ -209,4 +209,13 @@ Windows local setup: Start → Carribrary → Administrator access opens an elev
 2.0.36: Back up before updating. Existing local administrator credentials are upgraded safely to support separate dashboard accounts. Earlier programs cannot decrypt the new credentials; do not downgrade. Existing inventory, borrower vaults, original username/password/recovery and approved-device tokens stay intact. All tools → Dashboard accounts manages additional full administrators. All tools / Library settings → Sidebar artwork uploads/removes your PNG; no default illustration is embedded.
 
 
-2.0.37 borrower navigation source update: approved borrowers start in Catalog. My reading remains second; My loans includes borrowing requests and confirmation-based cancellation. Account groups private-list controls, install, optional notifications, help, data/history/deletion and sign-out. Pending accounts retain help, install and deletion access. The server delivers this update to borrower browsers/PWAs; no new borrower install is needed. Native Android administrator styling is unchanged. Current library format 3, administrator credential format 2, and pairings remain. Program recovery supports 2.0.36–2.0.37; earlier programs remain incompatible. Build packages locally; this source update does not install them.
+Earlier 2.0.37 borrower navigation source update: approved borrowers start in Catalog. My reading remains second; My loans includes borrowing requests and confirmation-based cancellation. Account groups private-list controls, install, optional notifications, help, data/history/deletion and sign-out. Pending accounts retain help, install and deletion access. The server delivers this update to borrower browsers/PWAs; no new borrower install is needed. Native Android administrator styling is unchanged. Current library format 3, administrator credential format 2, and pairings remain. Program recovery supports 2.0.38; earlier programs remain incompatible. Build packages locally; this source update does not install them.
+
+
+## Current 2.0.38: Android design, custom colors and versioned source folders
+
+Use Carribrary-2.0.38-source.zip, which extracts into Carribrary-2.0.38. Inside is home-library-native with the existing Build-Carribrary launcher and matching root Help. GitHub Download ZIP uses Carribrary-main; rename that extracted top folder to Carribrary-2.0.38 yourself if using it. Do not merge source versions or overwrite a running build. Reuse existing private signing material for Android updates.
+
+Android has refreshed cards, navigation and Book options. Colors → Custom theme provides eight color roles, full spectrum/hex controls, named save/edit/select and contrast checks. Save & use activates a custom palette on the server. Android preset/ saved selection remains a phone preference; Settings → Use my colors for shared library applies it library-wide. Browser dashboard, borrower pages, login/help and iPhone PWA follow server branding. Only public branding is available before login; all administrative operations remain authenticated. Refresh/reopen web apps after upgrading; rebuild/install Android to receive native changes.
+
+Saved themes are additive library fields with validated custom IDs. Upgrade preserves existing library data, defaults and tokens, but earlier executables reject custom IDs or discard unknown fields. Program-only recovery accepts 2.0.38 only; complete historical recovery remains a separate supervised operation. Library and credential format numbers stay 3 and 2. Back up before installing. No installer, APK, AAB, Flatpak or DEB was built or installed in this source iteration.

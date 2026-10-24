@@ -14,6 +14,17 @@ class LocalBuilderTests(unittest.TestCase):
   self.fake=self.root/'compiler';self.fake.write_text('test executable placeholder')
   self.patches=[patch.object(builder,'PROJECT',self.project),patch.object(builder,'WORKSPACE',self.root),patch.object(builder,'find_tool',return_value=str(self.fake))]
   for p in self.patches:p.start();self.addCleanup(p.stop)
+ def test_versioned_folders_reuse_tools_without_moving_source(self):
+  folder=self.root/'Carribrary-2.0.38';folder.mkdir()
+  legacy=self.root/'Carribrary-main'/'.build-tools';legacy.mkdir(parents=True)
+  with patch.dict(builder.os.environ,{},clear=True):
+   self.assertEqual(builder.tool_cache(folder),legacy)
+   shared=self.root/'.build-tools';shared.mkdir()
+   self.assertEqual(builder.tool_cache(folder),shared)
+   local=folder/'.build-tools';local.mkdir()
+   self.assertEqual(builder.tool_cache(folder),local)
+  with patch.dict(builder.os.environ,{'CARRIBRARY_TOOLS':str(self.root/'chosen')}):self.assertEqual(builder.tool_cache(folder),self.root/'chosen')
+  self.assertTrue(legacy.is_dir())
  def test_check_and_plan_never_execute_compilers(self):
   with patch.object(builder.subprocess,'run') as run:
    self.assertEqual(builder.main(['--target','windows','--check']),0)

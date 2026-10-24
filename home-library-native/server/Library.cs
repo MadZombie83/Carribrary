@@ -5,6 +5,7 @@ public sealed class LibraryState {
  public string LibrarySidebarArtwork {get;set;}="";
  public string LibraryIcon192 {get;set;}="";
  public string LibraryIcon512 {get;set;}="";
+ public List<LibraryPalette> SavedThemes {get;set;}=[];
  public string LibraryTheme {get;set;}=""; // Empty means a legacy server has not saved its browser palette yet.
  public string LibraryName {get;set;}="Carribrary";
  public string BannerSubtitle {get;set;}="A shelf worth sharing";
@@ -54,6 +55,7 @@ public static class Library {
  public static void Validate(LibraryState s){
   if(string.IsNullOrWhiteSpace(s.LibraryName)||s.LibraryName.Length>80||s.LibraryName.Any(char.IsControl))throw new LibraryError("Enter a library name of 1–80 characters.");
   if(s.LibraryTheme==null||!LibraryAppearance.Valid(s.LibraryTheme))throw new LibraryError("Choose a supported library color scheme.");
+  CustomThemes.Validate(s);
   LibraryAppearance.ValidateIcons(s.LibraryIcon192,s.LibraryIcon512);
   LibraryAppearance.ValidateSidebarArtwork(s.LibrarySidebarArtwork);
   ValidateSaying(s.BannerSubtitle,160);ValidateSaying(s.EncouragingMessage,240);
@@ -103,7 +105,8 @@ public static class Library {
    case "setLibraryPresentation":{var subtitle=Field(e,"bannerSubtitle").Trim();var message=Field(e,"encouragingMessage").Trim();ValidateSaying(subtitle,160);ValidateSaying(message,240);s.BannerSubtitle=subtitle;s.EncouragingMessage=message;return new{bannerSubtitle=subtitle,encouragingMessage=message};}
    case "setLibrarySidebarArtwork":{var artwork=Field(e,"artwork");LibraryAppearance.ValidateSidebarArtwork(artwork);s.LibrarySidebarArtwork=artwork;return new{saved=artwork!=""};}
    case "setLibraryIcon":{var small=Field(e,"icon192");var large=Field(e,"icon512");LibraryAppearance.ValidateIcons(small,large);s.LibraryIcon192=small;s.LibraryIcon512=large;return new{saved=large!=""};}
-   case "setLibraryTheme":{var theme=Field(e,"libraryTheme");if(theme==""||!LibraryAppearance.Valid(theme))throw new LibraryError("Choose a supported library color scheme.");s.LibraryTheme=theme;return new{libraryTheme=theme};}
+   case "saveCustomTheme":return CustomThemes.Save(s,e);
+   case "setLibraryTheme":{var theme=Field(e,"libraryTheme");if(theme==""||!LibraryAppearance.Valid(theme))throw new LibraryError("Choose a supported library color scheme.");if(CustomThemes.IsCustom(theme)&&!s.SavedThemes.Any(t=>"custom-"+t.Id==theme))throw new LibraryError("Saved theme not found.");s.LibraryTheme=theme;return new{libraryTheme=theme};}
    case "setLibraryName":{var name=Field(e,"libraryName").Trim();if(name.Length==0||name.Length>80||name.Any(char.IsControl))throw new LibraryError("Enter a library name of 1–80 characters.");s.LibraryName=name;return new{libraryName=name};}
    case "addBook":case "updateBook":{
     var b=Details(e);if(!ValidCode(b.Isbn)||b.Title=="")throw new LibraryError("Enter a valid ISBN and a title.");

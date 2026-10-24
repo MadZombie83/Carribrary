@@ -32,8 +32,8 @@ function Get-CarribraryHash([string]$Path) {
     finally { $Stream.Dispose(); $Sha.Dispose() }
 }
 function Test-CarribraryCompatible([string]$Version) {
-    # Multi-account credential boundary: older programs cannot read the upgraded protected store.
-    return $Version -match '^2\.0\.(?:36|37)(?:[.+-].*)?$'
+    # Custom-theme state boundary: earlier programs reject saved palette identifiers.
+    return $Version -match '^2\.0\.38(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

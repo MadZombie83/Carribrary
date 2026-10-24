@@ -1,3 +1,5 @@
+import {applyPalette} from './theme-palette.js';
+import {customThemeEditor} from './theme-editor.js';
 import {sidebarArtworkSettings} from './sidebar-artwork.js';
 import {dashboardAccounts} from './dashboard-accounts.js';
 import {renderDashboard,syncAdminShell} from './admin-dashboard.js';
@@ -19,7 +21,7 @@ for(const [id,fallback] of [['sort','title'],['direction','asc'],['page-size','1
  const select=$('#'+id),value=preference(id,fallback);
  select.value=[...select.options].some(o=>o.value===value)?value:fallback;
 }
-function applyTheme(){document.documentElement.dataset.theme=$('#theme').value;const color=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim();$('meta[name="theme-color"]').content=color;}
+function applyTheme(){const key=$('#theme').value;applyPalette(key,state?.savedThemes?.find(t=>'custom-'+t.id===key));}
 applyTheme();
 function matchedBooks(){
  const q=$('#search').value.trim().toLowerCase();
@@ -55,6 +57,7 @@ function render(){
  $('#admin-dashboard').hidden=view!=='dashboard';
  if(view==='dashboard')renderDashboard(state,{today:today(),offline:readOnly,onAction:dashboardAction,onBook:id=>{view='catalog';$('#search').value=id;page=1;render();$('#content').scrollIntoView({block:'start'});}});
 
+ const themeSelect=$("#theme");themeSelect.querySelectorAll("[data-saved-theme]").forEach(o=>o.remove());for(const theme of state.savedThemes||[]){const option=new Option(theme.name,"custom-"+theme.id);option.dataset.savedTheme="";themeSelect.add(option);}
  if(state.libraryTheme&&[...$("#theme").options].some(o=>o.value===state.libraryTheme)){$("#theme").value=state.libraryTheme;savePreference("theme",state.libraryTheme);applyTheme();}
  const candidates=view==='catalog'||view==='loans'?matchedBooks():[];selectedBooks=new Set([...selectedBooks].filter(id=>candidates.some(b=>b.id===id)));
  $('#bulk-bar').hidden=!['catalog','loans'].includes(view);$('#bulk-toggle').textContent=selecting?'Finish selecting':'Select books';for(const id of ['select-page','bulk-edit','clear-selection'])$('#'+id).hidden=!selecting;$('#bulk-edit').disabled=!selectedBooks.size||readOnly;$('#selection-count').textContent=selecting?`${selectedBooks.size} selected (maximum 500)`:'';
@@ -402,3 +405,5 @@ $('#copy-numbering').onclick=()=>openForm('Copy numbering',`<form><label>New cop
 $('#sidebar-artwork-settings').onclick=()=>sidebarArtworkSettings({state,mutate,openForm,toast});
 $('#dashboard-accounts').onclick=()=>dashboardAccounts({request,openForm,toast});
 document.addEventListener('click',e=>{if(e.target.id==='library-artwork')sidebarArtworkSettings({state,mutate,openForm,toast});});
+
+$('#custom-theme').onclick=()=>customThemeEditor({state,mutate,openForm,toast});

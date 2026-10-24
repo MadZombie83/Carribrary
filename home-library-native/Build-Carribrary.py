@@ -6,7 +6,15 @@ from pathlib import Path
 
 PROJECT = Path(__file__).resolve().parent
 WORKSPACE = PROJECT.parent
-TOOLS = WORKSPACE / '.build-tools'
+def tool_cache(workspace):
+    """Reuse compiler caches across versioned source downloads without touching old sources."""
+    configured=os.environ.get('CARRIBRARY_TOOLS')
+    if configured:return Path(configured).expanduser().resolve()
+    candidates=[workspace/'.build-tools',workspace.parent/'.build-tools',workspace.parent/'Carribrary-main'/'.build-tools']
+    return next((path for path in candidates if path.is_dir()),candidates[0])
+
+
+TOOLS = tool_cache(WORKSPACE)
 WINDOWS = os.name == 'nt'
 
 

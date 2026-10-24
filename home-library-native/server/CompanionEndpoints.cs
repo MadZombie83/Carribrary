@@ -25,6 +25,9 @@ public static class CompanionEndpoints {
   app.MapGet("/companion/{**leaf}",(string? leaf,HttpContext c,BrowserAdmins browsers)=>{
    if(!Public(c))return Results.NotFound();var root=Path.Combine(app.Environment.ContentRootPath,"wwwroot");
    c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; connect-src 'self' https://openlibrary.org; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'";
+   if(leaf=="branding"){var state=store.Read().State;return Results.Json(new{libraryName=state.LibraryName,libraryTheme=LibraryAppearance.Theme(state),palette=CustomThemes.Selected(state)});}
+   if(leaf=="branding-icon.png")return LibraryAppearance.IconFile(store,192,app.Environment.ContentRootPath);
+   if(leaf is "styles.css" or "theme-palette.js" or "theme-branding.js")return Results.File(Path.Combine(root,leaf),leaf.EndsWith(".js")?"text/javascript":"text/css");
    if(leaf=="manifest.webmanifest")return BorrowerApp.Manifest(store,true);
    if(leaf=="admin-sw.js")return Results.File(Path.Combine(root,"admin-sw.js"),"text/javascript");
    if(leaf=="companion-login.js")return Results.File(Path.Combine(root,leaf),"text/javascript");
@@ -32,7 +35,7 @@ public static class CompanionEndpoints {
     if(browsers.Resolve(c)==null)return Results.File(Path.Combine(root,"companion-login.html"),"text/html");
     var html=File.ReadAllText(Path.Combine(root,"index.html")).Replace("</head>","<link rel=\"manifest\" href=\"manifest.webmanifest\"><link rel=\"apple-touch-icon\" href=\"/account/library-icon-192.png\"><link rel=\"stylesheet\" href=\"companion.css\"><script src=\"companion-boot.js\"></script></head>").Replace("href=\"/help.html\"","href=\"help.html\"");return Results.Content(html,"text/html");
    }
-   var files=new HashSet<string>{"sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-shell.css","reading-list.js","app.js","companion-boot.js","companion.css","library-branding.js","book-about.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","devices.js","history.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","favicon.svg","favicon.ico","cover-credit.js","powered-by-google.png","vendor/zxing-browser-0.2.1.min.js","push-client.js"};
+   var files=new HashSet<string>{"theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-shell.css","reading-list.js","app.js","companion-boot.js","companion.css","library-branding.js","book-about.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","devices.js","history.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","favicon.svg","favicon.ico","cover-credit.js","powered-by-google.png","vendor/zxing-browser-0.2.1.min.js","push-client.js"};
    if(!files.Contains(leaf)||browsers.Resolve(c)==null)return Results.NotFound();var type=leaf.EndsWith(".js")?"text/javascript":leaf.EndsWith(".css")?"text/css":leaf.EndsWith(".html")?"text/html":leaf.EndsWith(".json")?"application/json":leaf.EndsWith(".png")?"image/png":leaf.EndsWith(".svg")?"image/svg+xml":"image/x-icon";
    return Results.File(Path.Combine(root,leaf),type);
   });

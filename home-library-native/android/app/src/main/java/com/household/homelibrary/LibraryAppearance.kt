@@ -31,7 +31,9 @@ import java.text.Collator
 import java.util.Locale
 
 val libraryThemes=linkedMapOf("purple-blue" to "Purple & blue","classic" to "Teal & gold","forest" to "Forest & sage","rose" to "Rose & plum","ocean" to "Ocean blue")
-fun libraryColors(theme:String):ColorScheme {
+fun libraryColors(theme:String,custom:String=""):ColorScheme {
+ if(theme.startsWith("custom-")){val p=runCatching{JSONObject(custom)}.getOrNull();if(p!=null&&paletteFields.keys.all{validHex(p.optString(it))})return lightColorScheme(primary=paletteColor(p.getString("ink")),onPrimary=Color.White,tertiary=paletteColor(p.getString("accent")),onTertiary=paletteColor(p.getString("ink")),secondary=paletteColor(p.getString("ink")),onSecondary=Color.White,background=paletteColor(p.getString("page")),onBackground=paletteColor(p.getString("text")),surface=paletteColor(p.getString("surface")),onSurface=paletteColor(p.getString("text")),surfaceVariant=paletteColor(p.getString("soft")),onSurfaceVariant=paletteColor(p.getString("muted")),primaryContainer=paletteColor(p.getString("soft")),onPrimaryContainer=paletteColor(p.getString("ink")),secondaryContainer=paletteColor(p.getString("soft")),onSecondaryContainer=paletteColor(p.getString("ink")),outline=paletteColor(p.getString("line")),outlineVariant=paletteColor(p.getString("line")))
+ }
  val (primary,secondary,background)=when(theme){
   "classic"->Triple(0xFF153E46,0xFF805D12,0xFFF5F6EF)
   "forest"->Triple(0xFF244D36,0xFF526435,0xFFF0F5EF)
@@ -39,7 +41,7 @@ fun libraryColors(theme:String):ColorScheme {
   "ocean"->Triple(0xFF174B73,0xFF24676D,0xFFEFF6FB)
   else->Triple(0xFF493276,0xFF365EA2,0xFFF2F1FC)
  }
- return lightColorScheme(primary=Color(primary),secondary=Color(secondary),background=Color(background),surface=Color(background),surfaceVariant=Color(secondary).copy(alpha=0.12f),onSurfaceVariant=Color(primary),primaryContainer=Color(primary).copy(alpha=0.12f),secondaryContainer=Color(secondary).copy(alpha=0.14f))
+ return lightColorScheme(primary=Color(primary),secondary=Color(secondary),background=Color(background),surface=Color.White,onSurface=Color(0xFF27273D),onBackground=Color(0xFF27273D),onPrimary=Color.White,tertiary=Color.White,onTertiary=Color(primary),surfaceVariant=Color(secondary).copy(alpha=0.12f),onSurfaceVariant=Color(primary),primaryContainer=Color(primary).copy(alpha=0.12f),secondaryContainer=Color(secondary).copy(alpha=0.14f))
 }
 val sortLabels=linkedMapOf("title" to "Title","author" to "Author","series" to "Series","id" to "Catalog number")
 fun sortedCatalog(books:List<JSONObject>,sort:String,descending:Boolean):List<JSONObject> {

@@ -5,6 +5,8 @@ void Check(bool value,string name){if(!value)throw new Exception("FAILED: "+name
 void Throws(Action action,string text){try{action();throw new Exception("Expected failure: "+text);}catch(LibraryError e){Check(e.Message.Contains(text,StringComparison.OrdinalIgnoreCase),text);}}
 JsonElement Input(object value)=>JsonSerializer.SerializeToElement(value,Library.Json);
 try{
+ CustomThemeTests.Run(Path.Combine(directory,"themes"),protection);
+ if(args.Contains("--custom-themes-only"))return;
  SidebarArtworkTests.Run(Path.Combine(directory,"sidebar-artwork"),protection);
  if(args.Contains("--local-admin-only")){LocalAdministratorTests.Run(Path.Combine(directory,"local-admin"),protection);return;}
  using(var store=new Store(directory,protection)){
