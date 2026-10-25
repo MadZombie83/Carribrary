@@ -4,7 +4,7 @@ $Temp=Join-Path ([IO.Path]::GetTempPath()) ('carribrary-recovery-test-'+[Guid]::
 function Check($Value,$Message) { if (!$Value) { throw $Message }; Write-Output ('PASS '+$Message) }
 function Reject([scriptblock]$Action,$Message) { try { & $Action; throw ('NOT_REJECTED '+$Message) } catch { if ($_.Exception.Message.StartsWith('NOT_REJECTED')) { throw }; Write-Output ('PASS '+$Message) } }
 try {
-    Check ((Test-CarribraryCompatible '2.0.39-preview') -and !(Test-CarribraryCompatible '2.0.38-preview') -and !(Test-CarribraryCompatible '2.0.37-preview') -and !(Test-CarribraryCompatible '2.0.40-preview')) 'portrait artwork boundary rejects earlier and unverified future program versions'
+    Check ((Test-CarribraryCompatible '2.0.39-preview') -and !(Test-CarribraryCompatible '2.0.38-preview') -and !(Test-CarribraryCompatible '2.0.37-preview') -and (Test-CarribraryCompatible '2.0.40-preview') -and !(Test-CarribraryCompatible '2.0.41-preview')) 'portrait artwork boundary rejects earlier and unverified future program versions'
     $Root=Join-Path $Temp 'app'; $Data=Join-Path $Temp 'data'; $RecoveryHome=Join-Path $Temp 'recovery'
     New-Item -ItemType Directory -Path (Join-Path $Root 'server'),(Join-Path $Root 'tray'),$Data -Force | Out-Null
     Set-Content (Join-Path $Root 'server/HomeLibrary.Server.dll') 'old application'; Set-Content (Join-Path $Root 'server/appsettings.json') '{"Library":{"AdminPort":4173}}'; Set-Content (Join-Path $Root 'tray/app') 'old tray'
