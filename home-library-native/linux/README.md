@@ -1,4 +1,4 @@
-# Carribrary for Linux and Raspberry Pi — 2.0.38 preview
+# Carribrary for Linux and Raspberry Pi — 2.0.39 preview
 
 LOCAL ADMINISTRATOR SIGN-IN AND SEPARATE ACCOUNTS
 
@@ -16,7 +16,7 @@ restart. Sign out explicitly when finished. Recover local administrator access
 uses your saved recovery code, not your Windows or borrower password. Lost-code
 recovery is documented in Help and requires protected server-data access.
 Revoked devices immediately lose server access; downloaded offline data is not
-erased remotely. Automatic program recovery permits only 2.0.38 custom-theme
+erased remotely. Automatic program recovery permits only 2.0.39 custom-theme
 programs; earlier binaries cannot decrypt upgraded credentials. Back up before updating.
 Physical Windows service/ACL/installer and Pi/Safari device checks remain necessary.
 
@@ -26,7 +26,7 @@ Same catalog, borrowers, loans, receipts, requests, covers, colors, sorting, sha
 ## Linux desktop: Flatpak (x86_64)
 
 1. Install Flatpak support through your distribution's software manager if needed.
-2. Open **Carribrary-Linux-x86_64-2.0.38-preview.flatpak** with Discover/GNOME Software or your Flatpak installer. It may download the Freedesktop runtime from Flathub.
+2. Open **Carribrary-Linux-x86_64-2.0.39-preview.flatpak** with Discover/GNOME Software or your Flatpak installer. It may download the Freedesktop runtime from Flathub.
 3. Launch **Carribrary** from your applications menu. It starts the server and opens **http://localhost:4173** in your normal browser.
 4. The server keeps running when the browser closes so the phone can connect. Launching Carribrary again reopens the existing library. Use the launcher’s **Stop library server** desktop action to stop it. Desktop logout/reboot stops it; add Carribrary in your desktop's Autostart settings if desired.
 5. Restore a JSON backup if migrating. Use **Paired phones** in the admin page to create a private QR for the new host.
@@ -34,7 +34,7 @@ Same catalog, borrowers, loans, receipts, requests, covers, colors, sorting, sha
 Terminal alternatives, if your software manager cannot open a bundle:
 
 ```sh
-flatpak install --user ./Carribrary-Linux-x86_64-2.0.38-preview.flatpak
+flatpak install --user ./Carribrary-Linux-x86_64-2.0.39-preview.flatpak
 flatpak run --user com.household.HomeLibrary
 flatpak run --user com.household.HomeLibrary --stop
 ```
@@ -47,11 +47,11 @@ The browser admin’s backup restore/upload and backup downloads work through yo
 
 Use 64-bit Raspberry Pi OS Bookworm or newer (Debian 12/13), **arm64**. This package does not support a 32-bit OS.
 
-1. Copy **Carribrary-Pi-ARM64-2.0.38-preview.deb** to the Pi.
+1. Copy **Carribrary-Pi-ARM64-2.0.39-preview.deb** to the Pi.
 2. Open it with the Pi’s graphical package installer if available. Otherwise, open a terminal in the downloaded file’s folder and run this one installation command:
 
 ```sh
-sudo apt install ./Carribrary-Pi-ARM64-2.0.38-preview.deb
+sudo apt install ./Carribrary-Pi-ARM64-2.0.39-preview.deb
 ```
 
 3. The installer creates a dedicated service user, starts Carribrary and enables it at boot.
@@ -191,7 +191,7 @@ and saves verified server/tray programs and the complete library-data directory.
 Updates do this automatically, then verify new files, startup and catalog access.
 Compatible failed updates attempt program recovery. Select a prior point and
 Restore selected application to keep CURRENT data while restoring compatible
-program files. Only custom-theme 2.0.38 program compatibility is supported here. Historical data
+program files. Only custom-theme 2.0.39 program compatibility is supported here. Historical data
 is never automatically restored; incompatible schema rollback remains planned.
 
 Points live under ProgramData/HomeLibraryNative/recovery, accessible only to
@@ -238,13 +238,22 @@ Complete snapshot recovery warning: Restoring an earlier complete snapshot rewin
 2.0.36: Back up before updating. Existing local administrator credentials are upgraded safely to support separate dashboard accounts. Earlier programs cannot decrypt the new credentials; do not downgrade. Existing inventory, borrower vaults, original username/password/recovery and approved-device tokens stay intact. All tools → Dashboard accounts manages additional full administrators. All tools / Library settings → Sidebar artwork uploads/removes your PNG; no default illustration is embedded.
 
 
-Earlier 2.0.37 borrower navigation source update: approved borrowers start in Catalog. My reading remains second; My loans includes borrowing requests and confirmation-based cancellation. Account groups private-list controls, install, optional notifications, help, data/history/deletion and sign-out. Pending accounts retain help, install and deletion access. The server delivers this update to borrower browsers/PWAs; no new borrower install is needed. Native Android administrator styling is unchanged. Current library format 3, administrator credential format 2, and pairings remain. Program recovery supports 2.0.38; earlier programs remain incompatible. Build packages locally; this source update does not install them.
+Earlier 2.0.37 borrower navigation source update: approved borrowers start in Catalog. My reading remains second; My loans includes borrowing requests and confirmation-based cancellation. Account groups private-list controls, install, optional notifications, help, data/history/deletion and sign-out. Pending accounts retain help, install and deletion access. The server delivers this update to borrower browsers/PWAs; no new borrower install is needed. Native Android administrator styling is unchanged. Current library format 3, administrator credential format 2, and pairings remain. Program recovery supports 2.0.39; earlier programs remain incompatible. Build packages locally; this source update does not install them.
 
 
-## Current 2.0.38: Android design, custom colors and versioned source folders
+## Current 2.0.39: Android design, custom colors and versioned source folders
 
-Use Carribrary-2.0.38-source.zip, which extracts into Carribrary-2.0.38. Inside is home-library-native with the existing Build-Carribrary launcher and matching root Help. GitHub Download ZIP uses Carribrary-main; rename that extracted top folder to Carribrary-2.0.38 yourself if using it. Do not merge source versions or overwrite a running build. Reuse existing private signing material for Android updates.
+Use Carribrary-2.0.39-source.zip, which extracts into Carribrary-2.0.39. Inside is home-library-native with the existing Build-Carribrary launcher and matching root Help. GitHub Download ZIP uses Carribrary-main; rename that extracted top folder to Carribrary-2.0.39 yourself if using it. Do not merge source versions or overwrite a running build. Reuse existing private signing material for Android updates.
 
 Android has refreshed cards, navigation and Book options. Colors → Custom theme provides eight color roles, full spectrum/hex controls, named save/edit/select and contrast checks. Save & use activates a custom palette on the server. Android preset/ saved selection remains a phone preference; Settings → Use my colors for shared library applies it library-wide. Browser dashboard, borrower pages, login/help and iPhone PWA follow server branding. Only public branding is available before login; all administrative operations remain authenticated. Refresh/reopen web apps after upgrading; rebuild/install Android to receive native changes.
 
-Saved themes are additive library fields with validated custom IDs. Upgrade preserves existing library data, defaults and tokens, but earlier executables reject custom IDs or discard unknown fields. Program-only recovery accepts 2.0.38 only; complete historical recovery remains a separate supervised operation. Library and credential format numbers stay 3 and 2. Back up before installing. No installer, APK, AAB, Flatpak or DEB was built or installed in this source iteration.
+Saved themes are additive library fields with validated custom IDs. Upgrade preserves existing library data, defaults and tokens, but earlier executables reject custom IDs or discard unknown fields. Program-only recovery accepts 2.0.39 only; complete historical recovery remains a separate supervised operation. Library and credential format numbers stay 3 and 2. Back up before installing. No installer, APK, AAB, Flatpak or DEB was built or installed in this source iteration.
+
+
+## Current 2.0.39: Settings & Tools, title fitting and full sidebar overlays
+
+The browser administrator has six navigable settings categories with search, breadcrumbs and in-page editors. Catalog, Borrowers, Lending and Requests follow shared dashboard tokens. Colors and custom themes are under Library & Appearance; book sharing and collection management are under Books & Organization. Daily checkout/return and dashboard shortcuts remain directly accessible. See distribution/ADMIN-TOOLS-INVENTORY-2.0.39.md for every relocated function.
+
+Library names use whole-word fitting on every palette: preferred size, reduction to 1 rem, then logo-above-title layout. Extremely long unbroken names scroll inside the label. Upload a portrait PNG under Library & Appearance → Full sidebar overlay; preferred canvas 512 × 1536, input under 10 MB/8192 pixels per side, resized PNG up to 2 MB. Existing 512 × 256 data is accepted but may crop; re-upload a portrait original for best results. No image or personal library brand is bundled. The overlay cannot intercept navigation clicks.
+
+No authentication, pairing or loan/history migration is introduced. Library/credential format versions stay 3/2. Earlier executables reject full-sidebar PNG dimensions, so program-only recovery now supports 2.0.39 only. Keep complete historical recovery points private and separate. Source archive extracts under Carribrary-2.0.39. Build packages locally; no installers were built or installed in this iteration.

@@ -11,7 +11,7 @@ Unicode true
 !define PROJECT ".."
 !endif
 !ifndef OUTPUT
-!define OUTPUT "../../Carribrary-Setup-2.0.38-preview.exe"
+!define OUTPUT "../../Carribrary-Setup-2.0.39-preview.exe"
 !endif
 Icon "${PROJECT}/assets/home-library.ico"
 !define MUI_ICON "${PROJECT}/assets/home-library.ico"
@@ -25,10 +25,10 @@ SetCompressorDictSize 32
 ShowInstDetails show
 ShowUninstDetails show
 BrandingText "Carribrary - household library server"
-VIProductVersion "2.0.38.0"
+VIProductVersion "2.0.39.0"
 VIAddVersionKey "ProductName" "Carribrary"
 VIAddVersionKey "FileDescription" "Carribrary Windows installer"
-VIAddVersionKey "FileVersion" "2.0.38-preview"
+VIAddVersionKey "FileVersion" "2.0.39-preview"
 VIAddVersionKey "LegalCopyright" "Carribrary household project"
 Var MaintenanceHandle
 Var RecoveryPoint
@@ -212,7 +212,7 @@ Section "Carribrary" SEC_MAIN
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   WriteRegStr HKLM "Software\HomeLibraryNative" "InstallDir" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayName" "Carribrary"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayVersion" "2.0.38-preview"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayVersion" "2.0.39-preview"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "UninstallString" '$\"$INSTDIR\Uninstall.exe$\"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayIcon" "$INSTDIR\tray\HomeLibrary.Tray.exe"

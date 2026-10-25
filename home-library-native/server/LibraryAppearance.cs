@@ -2,8 +2,8 @@ namespace HomeLibrary;
 public static class LibraryAppearance {
  public static void ValidateSidebarArtwork(string value){
   if(value=="")return;
-  try{if(value==null||value.Length>480000)throw new FormatException();var b=Convert.FromBase64String(value);if(b.Length<33||b.Length>350000||!b.AsSpan(0,8).SequenceEqual(new byte[]{137,80,78,71,13,10,26,10})||System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(b.AsSpan(16,4))!=512||System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(b.AsSpan(20,4))!=256)throw new FormatException();}
-  catch(FormatException){throw new LibraryError("Choose sidebar artwork using the PNG upload (512 × 256 pixels after fitting, maximum 350 KB).");}
+  try{if(value==null||value.Length>2800000)throw new FormatException();var b=Convert.FromBase64String(value);if(b.Length<33||b.Length>2097152||!b.AsSpan(0,8).SequenceEqual(new byte[]{137,80,78,71,13,10,26,10})||System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(b.AsSpan(16,4))!=512||System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(b.AsSpan(20,4)) is not (256 or 1536))throw new FormatException();}
+  catch(FormatException){throw new LibraryError("Choose sidebar artwork using the PNG upload (512 × 1536 pixels after fitting, maximum 2 MB; existing 512 × 256 images remain supported).");}
  }
  public static void ValidateIcons(string small,string large){if(small==""&&large=="")return;if(!Icon(small,192)||!Icon(large,512))throw new LibraryError("Choose an image using Library icon. Both sized PNG icons are required (maximum 350 KB each).");}
  static bool Icon(string value,int size){try{if(value==null||value.Length>480000)return false;var b=Convert.FromBase64String(value);return b.Length>32&&b.Length<=350000&&b.AsSpan(0,8).SequenceEqual(new byte[]{137,80,78,71,13,10,26,10})&&System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(b.AsSpan(16,4))==size&&System.Buffers.Binary.BinaryPrimitives.ReadInt32BigEndian(b.AsSpan(20,4))==size;}catch(FormatException){return false;}}

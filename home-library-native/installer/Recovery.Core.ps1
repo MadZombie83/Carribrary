@@ -32,8 +32,8 @@ function Get-CarribraryHash([string]$Path) {
     finally { $Stream.Dispose(); $Sha.Dispose() }
 }
 function Test-CarribraryCompatible([string]$Version) {
-    # Custom-theme state boundary: earlier programs reject saved palette identifiers.
-    return $Version -match '^2\.0\.38(?:[.+-].*)?$'
+    # Full-sidebar artwork boundary: earlier programs reject portrait PNG dimensions.
+    return $Version -match '^2\.0\.39(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

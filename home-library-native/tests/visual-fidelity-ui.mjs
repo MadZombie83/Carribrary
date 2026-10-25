@@ -1,3 +1,4 @@
+import {openAdminTool} from './admin-tool-navigation.mjs';
 // Real authenticated UI and disposable state; no installed household records.
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
@@ -26,6 +27,6 @@ try{
  await page.locator('.sidebar-nav [data-view=dashboard]').click();
  for(const tool of ['requests','lending-tools','devices','export','edit-library-name']){await page.locator(`.sidebar-nav [data-admin-tool=${tool}]`).click();await page.waitForFunction(()=>document.querySelector('#form-dialog').open);await page.locator('#close-form').click();}
  await page.locator('.sidebar-nav [data-view=catalog]').click();await page.locator('#search').fill('');
- for(const theme of ['classic','forest','rose','ocean','purple-blue']){await page.locator('#theme').selectOption(theme);await page.waitForFunction(t=>document.body.dataset.libraryTheme===t,theme);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));}
+ for(const theme of ['classic','forest','rose','ocean','purple-blue']){await openAdminTool(page,'palette');await page.locator('#theme').selectOption(theme);await page.waitForFunction(t=>document.body.dataset.libraryTheme===t,theme);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));}
  assert.deepEqual(errors,[]);console.log('PASS reference widths, real counts, transparent logo, no mandatory artwork, dashboard catalog search, operational dialogs, all five themes');
 }finally{await browser.close();}

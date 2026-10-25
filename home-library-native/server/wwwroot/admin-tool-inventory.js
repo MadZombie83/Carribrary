@@ -1,0 +1,45 @@
+// Public source metadata only; values and permissions still come from authenticated server operations.
+export const settingsCategories=[
+ {id:'library-appearance',title:'Library & Appearance',icon:'home',description:'Names, colors and artwork that make this library yours.'},
+ {id:'books-organization',title:'Books & Organization',icon:'book',description:'Collections, copy labels, numbering and acquisition lists.'},
+ {id:'borrowing-reminders',title:'Borrowing & Reminders',icon:'swap',description:'Lending rules, holds, requests and optional reminders.'},
+ {id:'people-access',title:'People & Access',icon:'people',description:'Administrator access, borrower accounts and approved devices.'},
+ {id:'data-history',title:'Data & History',icon:'backup',description:'Backups, exports, history and carefully confirmed recovery.'},
+ {id:'system-advanced',title:'System & Advanced',icon:'settings',description:'Connection guidance, updates, integrations and help.'}
+];
+export const settingsTools=[
+ ['rename-library','library-appearance','Library name','Change the name shown on library pages.','home'],
+ ['library-icon','library-appearance','Library icon','Upload your own icon, preserving transparency.','book'],
+ ['edit-library-name','library-appearance','Library sayings','Edit the subtitle and encouraging message.','reading'],
+ ['palette','library-appearance','Colors & saved themes','Choose a preset or edit a named custom palette.','settings'],
+ ['custom-theme','library-appearance','Custom theme editor','Full color pickers, hex values and readable contrast.','settings'],
+ ['sidebar-artwork-settings','library-appearance','Full sidebar overlay','Upload a portrait PNG beneath the sidebar navigation.','home'],
+ ['manage-collections','books-organization','Collections','Organize books without separating household borrowers.','book'],
+ ['copy-labels','books-organization','Print copy labels','Optional labels for individual physical copies.','book'],
+ ['copy-numbering','books-organization','Copy numbering','Choose gap filling or the next catalog number.','settings'],
+ ['books-to-buy','books-organization','Books to buy','Manage the private acquisition wishlist.','book'],
+ ['bulk-edit','books-organization','Bulk catalog editing','Select copies in Catalog, then review changes together.','book'],
+ ['share-qr','books-organization','Share the library / QR','Manage the public book-list link and QR.','requests'],
+ ['share-list','books-organization','Share a text book list','Review the current Catalog search and sort before sharing.','requests'],
+ ['active-loans','borrowing-reminders','Books on loan','Review active loans, due dates and per-copy returns.','swap'],
+ ['lending-tools','borrowing-reminders','Lending & holds','Holds, handover, batch checkout and batch returns.','swap'],
+ ['lending-limits','borrowing-reminders','Lending limits','Set batch and per-borrower limits; returns stay unrestricted.','settings'],
+ ['requests','borrowing-reminders','Book requests','Review requests without starting loans before handover.','requests'],
+ ['push-overview','borrowing-reminders','PWA notification status','Review optional borrower reminders and admin request-notification delivery.','requests'],
+ ['reminders','borrowing-reminders','Automatic email reminders','Configure SMTP and consent-based due-date reminders.','clock'],
+ ['accounts-button','people-access','Borrower accounts','Approve, block, relink or remove borrower sign-ins.','people'],
+ ['dashboard-accounts','people-access','Dashboard administrators','Individual administrator passwords, recovery and sessions.','people'],
+ ['devices','people-access','Android phone pairing','Pair approved phones and revoke their access.','devices'],
+ ['iphone-companion','people-access','iPhone / browser pairing','Approve or revoke token-based browser companions.','devices'],
+ ['household-readers','people-access','Household readers','Manage household profiles in Reading tracker.','reading'],
+ ['export','data-history','Backups','Complete password-protected server backup or library JSON export.','backup'],
+ ['export-csv','data-history','Export catalog CSV','Download book details for spreadsheets.','book'],
+ ['history','data-history','Loan history','Review checkouts and completed returns.','clock'],
+ ['recycle-bin','data-history','Recycle Bin','Review recoverable books and borrowers; permanent removal is confirmed.','backup'],
+ ['import','data-history','Restore library export','Replace library records only after the existing restore confirmation.','backup',true],
+ ['history-controls','data-history','Clear completed history','Preview protected records and type the existing confirmation.','alert',true],
+ ['setup','system-advanced','Setup & updates','Server details, DNS / DuckDNS checks, remote access, pairing and updates.','settings'],
+ ['google-cover-settings','system-advanced','Google Books integration','Optional user-provided API key; never included in library exports.','book'],
+ ['help-button','system-advanced','Help & instructions','Search the synchronized guide and illustrated quick start.','reading']
+].map(([id,category,title,description,icon,danger=false])=>({id,category,title,description,icon,danger}));
+export const toolRoute=id=>{const t=settingsTools.find(t=>t.id===id);return t?'#settings/'+t.category+'/'+t.id:null;};

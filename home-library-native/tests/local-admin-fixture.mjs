@@ -1,3 +1,4 @@
+import {openAdminTool} from './admin-tool-navigation.mjs';
 // Explicit test enrollment through the real authentication API. Never an auth bypass.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
@@ -12,10 +13,11 @@ export async function authenticateLocalAdmin(page){
  assert.equal(response.status(),200,'Test administrator must authenticate through the real server');
 }
 
-// Navigate through the responsive admin UI; mobile reading/lending tools live under More.
+// Navigate through visible responsive controls or the explicit Settings & Tools route.
 export async function openAdminView(page,view){
  const direct=page.locator(`[data-view=${view}]:visible`).first();
  if(await direct.count()){await direct.click();return;}
- await page.locator('[data-admin-tool=more]:visible').first().click();
- await page.locator(`[data-admin-route=${view}]`).click();
+ if(view==='reading')return openAdminTool(page,'household-readers');
+ if(view==='loans')return openAdminTool(page,'active-loans');
+ throw Error('No visible administrator view: '+view);
 }
