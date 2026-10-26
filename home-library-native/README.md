@@ -1,6 +1,8 @@
-# Carribrary 2.0.43 — batch acquisition, renewals and recovery
+# Carribrary 2.0.44 — verify saved backups safely
 
-**2.0.43 current source update:** Batch ISBN queues and mapped CSV imports, borrower renewals and opt-in email password recovery. [Release notes, limits and owner test checklist](distribution/RELEASE-2.0.43.md). Back up before upgrading: library format 4 adds ISBN-less books/import notes/renewals; older executables cannot read it safely. Program recovery is restricted to 2.0.43. Source only; owner builds packages.
+**2.0.44 current source update:** Verify a saved complete backup from Data & History on the dashboard, iPhone PWA and native Android. The authenticated tool checks encryption, all file hashes, SQLite integrity and recorded library format in isolated protected storage, removes temporary data and never restores a live library. An independent `--verify-complete-backup ARCHIVE` command prompts for the password even when the dashboard cannot start. [Release notes and owner checks](distribution/RELEASE-2.0.44.md). Android JSON restore now accepts format 4; in-page Settings headers stay in normal flow. Library format stays 4 and credentials stay 2; compatible program recovery supports 2.0.43–2.0.44. Source only; owner builds packages.
+
+**2.0.43 earlier source update:** Batch ISBN queues and mapped CSV imports, borrower renewals and opt-in email password recovery. [Release notes, limits and owner test checklist](distribution/RELEASE-2.0.43.md). Back up before upgrading: library format 4 adds ISBN-less books/import notes/renewals; older executables cannot read it safely. Program recovery is restricted to 2.0.43. Source only; owner builds packages.
 
 **Earlier 2.0.42 source update:** Android and iPhone PWA share four colored whole-library summary panels, functional request bells and dashboard-style search/navigation. Android adds Home quick actions; both companions offer Home, Catalog, Loans, Reading and Settings. See [release notes and hardware checklist](distribution/RELEASE-2.0.42.md). Source only; owner builds packages. Compatible recovery: 2.0.39–2.0.42.
 
@@ -16,7 +18,7 @@ An independently hosted ASP.NET Core / SQLite Windows library server, Windows tr
 
 ## Click-through Windows installer
 
-After building, use **Carribrary-Setup-2.0.39-preview.exe** for installation without commands. Export a backup first, close the previous Node server window, then double-click the installer. The wizard can import your JSON backup; it configures the service, firewall, shortcuts and optional tray startup. Existing native data and connection settings are retained on updates. The Start menu **Connection setup** window configures a remote hostname, optional encrypted DuckDNS credentials and optional public sharing. Router port forwarding is still done in the router interface. See `INSTALLER-GUIDE.txt`. The personal installer is unsigned; physical Windows execution remains unverified here.
+After building, use **Carribrary-Setup-2.0.44-preview.exe** for installation without commands. Export a backup first, close the previous Node server window, then double-click the installer. The wizard can import your JSON backup; it configures the service, firewall, shortcuts and optional tray startup. Existing native data and connection settings are retained on updates. The Start menu **Connection setup** window configures a remote hostname, optional encrypted DuckDNS credentials and optional public sharing. Router port forwarding is still done in the router interface. See `INSTALLER-GUIDE.txt`. The personal installer is unsigned; physical Windows execution remains unverified here.
 
 The ZIP/manual instructions below remain available for developers.
 

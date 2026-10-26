@@ -6,6 +6,10 @@ using System.Security.Authentication;
 using System.Text.Json;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Http.Features;
+if(args.Length>0&&args[0]=="--verify-complete-backup"){
+ if(args.Length!=2){Console.Error.WriteLine("Usage: HomeLibrary.Server --verify-complete-backup ARCHIVE. The password is prompted; do not pass it as an argument.");Environment.ExitCode=1;return;}
+ try{var report=BackupVerification.Verify(args[1],CompleteBackupRecovery.PasswordPrompt());Console.WriteLine($"Integrity verified: {report.Files} files, library format {report.LibraryFormat}. No library was restored. Compatibility, Windows machine-bound keys and external configuration still need separate recovery checks.");}catch(Exception error){Console.Error.WriteLine(error is LibraryError?error.Message:"Verification could not finish. Check the file, password, free space and permissions.");Environment.ExitCode=1;}return;
+}
 if(args.Length>0&&args[0]=="--unpack-complete-backup"){
  if(args.Length!=3){Console.Error.WriteLine("Usage: HomeLibrary.Server --unpack-complete-backup ARCHIVE NEW-FOLDER. The password is prompted; do not pass it as an argument.");Environment.ExitCode=1;return;}
  try{CompleteBackupRecovery.Command(args[1],args[2]);}catch(Exception error){Console.Error.WriteLine(error is LibraryError?error.Message:"The backup could not be unpacked. Check the file, password, destination permissions and available disk space.");Environment.ExitCode=1;}return;
@@ -25,8 +29,10 @@ var protection=builder.Services.AddDataProtection().SetApplicationName("HomeLibr
 if(OperatingSystem.IsWindows())protection.ProtectKeysWithDpapi(true);
 builder.Services.AddSingleton(sp=>new LocalAdministrators(data,sp.GetRequiredService<IDataProtectionProvider>()));
 builder.Services.AddSingleton(sp=>new BrowserAdmins(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>()));
+builder.Services.AddHttpClient("backup-verification-proxy",client=>client.Timeout=TimeSpan.FromMinutes(10)).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false,UseCookies=false,UseProxy=false});
 builder.Services.AddHttpClient("companion-proxy",client=>client.Timeout=TimeSpan.FromMinutes(3)).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false,UseCookies=false,UseProxy=false});
 builder.Services.AddSingleton<SnapshotGate>();
+builder.Services.AddSingleton(sp=>new BackupVerification(data));
 builder.Services.AddSingleton(sp=>new CompleteBackup(data,settings,sp.GetRequiredService<SnapshotGate>()));
 builder.Services.AddSingleton<IPushTransport,WebPushTransport>();
 builder.Services.AddSingleton(sp=>new PushNotifications(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<IPushTransport>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<BorrowerAccounts>(),sp.GetRequiredService<BrowserAdmins>()));builder.Services.AddHostedService<PushWorker>();
@@ -80,7 +86,7 @@ app.Use(async(context,next)=>{
    if(context.Request.Headers["Sec-Fetch-Site"]=="cross-site"){context.Response.StatusCode=403;return;}
    if(context.Request.Method is not ("GET" or "HEAD")){
     var origin=context.Request.Headers.Origin.ToString();if(origin!=adminOrigin&&origin!=$"http://127.0.0.1:{settings.AdminPort}"){context.Response.StatusCode=403;return;}
-    if(!context.Request.HasJsonContentType()){context.Response.StatusCode=403;return;}
+    if(!context.Request.HasJsonContentType()&&!(BackupVerification.IsUpload(context.Request.Path)&&BackupVerification.Binary(context.Request))){context.Response.StatusCode=403;return;}
    }
    // Login assets expose only intentional public name/icon/palette branding, never administrative data.
    var path=context.Request.Path.Value??"/";
@@ -101,9 +107,9 @@ app.Use(async(context,next)=>{
    context.Response.Headers["X-Robots-Tag"]="noindex, nofollow, noarchive";
    if(context.Request.Method is not ("GET" or "HEAD")){
     if(context.Request.Method!="POST"||!System.Text.RegularExpressions.Regex.IsMatch(context.Request.Path.Value??"",@"^(/s/[^/]+/requests|/reading/(action|requests|history/preview)|/account/(registration-options|register|login|logout|forgot-password|reset|vault|action|requests|history/preview|deletion-preview|delete|push|push/remove|push/test)|/companion/(enroll|logout|push|push/remove|push/test|api/[a-zA-Z0-9/_-]+))$")){context.Response.StatusCode=405;return;}
-    if(!context.Request.HasJsonContentType()){context.Response.StatusCode=415;return;}
+    if(!context.Request.HasJsonContentType()&&!(BackupVerification.IsUpload(context.Request.Path)&&BackupVerification.Binary(context.Request))){context.Response.StatusCode=415;return;}
     if(context.Request.Headers.Origin.ToString()!=settings.PublicCatalogOrigin.TrimEnd('/')){context.Response.StatusCode=403;return;}
-    var bodyLimit=context.Features.Get<IHttpMaxRequestBodySizeFeature>();if(bodyLimit!=null&&!bodyLimit.IsReadOnly)bodyLimit.MaxRequestBodySize=context.Request.Path.StartsWithSegments("/companion/api")?10*1024*1024:context.Request.Path=="/account/vault"?6*1024*1024:8192;
+    var bodyLimit=context.Features.Get<IHttpMaxRequestBodySizeFeature>();if(bodyLimit!=null&&!bodyLimit.IsReadOnly)bodyLimit.MaxRequestBodySize=BackupVerification.IsUpload(context.Request.Path)?BackupVerification.MaxRequestBytes:context.Request.Path.StartsWithSegments("/companion/api")?10*1024*1024:context.Request.Path=="/account/vault"?6*1024*1024:8192;
    }
    if(!context.Request.Path.StartsWithSegments("/s")&&!context.Request.Path.StartsWithSegments("/reading")&&!context.Request.Path.StartsWithSegments("/companion")&&!context.Request.Path.StartsWithSegments("/account")&&context.Request.Path!="/robots.txt"&&context.Request.Path!="/"&&context.Request.Path!="/welcome.css"&&context.Request.Path!="/welcome.js"){context.Response.StatusCode=404;return;}
   }else if(context.Connection.LocalPort==settings.PhonePort){
@@ -121,7 +127,7 @@ app.Use(async(context,next)=>{
 // Snapshot endpoints acquire the exclusive lease after normal authorization.
 app.Use(async(context,next)=>{
  var path=context.Request.Path;
- if(path.StartsWithSegments("/companion/api")||path=="/api/backup/complete"||path=="/mobile/backup/complete"){await next();return;}
+ if(BackupVerification.IsUpload(path)||path.StartsWithSegments("/companion/api")||path=="/api/backup/complete"||path=="/mobile/backup/complete"){await next();return;}
  using var lease=await app.Services.GetRequiredService<SnapshotGate>().Shared(context.RequestAborted);
  // All current route mutations finish before headers. Do not let a slow download
  // hold the snapshot gate after an operation has already completed.
@@ -131,6 +137,7 @@ bool Admin(HttpContext c)=>c.Connection.LocalPort==settings.AdminPort&&c.Items["
 bool Mobile(HttpContext c)=>c.Connection.LocalPort==settings.PhonePort;
 app.MapPost("/api/backup/complete",async(CompleteBackupInput input,HttpContext c,CompleteBackup backups)=>Admin(c)?await backups.Create(input.Password,c.RequestAborted):Results.NotFound());
 app.MapPost("/mobile/backup/complete",async(CompleteBackupInput input,HttpContext c,CompleteBackup backups)=>Mobile(c)?await backups.Create(input.Password,c.RequestAborted):Results.NotFound());
+foreach(var prefix in new[]{"/api","/mobile"})app.MapPost(prefix+"/backup/verify",async(HttpContext c,BackupVerification verification)=>(prefix=="/api"?Admin(c):Mobile(c))?await verification.Upload(c):Results.NotFound());
 app.MapGet("/api/state",(HttpContext c)=>Admin(c)?Results.Json(store.AdminRead(),Library.Json):Results.NotFound());
 app.MapPost("/api/action",(ActionRequest req,HttpContext c)=>Admin(c)?(req.Action=="requestBook"?Results.BadRequest(new{error="Use the shared catalog to submit requests."}):Results.Json(store.AdminApply(req),Library.Json)):Results.NotFound());
 app.MapGet("/api/receipts/{copyId}",(string copyId,HttpContext c)=>Admin(c)?Results.Json(BorrowingReceipt.Create(store.Read().State,copyId)):Results.NotFound());
@@ -204,7 +211,7 @@ app.MapMethods("/s/{token}/{**leaf}",new[]{"GET","HEAD"},async(string token,stri
  var filename=leaf switch{null or ""=>"catalog.html","catalog.js"=>"catalog.js","book-about.js"=>"book-about.js","catalog.css"=>"catalog.css","favicon.ico"=>"favicon.ico","powered-by-google.png"=>"powered-by-google.png","cover-credit.js"=>"cover-credit.js",_=>null};
  return filename==null?Results.NotFound():Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",filename),filename.EndsWith(".html")?"text/html":filename.EndsWith(".js")?"text/javascript":filename.EndsWith(".ico")?"image/x-icon":filename.EndsWith(".png")?"image/png":"text/css");
 }).RequireRateLimiting("personal-reading");
-var files=new HashSet<string>{"catalog-import.js","renewals.js","theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
+var files=new HashSet<string>{"backup-verification.js","catalog-import.js","renewals.js","theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
 app.MapGet("/{**path}",(string? path,HttpContext c)=>{
  if(c.Connection.LocalPort==settings.CatalogPort&&(string.IsNullOrEmpty(path)||path is "welcome.css" or "welcome.js")){
   c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";

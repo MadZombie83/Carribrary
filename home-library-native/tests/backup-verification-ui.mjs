@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import {readFile,mkdir,writeFile,readdir} from 'node:fs/promises';
+import {execFileSync} from 'node:child_process';
+import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
+import {openAdminTool} from './admin-tool-navigation.mjs';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const admin=process.env.LIBRARY_TEST_URL,publicUrl=process.env.PUBLIC_TEST_URL,password='Private verification browser test password';
+const out='output/backup-safety-2.0.44';await mkdir(out,{recursive:true});
+const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});const errors=[];
+const frame=(archive,key=password)=>{const json=Buffer.from(JSON.stringify({password:key})),size=Buffer.alloc(4);size.writeInt32LE(json.length);return Buffer.concat([size,json,archive]);};
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:1000}});page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(admin);await page.waitForSelector('#content',{state:'attached'});await page.waitForFunction(()=>document.querySelector('#app-version')?.textContent.includes('2.0.44'));
+ const before=await(await page.request.get(admin+'/api/state')).json();
+ const saved=await page.request.post(admin+'/api/backup/complete',{headers:{Origin:admin},data:{password}});assert.equal(saved.status(),200);const archive=await saved.body();assert.equal(archive.subarray(0,8).toString(),'CARRBK01');
+ const payload=frame(archive),binary={'Content-Type':'application/octet-stream',Origin:admin};
+ assert.equal((await page.request.post(admin+'/api/backup/verify',{headers:{...binary,Origin:'https://untrusted.example'},data:payload})).status(),403);
+ const outsider=await browser.newContext({ignoreHTTPSErrors:true});
+ assert.equal((await outsider.request.post(admin+'/api/backup/verify',{headers:binary,data:payload})).status(),401);
+ assert.equal((await outsider.request.post(publicUrl+'/companion/api/backup/verify',{headers:{...binary,Origin:publicUrl},data:payload})).status(),401);
+ assert.equal((await outsider.request.post(publicUrl+'/account/backup/verify',{headers:{...binary,Origin:publicUrl},data:payload})).status(),405);
+ const wrong=await page.request.post(admin+'/api/backup/verify',{headers:binary,data:frame(archive,'Incorrect but long backup password')});assert.equal(wrong.status(),400);assert.match((await wrong.json()).error,/password|damaged/i);
+ const damaged=Buffer.from(archive);damaged[damaged.length-20]^=1;assert.equal((await page.request.post(admin+'/api/backup/verify',{headers:binary,data:frame(damaged)})).status(),400);
+ assert.equal((await page.request.post(admin+'/api/backup/verify',{headers:binary,data:Buffer.from([0,0])})).status(),400);
+ const archivePath=out+'/fixture.carribrary-backup';await writeFile(archivePath,archive);
+ const untouched=out+'/must-not-be-server-data';
+ const offline=execFileSync(process.env.DOTNET_COMMAND,['home-library-native/server/bin/Release/net10.0/HomeLibrary.Server.dll','--verify-complete-backup',archivePath],{input:password+'\n',env:{...process.env,HOME_LIBRARY_DATA:untouched}}).toString();assert.match(offline,/Integrity verified/);await assert.rejects(readdir(untouched),{code:'ENOENT'});
+ await openAdminTool(page,'verify-backup');await page.locator('[name=archive]').setInputFiles(archivePath);await page.locator('[name=password]').fill('Wrong browser backup password');await page.getByRole('button',{name:'Verify saved backup',exact:true}).click();await page.waitForFunction(()=>document.querySelector('#form-dialog .form-error')?.textContent.includes('password'));
+ assert.equal(await page.locator('[name=password]').inputValue(),'');await page.locator('[name=password]').fill(password);await page.getByRole('button',{name:'Verify saved backup',exact:true}).click();await page.getByRole('heading',{name:'Backup integrity verified'}).waitFor();assert.equal(await page.locator('[name=password]').inputValue(),'');assert.equal(await page.locator('#verify-backup-form .form-error').textContent(),'');await page.screenshot({path:out+'/verification-desktop.png',fullPage:true});
+ await page.locator('#close-form').click();await openAdminTool(page,'export');await page.locator('#open-backup-verification').click();await page.locator('#verify-backup-form').waitFor();await page.locator('#close-form').click();
+ const pair=await(await page.request.post(admin+'/api/browser-admins/pair',{headers:{Origin:admin},data:{}})).json();
+ const companionContext=await browser.newContext({ignoreHTTPSErrors:true,viewport:{width:390,height:844}});assert.equal((await companionContext.request.post(publicUrl+'/companion/enroll',{headers:{Origin:publicUrl},data:{code:pair.code,name:'Backup verification test companion'}})).status(),200);
+ const companion=await companionContext.newPage();companion.on('pageerror',e=>errors.push(e.message));await companion.goto(publicUrl+'/companion/');await companion.waitForSelector('#content');await openAdminTool(companion,'verify-backup');await companion.locator('[name=archive]').setInputFiles(archivePath);await companion.locator('[name=password]').fill(password);await companion.getByRole('button',{name:'Verify saved backup',exact:true}).click();await companion.getByRole('heading',{name:'Backup integrity verified'}).waitFor();
+ assert.equal(await companion.locator('[name=password]').inputValue(),'');assert.ok(await companion.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await companion.screenshot({path:out+'/verification-companion-390.png',fullPage:true});
+ const devices=await(await page.request.get(admin+'/api/browser-admins',{headers:{Origin:admin}})).json();const device=devices.devices.find(d=>d.name==='Backup verification test companion');assert.ok(device);await page.request.post(admin+'/api/browser-admins/revoke',{headers:{Origin:admin},data:{deviceId:device.id}});
+ assert.equal((await companionContext.request.post(publicUrl+'/companion/api/backup/verify',{headers:{'Content-Type':'application/octet-stream',Origin:publicUrl},data:payload})).status(),401);
+ const after=await(await page.request.get(admin+'/api/state')).json();assert.deepEqual(after,before);assert.deepEqual(errors,[]);
+ const {rm}=await import('node:fs/promises');await rm(archivePath);console.log('PASS complete-backup verification: local/PWA UI, binary proxy, access/origin/revocation, wrong passwords, damage, truncation, offline no-start check, mobile layout and unchanged live state');
+}finally{await browser.close();}

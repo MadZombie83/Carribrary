@@ -35,6 +35,7 @@ export const settingsTools=[
  ['iphone-companion','people-access','iPhone / browser pairing','Approve or revoke token-based browser companions.','devices'],
  ['household-readers','people-access','Household readers','Manage household profiles in Reading tracker.','reading'],
  ['export','data-history','Backups','Complete password-protected server backup or library JSON export.','backup'],
+ ['verify-backup','data-history','Verify complete backup','Check a saved archive and password without restoring live records.','backup'],
  ['export-csv','data-history','Export catalog CSV','Download book details for spreadsheets.','book'],
  ['history','data-history','Loan history','Review checkouts and completed returns.','clock'],
  ['recycle-bin','data-history','Recycle Bin','Review recoverable books and borrowers; permanent removal is confirmed.','backup'],

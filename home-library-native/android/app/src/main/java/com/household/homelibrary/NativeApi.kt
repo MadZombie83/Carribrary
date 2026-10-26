@@ -166,6 +166,21 @@ class NativeApi(private val context:Context) {
    }catch(error:Exception){if(error is ApiError||written>0||index==candidates.lastIndex)throw error}finally{connection.disconnect()}
   }
  }
+ suspend fun verifyCompleteBackup(password:String,input:java.io.InputStream)=withContext(Dispatchers.IO){
+  check(paired){"Pair this phone first."};require(password.length in 12..128){"Enter the backup password (12–128 characters)."}
+  val expected=prefs.getString("pin","")!!;val remote=prefs.getString("url","")!!;val base=discover()?:remote
+  val url=URL(base+"/mobile/backup/verify");val connection=url.openConnection() as HttpsURLConnection
+  connection.instanceFollowRedirects=false;connection.connectTimeout=5000;connection.readTimeout=600000;connection.sslSocketFactory=socketFactory(expected,true)
+  connection.hostnameVerifier=HostnameVerifier{host,session->host==url.host&&runCatching{pin(session.peerCertificates[0] as X509Certificate)==expected}.getOrDefault(false)}
+  try{
+   connection.requestMethod="POST";connection.doOutput=true;connection.setRequestProperty("Content-Type","application/octet-stream");connection.setChunkedStreamingMode(65536)
+   val metadata=JSONObject().put("password",password).toString().toByteArray(Charsets.UTF_8)
+   connection.outputStream.use{output->output.write(java.nio.ByteBuffer.allocate(4).order(java.nio.ByteOrder.LITTLE_ENDIAN).putInt(metadata.size).array());output.write(metadata);val buffer=ByteArray(65536);var total=0L;while(true){val n=input.read(buffer);if(n<0)break;total+=n;require(total<=2L*1024*1024*1024+64*1024*1024){"Backup exceeds the supported verification size."};output.write(buffer,0,n)}}
+   val status=connection.responseCode;val raw=(if(status in 200..299)connection.inputStream else connection.errorStream)?.bufferedReader()?.use{it.readText()}?:"{}";val report=runCatching{JSONObject(raw)}.getOrDefault(JSONObject())
+   if(status !in 200..299||!report.optBoolean("verified"))throw ApiError(status,report.optString("error").ifBlank{if(status==404)"Update Carribrary Server to 2.0.44 or later for backup verification." else "Verification could not finish. Check the connection or use the offline tool."})
+   report
+  }finally{connection.disconnect()}
+ }
  private fun currentRequest(path:String,body:JSONObject?=null):JSONObject {
   check(paired){"Pair this phone first."};val remote=prefs.getString("url","")!!;val expected=prefs.getString("pin","")!!
   val local=discover();if(local!=null&&local!=remote){try{return request(local,path,expected,true,body)}catch(error:ApiError){throw error}catch(_:Exception){}}

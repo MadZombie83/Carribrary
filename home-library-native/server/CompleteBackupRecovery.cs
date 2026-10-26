@@ -36,10 +36,13 @@ public static class CompleteBackupRecovery {
   }catch(InvalidDataException){throw new LibraryError("The decrypted backup archive is damaged.");}
   finally{if(Directory.Exists(stage))Directory.Delete(stage,true);}
  }
- public static void Command(string file,string destination){
+ public static string PasswordPrompt(){
   Console.Write("Backup password: ");string password;
   if(Console.IsInputRedirected)password=Console.ReadLine()??"";
   else{var text=new System.Text.StringBuilder();while(true){var key=Console.ReadKey(true);if(key.Key==ConsoleKey.Enter)break;if(key.Key==ConsoleKey.Backspace){if(text.Length>0)text.Length--;}else if(!char.IsControl(key.KeyChar))text.Append(key.KeyChar);}Console.WriteLine();password=text.ToString();}
-  var manifest=Unpack(file,destination,password);Console.WriteLine($"Verified {manifest.Files.Count} files. Recovered into {Path.GetFullPath(destination)}. Read RECOVERY-READ-ME.txt before restoring a stopped server.");
+  return password;
+ }
+ public static void Command(string file,string destination){
+  var manifest=Unpack(file,destination,PasswordPrompt());Console.WriteLine($"Verified {manifest.Files.Count} files. Recovered into {Path.GetFullPath(destination)}. Read RECOVERY-READ-ME.txt before restoring a stopped server.");
  }
 }

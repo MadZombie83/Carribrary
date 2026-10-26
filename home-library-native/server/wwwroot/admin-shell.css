@@ -276,7 +276,7 @@
 .settings-editor-host{background:var(--surface,white);border:1px solid var(--line);border-radius:var(--ui-radius);padding:1.5rem;box-shadow:var(--ui-shadow);min-width:0}
 .admin-shell #settings-editor-host #form-dialog.settings-inline-editor{display:block;position:static;margin:0;width:100%;max-width:100%;max-height:none;padding:0;border:0;border-radius:0;box-shadow:none;background:transparent;overflow:visible;color:var(--ui-text)}
 .admin-shell #settings-editor-host #form-dialog.settings-inline-editor:not([open]){display:none}
-.admin-shell .settings-inline-editor .dialog-head{position:static;padding-top:0}.admin-shell .settings-inline-editor .dialog-head #dialog-title{font-size:1.5rem}.settings-inline-editor #close-form{font-size:0}.settings-inline-editor #close-form::after{content:'Back';font-size:.85rem}
+.admin-shell #form-dialog.settings-inline-editor .dialog-head{position:static;top:auto;padding-top:0}.admin-shell .settings-inline-editor .dialog-head #dialog-title{font-size:1.5rem}.settings-inline-editor #close-form{font-size:0}.settings-inline-editor #close-form::after{content:'Back';font-size:.85rem}
 .appearance-controls{display:flex;align-items:end;flex-wrap:wrap;gap:1rem}.appearance-controls label{display:grid;gap:.4rem;min-width:min(100%,240px);flex:1}.appearance-controls button{min-height:48px}
 .settings-danger-zone{margin-top:2.5rem;border-top:2px solid #d8a8a1;padding-top:1.5rem}.settings-danger-zone>h2{font:1.4rem Georgia,serif;color:#9b3225}.settings-danger-zone>p{font-size:.85rem;color:var(--ui-muted)}.settings-danger-card{border-color:#d8a8a1}.settings-danger-action{color:#9b3225}
 /* Sidebar names never break inside a word. The fitter reduces type, then stacks the logo. */

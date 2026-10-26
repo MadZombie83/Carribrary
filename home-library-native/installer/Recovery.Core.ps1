@@ -33,7 +33,7 @@ function Get-CarribraryHash([string]$Path) {
 }
 function Test-CarribraryCompatible([string]$Version) {
     # Format-4 boundary: older programs cannot preserve ISBN-less books and renewal records.
-    return $Version -match '^2\.0\.43(?:[.+-].*)?$'
+    return $Version -match '^2\.0\.(43|44)(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

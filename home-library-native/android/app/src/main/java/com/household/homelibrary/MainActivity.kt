@@ -108,6 +108,7 @@ fun duplicates(books:List<JSONObject>,draft:JSONObject)=books.filter{edition(it.
  }
  }
  if(dialog=="catalogBatch")BatchCatalogDialog(api,snapshot,onChanged={snapshot=it},onClose={dialog=""})
+ if(dialog=="backupVerify")VerifyBackupDialog(api,onClose={dialog=""})
  if(dialog=="renewals")RenewalsDialog(api,snapshot,onChanged={snapshot=it},onClose={dialog=""})
  if(scanner.isNotEmpty())Dialog(onDismissRequest={scanner=""},properties=DialogProperties(usePlatformDefaultWidth=false)){Surface(Modifier.fillMaxSize()){
   Scanner(api,scanner,onRead={value->val kind=scanner;scanner="";if(kind=="pair")launchTask{api.pair(value,phoneName);paired=true;pairingText="";snapshot=api.refresh();online=true}else {val next=JSONObject(draft.toString()).put(if(kind=="isbn")"isbn" else "copyId",value);if(kind=="isbn")next.remove("coverUrl") else next.remove("selectedCopy");draft=next}},onClose={scanner=""})
@@ -141,7 +142,7 @@ fun duplicates(books:List<JSONObject>,draft:JSONObject)=books.filter{edition(it.
  if(dialog=="theme")CustomThemeDialog(state,theme,online,busy,notice,onPreset={key->
   state.optJSONArray("savedThemes")?.objects()?.find{"custom-"+it.optString("id")==key}?.let{api.savePreference("custom-palette",it.toString())};onTheme(key)
  },onSave={palette->launchTask{snapshot=api.mutate("saveCustomTheme",palette,snapshot.optLong("revision"));val fresh=snapshot.getJSONObject("state");val key=fresh.getString("libraryTheme");fresh.optJSONArray("savedThemes")?.objects()?.find{"custom-"+it.optString("id")==key}?.let{api.savePreference("custom-palette",it.toString())};onTheme(key);notice="Custom library theme saved";dialog=""}},onClose={dialog=""})
- if(dialog !in listOf("catalogBatch","renewals")&&dialog.isNotEmpty()&&dialog !in listOf("acquisitions","dataControls","lending","about","recycle","reminders","bulk","setup","help","accounts","readingShare","sharing","theme","manage","deleteBook","deleteBorrower","privacy","collections"))Dialog(onDismissRequest={if(!busy)dialog=""}){Surface(shape=MaterialTheme.shapes.large){Column(Modifier.padding(20.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){
+ if(dialog !in listOf("catalogBatch","renewals","backupVerify")&&dialog.isNotEmpty()&&dialog !in listOf("acquisitions","dataControls","lending","about","recycle","reminders","bulk","setup","help","accounts","readingShare","sharing","theme","manage","deleteBook","deleteBorrower","privacy","collections"))Dialog(onDismissRequest={if(!busy)dialog=""}){Surface(shape=MaterialTheme.shapes.large){Column(Modifier.padding(20.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){
   Text(when(dialog){"book"->"Add physical copy";"editBook"->"Edit book";"borrower"->"Add borrower";"editBorrower"->"Edit borrower";"checkout"->"Check out";"return"->"Return copy";"handover"->"Hand over requested book";else->"Connection"},style=MaterialTheme.typography.titleLarge)
   var coverResults by remember(dialog,draft.optString("isbn")){mutableStateOf<JSONObject?>(null)}
   fun set(field:String,value:String){val next=JSONObject(draft.toString()).put(field,value);if(field=="copyId")next.remove("selectedCopy");if(field=="isbn"&&value!=draft.optString("isbn")){next.remove("coverUrl");coverResults=null};draft=next}

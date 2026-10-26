@@ -31,14 +31,14 @@ class Handler(http.server.BaseHTTPRequestHandler):
  def log_message(self,*args):pass
 server=http.server.ThreadingHTTPServer(('127.0.0.1',19877),Handler);ctx=ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER);ctx.load_cert_chain(os.environ['CARRIBRARY_TEST_CERT'],os.environ['CARRIBRARY_TEST_KEY']);server.socket=ctx.wrap_socket(server.socket,server_side=True);server.serve_forever()
 ''')
-checks=['acquisition-renewals','borrower-controls','summary-panels','release-polish','admin-landing','settings-pages','admin-pages','custom-themes','repair-requests','accounts','private-vault','account-deletion','borrower-app','data-controls','lending','circulation','collections-google','registration-security','turnstile','complete-backup','quick-start','ecosystem']
+checks=['backup-verification','acquisition-renewals','borrower-controls','summary-panels','release-polish','admin-landing','settings-pages','admin-pages','custom-themes','repair-requests','accounts','private-vault','account-deletion','borrower-app','data-controls','lending','circulation','collections-google','registration-security','turnstile','complete-backup','quick-start','ecosystem']
 if len(sys.argv)>1:checks=sys.argv[1:]
 base=os.environ.copy();base.update(Library__AdminPort='19873',Library__PhonePort='19874',Library__CatalogPort='19875',Library__DiscoveryPort='19876',Library__EnableDiscovery='false',LIBRARY_TEST_URL='http://localhost:19873',DOTNET_COMMAND=dotnet)
 plog=open(logdir/'proxy.log','w');gateway=subprocess.Popen([sys.executable,str(proxy)],cwd=root,env=base,stdout=plog,stderr=subprocess.STDOUT)
 results=json.loads((logdir/'results.json').read_text()) if (logdir/'results.json').exists() else {}
 try:
  for name in checks:
-  script=name+'-ui.mjs';origin='https://localhost:19877' if name in ['acquisition-renewals','summary-panels','release-polish','settings-pages','admin-pages','custom-themes','repair-requests','borrower-app','complete-backup','quick-start','ecosystem','circulation','lending','collections-google'] else 'https://library.test'
+  script=name+'-ui.mjs';origin='https://localhost:19877' if name in ['backup-verification','acquisition-renewals','summary-panels','release-polish','settings-pages','admin-pages','custom-themes','repair-requests','borrower-app','complete-backup','quick-start','ecosystem','circulation','lending','collections-google'] else 'https://library.test'
   fixture=tempfile.mkdtemp(prefix='hl-circulation-ui-233-');env=base.copy();env.update(HOME_LIBRARY_DATA=fixture,Library__PublicCatalogOrigin=origin,PUBLIC_TEST_URL='https://localhost:19877' if origin.startswith('https://localhost') else 'http://localhost:19875',GUIDE_VERIFY_ONLY='' if os.environ.get('CARRIBRARY_CAPTURE_GUIDE')=='1' and name=='quick-start' else '1')
   if name=='turnstile':env.update(BorrowerSecurity__TurnstileSiteKey='public-test-sitekey',BorrowerSecurity__TurnstileSecretKey='private-fixture-secret')
   slog=open(logdir/(name+'.server.log'),'w');server=subprocess.Popen([dotnet,str(root/'home-library-native/server/bin/Release/net10.0/HomeLibrary.Server.dll')],cwd=root,env=env,stdout=slog,stderr=subprocess.STDOUT)
