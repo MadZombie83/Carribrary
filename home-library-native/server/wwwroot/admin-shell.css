@@ -305,3 +305,5 @@
 
 .admin-mobile-nav .companion-nav-extra{display:none!important}
 @media(max-width:900px){.iphone-companion .admin-mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))}.iphone-companion .admin-mobile-nav .companion-nav-extra{display:flex!important}.iphone-companion .admin-mobile-nav [data-view=borrowers]{display:none!important}}
+
+#catalog-batch .settings-card{display:block;margin:.75rem 0}#catalog-batch label,#csv-mapping label{display:block;margin:.5rem 0}#catalog-batch input[type=checkbox]{width:auto;min-height:auto;margin-right:.5rem}#catalog-batch details input,#csv-mapping select{max-width:100%}#catalog-batch summary{cursor:pointer;font-weight:600}#queue-rows{overflow-wrap:anywhere}

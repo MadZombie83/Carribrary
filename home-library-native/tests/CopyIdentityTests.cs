@@ -11,7 +11,7 @@ public static class CopyIdentityTests {
    JsonElement Change(string action,object x)=>Input(store.Apply(new(action,Input(x),store.Read().Revision))).GetProperty("result");
    Book Book()=>store.Read().State.Books.Single();
    var result=Change("addBook",new{isbn="9780140328721",title="Original",author="Author",copyUid=new string('0',32)});uid=Book().CopyUid;
-   Check(store.Read().State.Version==3&&Guid.TryParseExact(uid,"N",out _),"fresh libraries persist permanent identities in format 3");
+   Check(store.Read().State.Version==4&&Guid.TryParseExact(uid,"N",out _),"fresh libraries persist permanent identities in format 4");
    Check(uid!=new string('0',32),"clients cannot choose copy identities");
    Change("updateBook",new{copyId=Book().Id,isbn="9780140328721",title="Edited",author="Author",copyUid=Guid.NewGuid().ToString("N")});
    Check(Book().CopyUid==uid,"editing preserves immutable identity");
@@ -34,7 +34,7 @@ public static class CopyIdentityTests {
   string migrated;
   using(var store=new Store(oldDirectory,protection)){
    var state=store.Read().State;migrated=state.Books[0].CopyUid;
-   Check(state.Version==3&&state.Books[0].Id=="BK-0001"&&state.RecycleBin[0].Book!.CopyUid==migrated,"stored legacy server migration preserves display and recycle references");
+   Check(state.Version==4&&state.Books[0].Id=="BK-0001"&&state.RecycleBin[0].Book!.CopyUid==migrated,"stored legacy server migration preserves display and recycle references");
    var backup=Directory.GetFiles(Path.Combine(oldDirectory,"backups"),"before-copy-identity-v2-*.hlbackup").Single();
    Check(store.RestoreEncrypted(File.ReadAllBytes(backup)).Version==1,"migration creates a private pre-change backup");
   }

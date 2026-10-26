@@ -32,8 +32,8 @@ function Get-CarribraryHash([string]$Path) {
     finally { $Stream.Dispose(); $Sha.Dispose() }
 }
 function Test-CarribraryCompatible([string]$Version) {
-    # Full-sidebar artwork boundary: earlier programs reject portrait PNG dimensions.
-    return $Version -match '^2\.0\.(?:39|40|41|42)(?:[.+-].*)?$'
+    # Format-4 boundary: older programs cannot preserve ISBN-less books and renewal records.
+    return $Version -match '^2\.0\.43(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

@@ -37,7 +37,7 @@ builder.Services.AddSingleton(sp=>new BorrowerVault(data));
 builder.Services.AddSingleton(sp=>new Store(data,sp.GetRequiredService<IDataProtectionProvider>()));
 builder.Services.AddSingleton(sp=>new Identity(data,sp.GetRequiredService<IDataProtectionProvider>(),args.Contains("--prepare-windows-identity")));builder.Services.AddSingleton(settings);
 builder.Services.AddSingleton<IReminderSender,SmtpReminderSender>();
-builder.Services.AddSingleton(sp=>new Reminders(data,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<IReminderSender>()));builder.Services.AddHostedService<ReminderWorker>();
+builder.Services.AddSingleton(sp=>new Reminders(data,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<IReminderSender>()));builder.Services.AddHostedService<ReminderWorker>();builder.Services.AddSingleton<AccountRecovery>();builder.Services.AddHostedService(sp=>sp.GetRequiredService<AccountRecovery>());
 builder.Services.AddSingleton(sp=>new CoverSettings(data,sp.GetRequiredService<IDataProtectionProvider>(),builder.Configuration["GoogleBooks:ApiKey"]??""));
 builder.Logging.AddFilter("System.Net.Http.HttpClient.covers",Microsoft.Extensions.Logging.LogLevel.None);
 builder.Services.AddHttpClient("covers",client=>{client.Timeout=TimeSpan.FromSeconds(6);client.DefaultRequestHeaders.UserAgent.ParseAdd("HomeLibrary/2.0.23");}).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false}).AddTypedClient((http,sp)=>new CoverLookup(http,sp.GetRequiredService<CoverSettings>().Key));
@@ -100,7 +100,7 @@ app.Use(async(context,next)=>{
   }else if(context.Connection.LocalPort==settings.CatalogPort){
    context.Response.Headers["X-Robots-Tag"]="noindex, nofollow, noarchive";
    if(context.Request.Method is not ("GET" or "HEAD")){
-    if(context.Request.Method!="POST"||!System.Text.RegularExpressions.Regex.IsMatch(context.Request.Path.Value??"",@"^(/s/[^/]+/requests|/reading/(action|requests|history/preview)|/account/(registration-options|register|login|logout|reset|vault|action|requests|history/preview|deletion-preview|delete|push|push/remove|push/test)|/companion/(enroll|logout|push|push/remove|push/test|api/[a-zA-Z0-9/_-]+))$")){context.Response.StatusCode=405;return;}
+    if(context.Request.Method!="POST"||!System.Text.RegularExpressions.Regex.IsMatch(context.Request.Path.Value??"",@"^(/s/[^/]+/requests|/reading/(action|requests|history/preview)|/account/(registration-options|register|login|logout|forgot-password|reset|vault|action|requests|history/preview|deletion-preview|delete|push|push/remove|push/test)|/companion/(enroll|logout|push|push/remove|push/test|api/[a-zA-Z0-9/_-]+))$")){context.Response.StatusCode=405;return;}
     if(!context.Request.HasJsonContentType()){context.Response.StatusCode=415;return;}
     if(context.Request.Headers.Origin.ToString()!=settings.PublicCatalogOrigin.TrimEnd('/')){context.Response.StatusCode=403;return;}
     var bodyLimit=context.Features.Get<IHttpMaxRequestBodySizeFeature>();if(bodyLimit!=null&&!bodyLimit.IsReadOnly)bodyLimit.MaxRequestBodySize=context.Request.Path.StartsWithSegments("/companion/api")?10*1024*1024:context.Request.Path=="/account/vault"?6*1024*1024:8192;
@@ -186,6 +186,7 @@ app.MapGet("/reading/{**leaf}",(string? leaf,HttpContext c)=>{
  return Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file),file.EndsWith(".html")?"text/html":file.EndsWith(".js")?"text/javascript":file.EndsWith(".png")?"image/png":"text/css");
 });
 DataControlsEndpoints.Map(app,settings,store,Admin,Mobile);
+CatalogBatch.Map(app,store,Admin,Mobile);
 AccountEndpoints.Map(app,settings,store,Admin,Mobile);VaultEndpoints.Map(app,settings,store);
 LocalAdminEndpoints.Map(app,settings,Admin,Mobile);
 CompanionEndpoints.Map(app,settings,store,Admin,Mobile);
@@ -203,7 +204,7 @@ app.MapMethods("/s/{token}/{**leaf}",new[]{"GET","HEAD"},async(string token,stri
  var filename=leaf switch{null or ""=>"catalog.html","catalog.js"=>"catalog.js","book-about.js"=>"book-about.js","catalog.css"=>"catalog.css","favicon.ico"=>"favicon.ico","powered-by-google.png"=>"powered-by-google.png","cover-credit.js"=>"cover-credit.js",_=>null};
  return filename==null?Results.NotFound():Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",filename),filename.EndsWith(".html")?"text/html":filename.EndsWith(".js")?"text/javascript":filename.EndsWith(".ico")?"image/x-icon":filename.EndsWith(".png")?"image/png":"text/css");
 }).RequireRateLimiting("personal-reading");
-var files=new HashSet<string>{"theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
+var files=new HashSet<string>{"catalog-import.js","renewals.js","theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
 app.MapGet("/{**path}",(string? path,HttpContext c)=>{
  if(c.Connection.LocalPort==settings.CatalogPort&&(string.IsNullOrEmpty(path)||path is "welcome.css" or "welcome.js")){
   c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";

@@ -35,6 +35,8 @@ import java.util.concurrent.atomic.AtomicBoolean
  var provider by remember{mutableStateOf<ProcessCameraProvider?>(null)}
  var selected by remember{mutableStateOf(api.cameraId)};var expanded by remember{mutableStateOf(false)};var message by remember{mutableStateOf("")}
  val preview=remember{PreviewView(context)};val once=remember{AtomicBoolean(false)};val disposed=remember{AtomicBoolean(false)};var boundCamera by remember{mutableStateOf<Camera?>(null)}
+ var scannedCount by remember{mutableIntStateOf(0)}
+ var batchCode by remember{mutableStateOf("")};var batchSeen by remember{mutableStateOf(0L)}
  val detector=remember{BarcodeScanning.getClient(BarcodeScannerOptions.Builder().setBarcodeFormats(Barcode.FORMAT_EAN_13,Barcode.FORMAT_EAN_8,Barcode.FORMAT_UPC_A,Barcode.FORMAT_UPC_E,Barcode.FORMAT_CODE_128,Barcode.FORMAT_CODE_39,Barcode.FORMAT_QR_CODE).build())}
  val executor=remember{Executors.newSingleThreadExecutor()}
  LaunchedEffect(permitted){if(permitted){val future=ProcessCameraProvider.getInstance(context);future.addListener({if(!disposed.get())runCatching{provider=future.get()}.onFailure{message="Camera unavailable. Use manual entry."}},ContextCompat.getMainExecutor(context))}}
@@ -46,8 +48,10 @@ import java.util.concurrent.atomic.AtomicBoolean
    val analysis=ImageAnalysis.Builder().setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST).build()
    analysis.setAnalyzer(executor){proxy->val image=proxy.image;if(image==null){proxy.close()}else{
     detector.process(InputImage.fromMediaImage(image,proxy.imageInfo.rotationDegrees)).addOnSuccessListener{codes->
+     if(kind=="batch-isbn"&&codes.isEmpty()&&System.currentTimeMillis()-batchSeen>900)batchCode=""
      if(!disposed.get())for(code in codes){val raw=code.rawValue?:continue;val normalized=raw.trim().uppercase().replace(" ","")
-      val value=when(kind){"pair"->raw.takeIf{it.startsWith("hl-pair:")};"isbn"->normalized.takeIf{it.matches(Regex("[0-9]{9}[0-9X]|[0-9]{13}"))};else->normalized.takeIf{validCopyReference(it)||validCirculationISBN(it)||it.matches(Regex("BK-?[0-9]+"))}}
+      val value=when(kind){"pair"->raw.takeIf{it.startsWith("hl-pair:")};"isbn","batch-isbn"->normalized.takeIf{it.matches(Regex("[0-9]{9}[0-9X]|[0-9]{13}"))};else->normalized.takeIf{validCopyReference(it)||validCirculationISBN(it)||it.matches(Regex("BK-?[0-9]+"))}}
+      if(value!=null&&kind=="batch-isbn"){batchSeen=System.currentTimeMillis();if(batchCode!=value){batchCode=value;scannedCount++;onRead(value);message="Queued #$scannedCount: $value. Move to the next book, or remove the barcode briefly before scanning another identical copy."};break}
       if(value!=null&&once.compareAndSet(false,true)){onRead(value);break}
      }
     }.addOnCompleteListener{proxy.close()}

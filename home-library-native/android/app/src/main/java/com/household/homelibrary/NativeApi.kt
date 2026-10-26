@@ -33,6 +33,7 @@ class NativeApi(private val context:Context) {
  private val cacheAlias="home-library-cache-key"
  fun preference(name:String,default:String)=prefs.getString("ui-"+name,default)!!
  fun savePreference(name:String,value:String){prefs.edit().putString("ui-"+name,value).apply()}
+ suspend fun batchLookup(isbn:String)=withContext(Dispatchers.IO){currentRequest("/mobile/catalog-batch/lookup?isbn="+android.net.Uri.encode(isbn))}
  suspend fun covers(isbn:String,title:String,author:String)=withContext(Dispatchers.IO){
   try{currentRequest("/mobile/covers?isbn="+android.net.Uri.encode(isbn)+"&title="+android.net.Uri.encode(title)+"&author="+android.net.Uri.encode(author))}
   catch(error:ApiError){if(error.status==404)throw IllegalStateException("Update the server to 2.0.12 or later to search cover sources.");throw error}
@@ -43,7 +44,7 @@ class NativeApi(private val context:Context) {
  suspend fun about(copyId:String)=withContext(Dispatchers.IO){currentRequest("/mobile/books/"+android.net.Uri.encode(copyId)+"/about")}
  suspend fun browserAdmins(action:String?=null,input:JSONObject?=null)=withContext(Dispatchers.IO){currentRequest("/mobile/browser-admins"+(action?.let{"/"+it}?:""),input)}
  suspend fun receipt(copyId:String)=withContext(Dispatchers.IO){currentRequest("/mobile/receipts/"+android.net.Uri.encode(copyId))}
- suspend fun tools(path:String,input:JSONObject?=null)=withContext(Dispatchers.IO){require(path in listOf("reminders","reminders/test","setup","setup/dns"));currentRequest("/mobile/"+path,input)}
+ suspend fun tools(path:String,input:JSONObject?=null)=withContext(Dispatchers.IO){require(path in listOf("reminders","reminders/test","setup","setup/dns","catalog-batch/csv","catalog-batch/preview"));currentRequest("/mobile/"+path,input)}
  suspend fun accountAdmin(action:String?=null,input:JSONObject?=null)=withContext(Dispatchers.IO){
   if(action=="delete")check(!hasPending()){ "Resolve Retry pending change before deleting an account." }
   val result=currentRequest("/mobile/accounts"+(action?.let{"/"+it}?:""),input)

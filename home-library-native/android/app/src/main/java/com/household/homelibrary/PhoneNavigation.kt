@@ -13,8 +13,8 @@ import org.json.JSONObject
 
 internal val phoneToolCategories=listOf(
  "Library & Appearance" to listOf("theme" to "Colors & custom themes","settings" to "Library name, logo & sayings"),
- "Books & Organization" to listOf("acquisitions" to "Books to buy","sharing" to "Share library / QR","collections" to "Manage collections","copyTools" to "Copy labels & numbering","bulk" to "Bulk edit books"),
- "Borrowing & Reminders" to listOf("lending" to "Lending & holds / batch lending","Requests" to "Book requests","reminders" to "Email reminders"),
+ "Books & Organization" to listOf("acquisitions" to "Books to buy","sharing" to "Share library / QR","collections" to "Manage collections","copyTools" to "Copy labels & numbering","bulk" to "Bulk edit books","catalogBatch" to "Batch add / CSV import"),
+ "Borrowing & Reminders" to listOf("lending" to "Lending & holds / batch lending","Requests" to "Book requests","renewals" to "Borrower renewals","reminders" to "Email reminders"),
  "People & Access" to listOf("Borrowers" to "Borrowers","accounts" to "Borrower accounts & approvals","devices" to "Paired admin phones"),
  "Data & History" to listOf("History" to "Loan history","dataControls" to "Data & privacy / clear history","recycle" to "Recycle Bin","csv" to "Export catalog CSV","backup" to "Complete server data backup","restore" to "Restore library backup"),
  "System & Advanced" to listOf("setup" to "Setup & updates","connection" to "Connection")

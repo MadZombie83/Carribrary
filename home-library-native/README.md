@@ -1,6 +1,8 @@
-# Carribrary 2.0.42 — companion dashboard panels and navigation
+# Carribrary 2.0.43 — batch acquisition, renewals and recovery
 
-**2.0.42 current source update:** Android and iPhone PWA share four colored whole-library summary panels, functional request bells and dashboard-style search/navigation. Android adds Home quick actions; both companions offer Home, Catalog, Loans, Reading and Settings. See [release notes and hardware checklist](distribution/RELEASE-2.0.42.md). Source only; owner builds packages. Compatible recovery: 2.0.39–2.0.42.
+**2.0.43 current source update:** Batch ISBN queues and mapped CSV imports, borrower renewals and opt-in email password recovery. [Release notes, limits and owner test checklist](distribution/RELEASE-2.0.43.md). Back up before upgrading: library format 4 adds ISBN-less books/import notes/renewals; older executables cannot read it safely. Program recovery is restricted to 2.0.43. Source only; owner builds packages.
+
+**Earlier 2.0.42 source update:** Android and iPhone PWA share four colored whole-library summary panels, functional request bells and dashboard-style search/navigation. Android adds Home quick actions; both companions offer Home, Catalog, Loans, Reading and Settings. See [release notes and hardware checklist](distribution/RELEASE-2.0.42.md). Source only; owner builds packages. Compatible recovery: 2.0.39–2.0.42.
 
 **Earlier 2.0.41 source update:** Plain public addresses open a branded welcome with invitation guidance, without revealing the catalog token. Local administrators open Dashboard. Android Settings & Tools has six searchable categories and refreshed remaining screens; household Reading/history/details match dashboard surfaces. See [release notes](distribution/RELEASE-2.0.41.md) and [package/hardware checklist](distribution/RELEASE-TEST-CHECKLIST-2.0.41.md). No installers built here; owner compiles packages. Recovery supports 2.0.39–2.0.41.
 

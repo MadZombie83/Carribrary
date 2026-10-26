@@ -5,6 +5,7 @@ void Check(bool value,string name){if(!value)throw new Exception("FAILED: "+name
 void Throws(Action action,string text){try{action();throw new Exception("Expected failure: "+text);}catch(LibraryError e){Check(e.Message.Contains(text,StringComparison.OrdinalIgnoreCase),text);}}
 JsonElement Input(object value)=>JsonSerializer.SerializeToElement(value,Library.Json);
 try{
+ if(args.Contains("--batch-renewals-only")){await BatchRenewalTests.Run(Path.Combine(directory,"batch-renewals"),protection);return;}
  CustomThemeTests.Run(Path.Combine(directory,"themes"),protection);
  if(args.Contains("--custom-themes-only"))return;
  SidebarArtworkTests.Run(Path.Combine(directory,"sidebar-artwork"),protection);

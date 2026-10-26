@@ -3,7 +3,7 @@ namespace HomeLibrary;
 public static class CopyIdentity {
  public static bool Migrate(LibraryState state){
   Library.Validate(state);
-  if(state.Version==3){Validate(state);return false;}
+  if(state.Version is 3 or 4){Validate(state);return false;}
   if(state.Version is not (1 or 2))throw new LibraryError("Unsupported library format. Use a compatible Carribrary version.");
   foreach(var book in state.Books)if(book.CopyUid=="")book.CopyUid=Guid.NewGuid().ToString("N");
   foreach(var item in state.RecycleBin.Where(x=>x.Book!=null)){
