@@ -60,7 +60,7 @@ try{
  assert.equal((await context.request.get(local+'/api/state',{headers:{Cookie:'carribrary-local-admin='+oldLocal}})).status(),401);
  assert.equal((await post('/local-auth/recover',{username:'Admin',password,code:recovery})).status,401);
  assert.equal((await context.request.get(local+'/api/state')).status(),200);
- assert.equal((await context.request.get(origin+'/')).status(),404);
+ assert.equal((await context.request.get(origin+'/')).status(),200);
  assert.equal((await context.request.get(origin+'/local-auth/status')).status(),404);
  assert.equal((await context.request.post(local+'/api/action',{headers:{Origin:'https://evil.invalid'},data:{}})).status(),403);
  assert.equal((await context.request.get(local+'/api/state',{headers:{'Host':'evil.invalid'}})).status(),403);

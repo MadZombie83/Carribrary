@@ -1,9 +1,10 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {openAdminTool} from './admin-tool-navigation.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 try{
- const page=await browser.newPage({viewport:{width:412,height:915}});const errors=[];page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(process.env.LIBRARY_TEST_URL);await page.waitForSelector('#content');
+ const page=await browser.newPage({viewport:{width:412,height:915}});const errors=[];page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(page);await page.waitForSelector('#content');
  async function admin(path,body){return page.evaluate(async({path,body})=>{const response=await fetch('/api/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const result=await response.json();if(!response.ok)throw Error(result.error);return result;},{path,body});}
  async function change(action,input){return page.evaluate(async({action,input})=>{const {revision}=await(await fetch('/api/state')).json();const r=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,input,revision})});if(!r.ok)throw Error(await r.text());return await r.json();},{action,input});}
  async function state(){return page.evaluate(async()=>(await(await fetch('/api/state')).json()).state);}

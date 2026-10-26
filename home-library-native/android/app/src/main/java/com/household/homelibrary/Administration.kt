@@ -25,7 +25,8 @@ import java.time.LocalDate
 @Composable fun LoanHistory(state:JSONObject,search:String){
  val books=state.optJSONArray("books")?.objects()?:emptyList();val people=state.optJSONArray("borrowers")?.objects()?:emptyList()
  val loans=(state.optJSONArray("loans")?.objects()?:emptyList()).sortedByDescending{it.optString("checkoutDate")}.filter{loan->listOf(loan.optString("copyId"),books.find{it.optString("id")==loan.optString("copyId")}?.optString("title")?:"",people.find{it.optString("id")==loan.optString("borrowerId")}?.optString("name")?:"").any{it.contains(search,true)}}
- if(loans.isEmpty())Text("No matching loans.")
+ PhoneStatusPill("${loans.count{it.isNull("returnedDate")}} on loan · ${loans.count{!it.isNull("returnedDate")}} returned")
+ if(loans.isEmpty())PhoneEmptyState("No matching loans","Try another book, borrower or catalog number.")
  loans.forEach{loan->Card(Modifier.fillMaxWidth()){Column(Modifier.padding(16.dp),verticalArrangement=Arrangement.spacedBy(6.dp)){
   Text(books.find{it.optString("id")==loan.optString("copyId")}?.optString("title")?:loan.optString("copyId"),style=MaterialTheme.typography.titleMedium)
   Text(loan.optString("copyId")+" · "+(people.find{it.optString("id")==loan.optString("borrowerId")}?.optString("name")?:"Borrower"))
@@ -53,7 +54,8 @@ private fun csvCell(value:String):String{val safe=if(value.firstOrNull() in list
   "csv"->task{val fresh=api.refresh();onChanged(fresh);val fields=listOf("id","isbn","title","author","series","publisher","collection");fileContent="\uFEFF"+fields.joinToString(",")+"\r\n"+fresh.getJSONObject("state").getJSONArray("books").objects().filter{!it.optBoolean("archived")}.joinToString("\r\n"){book->fields.joinToString(","){csvCell(if(it=="collection")fresh.getJSONObject("state").optJSONArray("collections")?.objects()?.find{c->c.optString("id")==book.optString("collectionId","general")}?.optString("name")?:"General" else book.optString(it))}};saveCsv.launch("home-library-books.csv")}
  }}
  Dialog(onDismissRequest={if(!busy)onClose()}){Surface(shape=MaterialTheme.shapes.large){Column(Modifier.padding(20.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){
-  Text("Manage library",style=MaterialTheme.typography.headlineSmall)
+  PhoneSectionHeading("Manage library","Library appearance, safe backups and approved devices.")
+  PhoneDisclosure("Library & appearance",initialAction.isBlank()){
   RequestAlertControls(api)
   LibraryBrandingControls(api,onChanged)
   OutlinedTextField(name,{name=it},label={Text("Library name")},modifier=Modifier.fillMaxWidth(),enabled=!busy)
@@ -62,20 +64,23 @@ private fun csvCell(value:String):String{val safe=if(value.firstOrNull() in list
   OutlinedTextField(saying,{saying=it},label={Text("Encouraging saying")},modifier=Modifier.fillMaxWidth(),enabled=!busy)
   Text("Leave a saying blank to hide it. Subtitle: 160 characters; saying: 240.",style=MaterialTheme.typography.bodySmall)
   Button(enabled=!busy&&subtitle.length<=160&&saying.length<=240,onClick={task{val fresh=api.refresh();onChanged(api.mutate("setLibraryPresentation",JSONObject().put("bannerSubtitle",subtitle).put("encouragingMessage",saying),fresh.optLong("revision")));notice="Library sayings saved"}}){Text("Save sayings")}
-  HorizontalDivider()
+  }
+  PhoneDisclosure("Data, exports & recovery",initialAction in listOf("backup","restore","csv")){
   OutlinedButton(enabled=!busy,onClick={completeBackup=true}){Text("Complete server data backup")}
   OutlinedButton(enabled=!busy,onClick={task{val fresh=api.refresh();onChanged(fresh);fileContent=fresh.getJSONObject("state").toString(2);saveBackup.launch("home-library-${LocalDate.now()}.json")}}){Text("Export library JSON")}
   OutlinedButton(enabled=!busy,onClick={openBackup.launch(arrayOf("application/json","text/plain","application/octet-stream"))}){Text("Restore library export")}
   Text("JSON backups contain private contacts and loans. Restore replaces the household library; an encrypted rollback backup is saved on the library server.",style=MaterialTheme.typography.bodySmall)
   OutlinedButton(enabled=!busy,onClick={task{val fresh=api.refresh();onChanged(fresh);val fields=listOf("id","isbn","title","author","series","publisher","collection");fileContent="\uFEFF"+fields.joinToString(",")+"\r\n"+(fresh.getJSONObject("state").getJSONArray("books").objects().filter{!it.optBoolean("archived")}.joinToString("\r\n"){book->fields.joinToString(","){csvCell(if(it=="collection")fresh.getJSONObject("state").optJSONArray("collections")?.objects()?.find{c->c.optString("id")==book.optString("collectionId","general")}?.optString("name")?:"General" else book.optString(it))}});saveCsv.launch("home-library-books.csv")}}){Text("Export books CSV")}
   OutlinedButton(enabled=!busy,onClick={task{val fresh=api.refresh();onChanged(fresh);val library=fresh.getJSONObject("state");val text=library.optString("libraryName","Carribrary")+"\n\n"+sortedCatalog(library.getJSONArray("books").objects().filter{!it.optBoolean("archived")},"title",false).joinToString("\n\n"){book->"${book.optString("id")} · ${book.optString("title")}\n${book.optString("author")}"+(if(book.optString("series").isBlank())"" else "\nSeries: "+book.optString("series"))};context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT,text),"Share book list"))}}){Text("Share book list as text")}
-  HorizontalDivider()
+  }
+  PhoneDisclosure("Approved phones",initialAction=="devices"){
   OutlinedButton(enabled=!busy,onClick={task{devices=api.devices()}}){Text("Paired phones")}
   if(devices!=null){
    Text("Approved phones can manage the entire library. Pair only trusted household phones.",style=MaterialTheme.typography.bodySmall)
    Button(enabled=!busy,onClick={task{val pair=api.createPairing();pairing="hl-pair:"+Base64.encodeToString(pair.toString().toByteArray(Charsets.UTF_8),Base64.URL_SAFE or Base64.NO_PADDING or Base64.NO_WRAP);expiry=pair.optString("expires")}}){Text("Create private pairing QR")}
    if(pairing.isNotBlank()){val qr=remember(pairing){catalogQr(pairing)};Image(qr.asImageBitmap(),"Private phone pairing QR",Modifier.fillMaxWidth().aspectRatio(1f));Text("Private · single use · expires $expiry. Scan using Carribrary on the new phone.");SelectionContainer{Text(pairing,style=MaterialTheme.typography.bodySmall)}}
    devices!!.optJSONArray("devices")?.objects()?.forEach{device->Text(device.optString("name")+" · "+(if(device.optBoolean("revoked"))"Revoked" else "Approved")+(if(device.optString("id")==devices!!.optString("currentDeviceId"))" · This phone" else ""));if(!device.optBoolean("revoked"))TextButton(enabled=!busy,onClick={revoke=device}){Text("Revoke phone")}}
+  }
   }
   if(busy)LinearProgressIndicator(Modifier.fillMaxWidth());if(notice.isNotBlank())Text(notice)
   TextButton(enabled=!busy,onClick=onClose){Text("Done")}

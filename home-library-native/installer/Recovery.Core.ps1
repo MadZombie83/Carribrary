@@ -33,7 +33,7 @@ function Get-CarribraryHash([string]$Path) {
 }
 function Test-CarribraryCompatible([string]$Version) {
     # Full-sidebar artwork boundary: earlier programs reject portrait PNG dimensions.
-    return $Version -match '^2\.0\.(?:39|40)(?:[.+-].*)?$'
+    return $Version -match '^2\.0\.(?:39|40|41)(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

@@ -1,3 +1,4 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {openAdminTool} from './admin-tool-navigation.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
@@ -8,7 +9,7 @@ const admin=process.env.LIBRARY_TEST_URL,publicUrl=process.env.PUBLIC_TEST_URL;
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 const password='Complete backup test password 230';
 try{
- const page=await browser.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await authenticateLocalAdmin(page);await page.goto(admin);await page.waitForSelector('#content');
+ const page=await browser.newPage(),errors=[];page.on('pageerror',error=>errors.push(error.message));await authenticateLocalAdmin(page);await page.goto(admin);await openCatalogIfAdmin(page);await page.waitForSelector('#content');
  const sharing=await page.evaluate(async()=>{for(const [action,input] of [['addBook',{isbn:'9780140328721',title:'Backup test book',author:'Author'}],['addBorrower',{name:'Backup test borrower',contact:'borrower@example.com'}]]){const s=await(await fetch('/api/state')).json();if(action==='addBook'&&s.state.books.length||action==='addBorrower'&&s.state.borrowers.length)continue;const response=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,input,revision:s.revision})});if(!response.ok)throw Error(await response.text());}return(await(await fetch('/api/sharing',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"action":"enable"}'})).json()).url;});
  const publicContext=await browser.newContext({ignoreHTTPSErrors:true});const token=new URL(sharing).pathname.split('/').filter(Boolean).at(-1);
  const registration=await publicContext.request.post(publicUrl+'/account/register',{headers:{Origin:publicUrl},data:{shareToken:token,username:'backupreader',password:'Borrower test password 230',name:'Backup Reader',contact:'reader@example.com'}});assert.equal(registration.status(),200);

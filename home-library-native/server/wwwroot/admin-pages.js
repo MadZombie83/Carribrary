@@ -18,7 +18,7 @@ export function borrowerCard(person,loans){
 }
 export function installWorkspaceStyling(){
  const dialog=document.querySelector('#form-dialog'),heading=document.querySelector('#dialog-title');
- const sync=()=>{const tool={'Book requests':'requests','Lending & holds':'lending-tools'}[heading.textContent];dialog.classList.toggle('workspace-dialog',!!tool);dialog.dataset.workspace=tool||'';
+ const sync=()=>{const tool={'Book requests':'requests','Lending & holds':'lending-tools','Loan history':'history'}[heading.textContent];dialog.classList.toggle('workspace-dialog',!!tool);dialog.dataset.workspace=tool||'';
   document.querySelectorAll('.sidebar-nav [data-admin-tool]').forEach(button=>{if(dialog.open&&!dialog.classList.contains('settings-inline-editor')&&button.dataset.adminTool===tool)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
   document.querySelectorAll('.sidebar-nav [data-view]').forEach(button=>{if(!(dialog.open&&tool&&!dialog.classList.contains('settings-inline-editor'))&&button.dataset.view===document.body.dataset.adminView)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');});
  };

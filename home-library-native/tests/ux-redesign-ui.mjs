@@ -1,3 +1,4 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {openAdminTool} from './admin-tool-navigation.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
@@ -18,7 +19,7 @@ try{
  await guest.goto(sharing.url);await guest.waitForSelector('[data-request=BK-0003]');
  for(const id of ['BK-0003','BK-0004']){await guest.locator(`[data-request=${id}]`).click();await guest.locator('[name=name]').fill('Test Reader');await guest.locator('[name=contact]').fill('reader@example.com');await guest.locator('#submit-request').click();await guest.waitForFunction(()=>document.querySelector('#request-status').textContent.includes('held'));await guest.locator('#close-request').click();}
  const requests=await page.evaluate(async()=>(await(await fetch('/api/state')).json()).state.requests);await action('declineRequest',{requestId:requests.find(r=>r.copyId==='BK-0004').id});
- await guest.close();await page.reload();await page.waitForSelector('#content .book');await page.locator('.sidebar-nav [data-view=dashboard]').click();
+ await guest.close();await page.reload();await openCatalogIfAdmin(page);await page.waitForSelector('#content .book');await page.locator('.sidebar-nav [data-view=dashboard]').click();
  assert.deepEqual(await page.locator('[data-kpi]').allTextContents(),['12','9','1','1']);
  assert.match(await page.locator('.recent-requests').innerText(),/Declined/);assert.match(await page.locator('.recent-requests').innerText(),/Awaiting approval/);
  assert.match(await page.locator('.dashboard-lower').innerText(),/1 book on loan/);

@@ -1,8 +1,9 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {openAdminTool} from './admin-tool-navigation.mjs';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 try{
- const page=await browser.newPage({viewport:{width:412,height:915}});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.env.LIBRARY_TEST_URL);await page.waitForSelector('#content');
+ const page=await browser.newPage({viewport:{width:412,height:915}});const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(page);await page.waitForSelector('#content');
  async function action(name,input){return await page.evaluate(async({name,input})=>{const state=await(await fetch('/api/state')).json();const r=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:name,input,revision:state.revision})});if(!r.ok)throw Error(await r.text());return await r.json();},{name,input});}
  await action('addBook',{isbn:'9780140328721',title:'Matilda',author:'Roald Dahl'});await action('addBook',{isbn:'9780141439518',title:'Pride and Prejudice',author:'Jane Austen'});await page.reload();await page.locator('.book').first().waitFor();
  // Bulk editor changes only explicitly checked fields.

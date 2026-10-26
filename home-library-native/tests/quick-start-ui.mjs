@@ -1,12 +1,13 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 try{
- const page=await browser.newPage({ignoreHTTPSErrors:true,viewport:{width:1100,height:1000},deviceScaleFactor:1});const errors=[];page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(process.env.LIBRARY_TEST_URL);await page.waitForSelector('#content');
+ const page=await browser.newPage({ignoreHTTPSErrors:true,viewport:{width:1100,height:1000},deviceScaleFactor:1});const errors=[];page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(page);await page.waitForSelector('#content');
  await page.evaluate(async()=>{for(const [action,input] of [['setLibraryName',{libraryName:'Example Library'}],['addBook',{isbn:'9780140328721',title:'Matilda',author:'Roald Dahl'}],['addBorrower',{name:'Example Borrower'}]]){const s=await(await fetch('/api/state')).json();const response=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,input,revision:s.revision})});if(!response.ok)throw Error(await response.text());}});
- await page.reload();await page.waitForSelector('.book');await mkdir('home-library-native/server/wwwroot/guide',{recursive:true});
+ await page.reload();await openCatalogIfAdmin(page);await page.waitForSelector('.book');await mkdir('home-library-native/server/wwwroot/guide',{recursive:true});
  if(!process.env.GUIDE_VERIFY_ONLY){
  await page.setViewportSize({width:1100,height:920});await page.screenshot({path:'home-library-native/server/wwwroot/guide/catalog.png'});
  await page.setViewportSize({width:1100,height:1000});await page.locator('#add-book').click();await page.locator('#form-dialog').screenshot({path:'home-library-native/server/wwwroot/guide/add-book.png'});await page.locator('#close-form').click();

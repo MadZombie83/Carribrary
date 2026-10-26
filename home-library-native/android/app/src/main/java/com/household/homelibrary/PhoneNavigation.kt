@@ -11,16 +11,26 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import org.json.JSONObject
 
+internal val phoneToolCategories=listOf(
+ "Library & Appearance" to listOf("theme" to "Colors & custom themes","settings" to "Library name, logo & sayings"),
+ "Books & Organization" to listOf("acquisitions" to "Books to buy","sharing" to "Share library / QR","collections" to "Manage collections","copyTools" to "Copy labels & numbering","bulk" to "Bulk edit books"),
+ "Borrowing & Reminders" to listOf("lending" to "Lending & holds / batch lending","Requests" to "Book requests","reminders" to "Email reminders"),
+ "People & Access" to listOf("Borrowers" to "Borrowers","accounts" to "Borrower accounts & approvals","devices" to "Paired admin phones"),
+ "Data & History" to listOf("History" to "Loan history","dataControls" to "Data & privacy / clear history","recycle" to "Recycle Bin","csv" to "Export catalog CSV","backup" to "Complete server data backup","restore" to "Restore library backup"),
+ "System & Advanced" to listOf("setup" to "Setup & updates","connection" to "Connection")
+)
 @Composable fun PhoneMoreMenu(enabled:Boolean,requests:Int,canRefresh:Boolean=true,onSelect:(String)->Unit){
- Text("More",style=MaterialTheme.typography.headlineMedium)
- Text("Manage lending, sharing and library settings.")
- for((title,items)in listOf(
-  "People & lending" to listOf("lending" to "Lending & holds / batch lending","Borrowers" to "Borrowers","Requests" to "Requests ($requests)","accounts" to "Borrower accounts & approvals","History" to "Loan history"),
-  "Sharing & collections" to listOf("acquisitions" to "Books to buy","sharing" to "Share library / QR","collections" to "Manage collections"),
-  "Settings & backups" to listOf("dataControls" to "Data & privacy / clear history","theme" to "Colors","settings" to "Library name & sayings","copyTools" to "Copy labels & numbering","recycle" to "Recycle Bin","reminders" to "Email reminders","setup" to "Setup & updates","csv" to "Export catalog CSV","backup" to "Complete server data backup","restore" to "Restore library backup","devices" to "Paired admin phones","connection" to "Connection"))) {
-  var expanded by remember(title){mutableStateOf(false)}
-  Card(Modifier.fillMaxWidth()){Column(Modifier.padding(12.dp)){TextButton(onClick={expanded=!expanded},modifier=Modifier.fillMaxWidth()){Text((if(expanded)"▾ " else "▸ ")+title)};if(expanded)items.forEach{(action,label)->TextButton(enabled=enabled||action in listOf("Borrowers","Requests","History","theme","connection","dataControls"),onClick={onSelect(action)},modifier=Modifier.fillMaxWidth()){Text(label)}}}}
+ var category by remember{mutableStateOf("")};var query by remember{mutableStateOf("")}
+ PhoneSectionHeading(if(category.isBlank())"Settings & Tools" else category,"Library tools, grouped by purpose. Your saved settings and access stay the same.")
+ if(category.isNotBlank())OutlinedButton(onClick={category="";query=""}){Text("← Settings & Tools")}
+ OutlinedTextField(query,{query=it},label={Text("Search all settings & tools")},modifier=Modifier.fillMaxWidth())
+ val matching=phoneToolCategories.filter{category.isBlank()||query.isNotBlank()||it.first==category}
+ for((title,items)in matching){
+  val found=items.filter{query.isBlank()||(title+" "+it.second).contains(query,true)}
+  if(query.isBlank()&&category.isBlank())PhonePanel{Text(title,style=MaterialTheme.typography.titleLarge);Text("${items.size} tools",color=MaterialTheme.colorScheme.onSurfaceVariant);OutlinedButton(onClick={category=title}){Text("Open category →")}}
+  else if(found.isNotEmpty())PhonePanel{Text(title,style=MaterialTheme.typography.titleLarge);for((action,label)in found){TextButton(enabled=enabled||action in listOf("Borrowers","Requests","History","theme","connection","dataControls"),onClick={onSelect(action)},modifier=Modifier.fillMaxWidth()){Text(label+if(action=="Requests")" ($requests)" else "",color=if(action=="restore")MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary)}}}
  }
+ if(query.isNotBlank()&&phoneToolCategories.flatMap{(title,items)->items.filter{(title+" "+it.second).contains(query,true)}}.isEmpty())PhoneEmptyState("No matching tools","Try a name such as backup, colors, requests or pairing.")
  Row(horizontalArrangement=Arrangement.spacedBy(8.dp)){OutlinedButton(onClick={onSelect("refresh")},enabled=canRefresh){Text("Refresh")};OutlinedButton(onClick={onSelect("help")}){Text("Help")};TextButton(onClick={onSelect("privacy")}){Text("App info")}}
 }
 @Composable fun PhoneHelpDialog(onClose:()->Unit){val context=LocalContext.current;val topics=remember{runCatching{JSONObject(context.assets.open("help.json").bufferedReader().use{it.readText()}).getJSONArray("topics").objects()}.getOrDefault(emptyList())};var search by remember{mutableStateOf("")}

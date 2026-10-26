@@ -105,7 +105,7 @@ app.Use(async(context,next)=>{
     if(context.Request.Headers.Origin.ToString()!=settings.PublicCatalogOrigin.TrimEnd('/')){context.Response.StatusCode=403;return;}
     var bodyLimit=context.Features.Get<IHttpMaxRequestBodySizeFeature>();if(bodyLimit!=null&&!bodyLimit.IsReadOnly)bodyLimit.MaxRequestBodySize=context.Request.Path.StartsWithSegments("/companion/api")?10*1024*1024:context.Request.Path=="/account/vault"?6*1024*1024:8192;
    }
-   if(!context.Request.Path.StartsWithSegments("/s")&&!context.Request.Path.StartsWithSegments("/reading")&&!context.Request.Path.StartsWithSegments("/companion")&&!context.Request.Path.StartsWithSegments("/account")&&context.Request.Path!="/robots.txt"){context.Response.StatusCode=404;return;}
+   if(!context.Request.Path.StartsWithSegments("/s")&&!context.Request.Path.StartsWithSegments("/reading")&&!context.Request.Path.StartsWithSegments("/companion")&&!context.Request.Path.StartsWithSegments("/account")&&context.Request.Path!="/robots.txt"&&context.Request.Path!="/"&&context.Request.Path!="/welcome.css"&&context.Request.Path!="/welcome.js"){context.Response.StatusCode=404;return;}
   }else if(context.Connection.LocalPort==settings.PhonePort){
    if(!context.Request.IsHttps){context.Response.StatusCode=403;return;}
    if(context.Request.Path!="/mobile/pair"){
@@ -205,6 +205,10 @@ app.MapMethods("/s/{token}/{**leaf}",new[]{"GET","HEAD"},async(string token,stri
 }).RequireRateLimiting("personal-reading");
 var files=new HashSet<string>{"theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
 app.MapGet("/{**path}",(string? path,HttpContext c)=>{
+ if(c.Connection.LocalPort==settings.CatalogPort&&(string.IsNullOrEmpty(path)||path is "welcome.css" or "welcome.js")){
+  c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
+  return string.IsNullOrEmpty(path)?WelcomePage.Render(store,app.Environment.ContentRootPath):Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",path!),path=="welcome.js"?"text/javascript":"text/css");
+ }
  var localLogin=c.Connection.LocalPort==settings.AdminPort&&path is "login" or "local-login.js" or "styles.css" or "favicon.ico" or "branding" or "branding-icon.png" or "theme-palette.js" or "theme-branding.js";
  if(!Admin(c)&&!localLogin)return Results.NotFound();var file=string.IsNullOrEmpty(path)?"index.html":path;
  if(file=="branding")return Results.Json(new{libraryName=store.Read().State.LibraryName,libraryTheme=LibraryAppearance.Theme(store.Read().State),palette=CustomThemes.Selected(store.Read().State)});

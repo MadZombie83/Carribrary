@@ -21,3 +21,10 @@ export async function openAdminView(page,view){
  if(view==='loans')return openAdminTool(page,'active-loans');
  throw Error('No visible administrator view: '+view);
 }
+
+// Catalog-oriented checks must navigate explicitly now that local administrators land on Dashboard.
+export async function openCatalogIfAdmin(page){
+ if(!await page.locator('body.admin-shell').count())return;
+ await page.waitForFunction(()=>!!document.body.dataset.adminView);
+ if(await page.locator('body').getAttribute('data-admin-view')==='dashboard')await page.locator('[data-view=catalog]:visible').first().click();
+}

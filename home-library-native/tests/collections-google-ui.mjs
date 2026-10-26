@@ -1,13 +1,14 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {openAdminTool} from './admin-tool-navigation.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';import {readFile} from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');const browser=await chromium.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--ignore-certificate-errors']});
 try{
  const page=await browser.newPage({ignoreHTTPSErrors:true,viewport:{width:412,height:915}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
- await authenticateLocalAdmin(page);await page.goto(process.env.LIBRARY_TEST_URL);await page.waitForSelector('#collection');
+ await authenticateLocalAdmin(page);await page.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(page);await openCatalogIfAdmin(page);await page.waitForSelector('#collection');
  const legacy={version:1,nextCopy:2,books:[{id:'BK-0001',isbn:'9780140328721',title:'Matilda',author:'Roald Dahl',publisher:'',coverUrl:''}],borrowers:[],loans:[]};
  assert.equal(await page.evaluate(async state=>{const snapshot=await(await fetch('/api/state')).json();return(await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'restore',input:state,revision:snapshot.revision})})).status},legacy),200);
- await page.reload();await page.waitForSelector('.book');assert.equal(await page.locator('#collection option').count(),2);
+ await page.reload();await openCatalogIfAdmin(page);await page.waitForSelector('.book');assert.equal(await page.locator('#collection option').count(),2);
  await openAdminTool(page,'manage-collections');await page.locator('#new-collection').click();await page.locator('[name=name]').fill('Kids');await page.locator('#form-content button[type=submit]').click();await page.waitForSelector('[data-rename-collection]');await page.locator('#close-form').click();
  const kids=await page.evaluate(async()=> (await(await fetch('/api/state')).json()).state.collections.find(c=>c.name==='Kids').id);
  await page.locator('.admin-mobile-nav [data-view=catalog]').click();await page.locator('[data-edit-book="BK-0001"]').click();await page.locator('[name=collectionId]').selectOption(kids);await page.locator('#form-content button[type=submit]').click();await page.waitForFunction(()=>!document.querySelector('#form-dialog').open);

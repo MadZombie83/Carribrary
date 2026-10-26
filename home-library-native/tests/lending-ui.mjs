@@ -1,10 +1,11 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {openAdminTool} from './admin-tool-navigation.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--ignore-certificate-errors']});
 try {
- const admin=await browser.newPage({ignoreHTTPSErrors:true,viewport:{width:412,height:915}}),errors=[];admin.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await admin.waitForSelector('#content');
+ const admin=await browser.newPage({ignoreHTTPSErrors:true,viewport:{width:412,height:915}}),errors=[];admin.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(admin);await admin.waitForSelector('#content');
  const share=await admin.evaluate(async()=>{const snap=await(await fetch('/api/state')).json();const input={version:1,nextCopy:8,books:Array.from({length:7},(_,i)=>({id:'BK-'+String(i+1).padStart(4,'0'),isbn:'9780140328721',title:'Volume '+(i+1),author:'Author',publisher:'',coverUrl:''})),borrowers:[{id:'BR-0001',name:'Sam',contact:'sam@example.com'},{id:'BR-0002',name:'Pat',contact:'pat@example.com'}],loans:[]};const r=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'restore',revision:snap.revision,input})});if(!r.ok)throw Error(await r.text());return(await(await fetch('/api/sharing',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"action":"enable"}'})).json()).url;});
  await admin.reload();const visitor=await browser.newPage({ignoreHTTPSErrors:true,viewport:{width:412,height:915}});visitor.on('pageerror',e=>errors.push(e.message));
  await visitor.route('https://library.test/**',async route=>{const u=new URL(route.request().url());await route.fulfill({response:await route.fetch({url:process.env.PUBLIC_TEST_URL+u.pathname+u.search,headers:{...route.request().headers(),origin:'https://library.test'}})});});

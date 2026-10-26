@@ -24,6 +24,6 @@ try{
  while(logins<20)assert.equal((await login('unknown.reader','wrong')).status(),401);
  assert.equal((await login('unknown.reader','wrong')).status(),429);
  await context.clearCookies();await page.goto(origin+'/account/');await page.locator('#signin [name=username]').fill('unknown.reader');await page.locator('#signin [name=password]').fill('wrong');await page.locator('#signin [type=submit]').click();await page.waitForFunction(()=>document.querySelector('#auth-message').textContent.includes('Too many attempts'));
- assert.equal((await context.request.get(upstream+'/')).status(),404);assert.equal((await context.request.get(upstream+'/api/state')).status(),404);
+ assert.equal((await context.request.get(upstream+'/')).status(),200);assert.equal((await context.request.get(upstream+'/api/state')).status(),404);
  console.log('PASS provider-free signup/approval, no Cloudflare traffic, valid invitation required, separate signup/login/reset limits, Retry-After, generic auth errors and visible 429 feedback');
 }finally{await browser.close();}

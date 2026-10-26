@@ -1,3 +1,4 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {openAdminTool} from './admin-tool-navigation.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
@@ -6,7 +7,7 @@ import {readFileSync} from 'node:fs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 try{
- const admin=await browser.newPage({viewport:{width:412,height:915}}),errors=[];admin.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await admin.waitForSelector('#content');
+ const admin=await browser.newPage({viewport:{width:412,height:915}}),errors=[];admin.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(admin);await admin.waitForSelector('#content');
  const seed=await admin.evaluate(async()=>{const change=async(action,input)=>{const s=await(await fetch('/api/state')).json();const r=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,input,revision:s.revision})});if(!r.ok)throw Error(await r.text());return(await r.json()).result;};await change('saveAcquisition',{isbn:'9780140328721',title:'Matilda',author:'Roald Dahl',notes:'ADMIN ACQUISITION SECRET'});return(await(await fetch('/api/sharing',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"action":"enable"}'})).json()).url;});
  const initial=await admin.evaluate(async()=> (await(await fetch('/api/state')).json()).state);assert.equal(initial.books.length,0);assert.equal(initial.nextCopy,1);
  await openAdminTool(admin,'books-to-buy');await admin.locator('[data-wish-buy]').click();await admin.locator('dialog [name=room]').fill('PRIVATE BEDROOM LOCATION');await admin.locator('dialog [name=bookcase]').fill('West bookcase');await admin.locator('dialog [name=shelf]').fill('3');await admin.locator('dialog [name=purchaseConfirmed]').check();await admin.locator('dialog form [type=submit]').click();await admin.waitForFunction(()=>!document.querySelector('dialog[open]'));

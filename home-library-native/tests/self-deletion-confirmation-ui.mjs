@@ -1,9 +1,10 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 try{
- const admin=await browser.newPage();await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await admin.waitForSelector('#content');const share=await admin.evaluate(async()=> (await(await fetch('/api/sharing',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"action":"enable"}'})).json()).url);const token=new URL(share).pathname.split('/')[2];
+ const admin=await browser.newPage();await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(admin);await admin.waitForSelector('#content');const share=await admin.evaluate(async()=> (await(await fetch('/api/sharing',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"action":"enable"}'})).json()).url);const token=new URL(share).pathname.split('/')[2];
  for(const [signup,typed]of [['Case.Reader',' Case.Reader '],['Prefix.Reader','\u3000@Prefix.Reader\u00a0']]){
   const context=await browser.newContext({viewport:{width:390,height:844}});await context.route('https://library.test/**',async route=>{const u=new URL(route.request().url());await route.fulfill({response:await route.fetch({url:process.env.PUBLIC_TEST_URL+u.pathname+u.search,headers:{...route.request().headers(),origin:'https://library.test'}})});});const page=await context.newPage(),errors=[],deletes=[];page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{if(new URL(r.url()).pathname==='/account/delete')deletes.push(JSON.parse(r.postData()));});
   await page.goto('https://library.test/account/');const account=await page.evaluate(async({token,signup})=>{const r=await fetch('register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:signup,name:'A different display name',password:'Deletion fixture passphrase!',shareToken:token,contact:''})});if(!r.ok)throw Error(await r.text());return(await r.json()).account;},{token,signup});assert.equal(account.username,signup.toLowerCase());

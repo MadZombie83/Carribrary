@@ -1,3 +1,4 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -5,7 +6,7 @@ const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const output=process.env.CARRIBRARY_BORROWER_SCREENSHOTS||'/tmp/carribrary-borrower-layout';fs.mkdirSync(output,{recursive:true});
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 try{
- const admin=await browser.newPage();await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await admin.waitForSelector('#content');
+ const admin=await browser.newPage();await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(admin);await admin.waitForSelector('#content');
  const share=await admin.evaluate(async()=>{const snap=await(await fetch('/api/state')).json(),input={version:1,nextCopy:13,libraryName:'Meadow House Library',libraryTheme:'purple-blue',books:Array.from({length:12},(_,i)=>({id:'BK-'+String(i+1).padStart(4,'0'),isbn:'9780140328721',title:i===0?'A Secret Garden':i===1?'A very long book title that wraps naturally on a phone without hiding its author or borrowing controls':'Stories by the Sea '+(i+1),author:'Fixture Author',publisher:'Fixture Press',coverUrl:''})),borrowers:[],loans:[]};const r=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'restore',revision:snap.revision,input})});if(!r.ok)throw Error(await r.text());return(await(await fetch('/api/sharing',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"action":"enable"}'})).json()).url;});
  const context=await browser.newContext({viewport:{width:390,height:844}});await context.route('https://library.test/**',async route=>{const u=new URL(route.request().url());await route.fulfill({response:await route.fetch({url:process.env.PUBLIC_TEST_URL+u.pathname+u.search,headers:{...route.request().headers(),origin:'https://library.test'}})});});
  await context.route('https://covers.openlibrary.org/**',route=>route.fulfill({status:404,body:''}));

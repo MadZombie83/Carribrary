@@ -2,7 +2,7 @@
 
 For everyday use open your library HTTPS address followed by `/companion/` in Safari, Share → Add to Home Screen, then pair from the server. The server hosts this PWA; no Mac or native iOS build is required. The Swift project below remains optional source for future native development and has not been Xcode/device verified.
 
-# Carribrary iPhone companion — source preview 0.1.24
+# Carribrary iPhone companion — source preview 0.1.25
 
 This is a native SwiftUI companion for the existing Carribrary server, targeting iOS 17 and later. It includes a checked-in Xcode project, shared test scheme and the established Carribrary icon. No third-party iOS packages or project generators are required to open it.
 

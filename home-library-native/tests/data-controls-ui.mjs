@@ -1,9 +1,10 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
 import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import assert from 'node:assert/strict';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
 try{
- const admin=await browser.newPage({viewport:{width:412,height:915}}),errors=[];admin.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await admin.waitForSelector('#content');
+ const admin=await browser.newPage({viewport:{width:412,height:915}}),errors=[];admin.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(admin);await admin.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(admin);await admin.waitForSelector('#content');
  const share=await admin.evaluate(async()=> (await(await fetch('/api/sharing',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"action":"enable"}'})).json()).url);
  const context=await browser.newContext({viewport:{width:412,height:915}});await context.route('https://library.test/**',async route=>{const u=new URL(route.request().url());await route.fulfill({response:await route.fetch({url:process.env.PUBLIC_TEST_URL+u.pathname+u.search,headers:{...route.request().headers(),origin:'https://library.test'}})});});const page=await context.newPage();page.on('pageerror',e=>errors.push(e.message));await page.goto('https://library.test/account/');
  const help=await page.request.get(process.env.PUBLIC_TEST_URL+'/account/delete-help');assert.equal(help.status(),200);assert.match(await help.text(),/delete your account|Delete your Carribrary/);

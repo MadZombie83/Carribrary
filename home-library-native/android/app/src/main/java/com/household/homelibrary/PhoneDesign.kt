@@ -64,3 +64,21 @@ val phoneTypography=Typography().let{it.copy(headlineMedium=it.headlineMedium.co
   }
  }
 }
+
+@Composable fun PhoneSectionHeading(title:String,description:String){
+ Column(verticalArrangement=Arrangement.spacedBy(6.dp)){
+  Text(title,style=MaterialTheme.typography.headlineMedium,color=MaterialTheme.colorScheme.primary)
+  Text(description,style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
+ }
+}
+@Composable fun PhonePanel(content:@Composable ColumnScope.()->Unit){
+ OutlinedCard(Modifier.fillMaxWidth(),shape=MaterialTheme.shapes.large,colors=CardDefaults.outlinedCardColors(containerColor=MaterialTheme.colorScheme.surface),border=BorderStroke(1.dp,MaterialTheme.colorScheme.outlineVariant)){
+  Column(Modifier.padding(18.dp),verticalArrangement=Arrangement.spacedBy(10.dp),content=content)
+ }
+}
+@Composable fun PhoneEmptyState(title:String,description:String){PhonePanel{Text(title,style=MaterialTheme.typography.titleLarge);Text(description,color=MaterialTheme.colorScheme.onSurfaceVariant)}}
+@Composable fun PhoneStatusPill(text:String){Surface(color=MaterialTheme.colorScheme.secondaryContainer,contentColor=MaterialTheme.colorScheme.onSecondaryContainer,shape=RoundedCornerShape(50)){Text(text,Modifier.padding(horizontal=12.dp,vertical=6.dp),style=MaterialTheme.typography.labelMedium)}}
+@Composable fun PhoneDisclosure(title:String,initialOpen:Boolean=false,content:@Composable ColumnScope.()->Unit){
+ var expanded by remember(title){mutableStateOf(initialOpen)}
+ PhonePanel{TextButton(onClick={expanded=!expanded},modifier=Modifier.fillMaxWidth()){Text((if(expanded)"▾ " else "▸ ")+title,style=MaterialTheme.typography.titleLarge)};if(expanded)content()}
+}
