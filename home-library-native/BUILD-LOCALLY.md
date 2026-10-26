@@ -127,3 +127,5 @@ No authentication, pairing or loan/history migration is introduced. Library/cred
 Current source 2.0.40: borrower catalog/account and iPhone PWA polish. Use Carribrary-2.0.40-source.zip in a new versioned folder. Existing data/pairing are preserved. Program-only recovery supports 2.0.39–2.0.40. Build packages locally; no installers supplied with this source iteration.
 
 Current source 2.0.41: branded public welcome, administrator Dashboard landing and Android/reading/detail polish. Extract Carribrary-2.0.41-source.zip into its new versioned folder; do not merge it into another build. Review distribution/RELEASE-TEST-CHECKLIST-2.0.41.md after compiling. Compatible program recovery: 2.0.39–2.0.41. No installer packages built in this source delivery.
+
+Current source 2.0.42: companion summary panels, Home/navigation/search and request bells. Use Carribrary-2.0.42-source.zip in its own folder. See distribution/RELEASE-2.0.42.md for verification and owner device checks. Source only; no installers built. Compatible program recovery: 2.0.39–2.0.42; library/credential formats remain 3/2.

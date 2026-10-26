@@ -1,7 +1,7 @@
 plugins { id("com.android.application"); id("org.jetbrains.kotlin.android"); id("org.jetbrains.kotlin.plugin.compose") }
 android {
  namespace="com.household.homelibrary"; compileSdk=36
- defaultConfig { applicationId="com.household.homelibrary"; minSdk=29; targetSdk=36; versionCode=20041; versionName="2.0.41-preview" }
+ defaultConfig { applicationId="com.household.homelibrary"; minSdk=29; targetSdk=36; versionCode=20042; versionName="2.0.42-preview" }
  buildFeatures { compose=true; buildConfig=true }
  compileOptions { sourceCompatibility=JavaVersion.VERSION_17; targetCompatibility=JavaVersion.VERSION_17 }
  kotlinOptions { jvmTarget="17" }

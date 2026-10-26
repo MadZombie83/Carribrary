@@ -1,6 +1,8 @@
-# Carribrary 2.0.41 — branded welcome and remaining screen polish
+# Carribrary 2.0.42 — companion dashboard panels and navigation
 
-**2.0.41 current source update:** Plain public addresses open a branded welcome with invitation guidance, without revealing the catalog token. Local administrators open Dashboard. Android Settings & Tools has six searchable categories and refreshed remaining screens; household Reading/history/details match dashboard surfaces. See [release notes](distribution/RELEASE-2.0.41.md) and [package/hardware checklist](distribution/RELEASE-TEST-CHECKLIST-2.0.41.md). No installers built here; owner compiles packages. Recovery supports 2.0.39–2.0.41.
+**2.0.42 current source update:** Android and iPhone PWA share four colored whole-library summary panels, functional request bells and dashboard-style search/navigation. Android adds Home quick actions; both companions offer Home, Catalog, Loans, Reading and Settings. See [release notes and hardware checklist](distribution/RELEASE-2.0.42.md). Source only; owner builds packages. Compatible recovery: 2.0.39–2.0.42.
+
+**Earlier 2.0.41 source update:** Plain public addresses open a branded welcome with invitation guidance, without revealing the catalog token. Local administrators open Dashboard. Android Settings & Tools has six searchable categories and refreshed remaining screens; household Reading/history/details match dashboard surfaces. See [release notes](distribution/RELEASE-2.0.41.md) and [package/hardware checklist](distribution/RELEASE-TEST-CHECKLIST-2.0.41.md). No installers built here; owner compiles packages. Recovery supports 2.0.39–2.0.41.
 
 **Earlier 2.0.40 source update:** Shared catalog, borrower sign-in/account and the librarian iPhone PWA follow dashboard theme tokens, responsive cards and clear availability. Catalog-first navigation, guest requests, private reading, account controls and pairing remain. iPhone notification/unpair controls are visible under Settings & Tools home / People & Access. See [release notes](distribution/RELEASE-2.0.40.md). Source only; owner builds packages. Program recovery supports 2.0.39–2.0.40.
 

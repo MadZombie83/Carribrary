@@ -1,0 +1,33 @@
+import {openCatalogIfAdmin} from './local-admin-fixture.mjs';
+import {openAdminTool} from './admin-tool-navigation.mjs';
+import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
+import assert from 'node:assert/strict';
+import {randomUUID} from 'node:crypto';
+import {mkdir} from 'node:fs/promises';
+const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
+const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--ignore-certificate-errors']});
+const output='output/summary-panels-2.0.42';await mkdir(output,{recursive:true});
+try{
+ const context=await browser.newContext({ignoreHTTPSErrors:true,viewport:{width:1440,height:1000}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(process.env.LIBRARY_TEST_URL);await openCatalogIfAdmin(page);await page.waitForSelector('#content .empty');
+ const share=await page.evaluate(async()=>{
+  const api=async(action,input)=>{const s=await(await fetch('/api/state')).json();const r=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,input,revision:s.revision})});if(!r.ok)throw Error(await r.text());return r.json();};
+  await api('restore',{version:1,nextCopy:5,libraryName:'Meadow House Library',libraryTheme:'purple-blue',encouragingMessage:'A good story grows when it is shared.',books:['The Secret Garden','Stories by the Sea','A Journey Home','Quiet Pages'].map((title,i)=>({id:'BK-000'+(i+1),isbn:'9780140328721',title,author:'Morgan Vale',series:'Household Stories',publisher:'Fixture Press',coverUrl:''})),borrowers:[{id:'BR-0001',name:'Test Robin',contact:'robin@example.com',reminderConsent:true},{id:'BR-0002',name:'Test Alex',contact:''}],loans:[]});
+  await api('checkout',{copyId:'BK-0001',borrowerId:'BR-0001',checkoutDate:'2020-01-01',dueDate:'2020-02-01'});await api('createHold',{copyId:'BK-0002',borrowerId:'BR-0002'});
+  return(await(await fetch('/api/sharing',{method:'POST',headers:{'Content-Type':'application/json'},body:'{"action":"enable"}'})).json()).url;
+ });
+ const visitor=await browser.newContext({ignoreHTTPSErrors:true});
+ for(const copyId of ['BK-0003','BK-0004']){const response=await visitor.request.post(share.replace(/\/$/,'')+'/requests',{headers:{Origin:process.env.PUBLIC_TEST_URL},data:{copyId,requestId:randomUUID(),expectedIsbn:'9780140328721',expectedTitle:copyId==='BK-0003'?'A Journey Home':'Quiet Pages',name:'Test Reader',contact:'reader@example.com',message:'<script>window.BAD=true</script>'}});assert.equal(response.status(),200,await response.text());}
+ await page.evaluate(async()=>{const s=await(await fetch('/api/state')).json(),id=s.state.requests.find(r=>r.copyId==='BK-0004').id;const r=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'declineRequest',revision:s.revision,input:{requestId:id}})});if(!r.ok)throw Error(await r.text());});await visitor.close();await page.reload();await openCatalogIfAdmin(page);await page.waitForSelector('#content .book');
+
+ await openAdminTool(page,'iphone-companion');await page.locator('#pair-browser').click();await page.waitForSelector('#browser-pair input');const code=await page.locator('#browser-pair input').first().inputValue();
+ const phone=await context.newPage();phone.on('pageerror',e=>errors.push(e.message));await phone.setViewportSize({width:390,height:900});await phone.goto(process.env.PUBLIC_TEST_URL+'/companion/');await phone.locator('[name=code]').fill(code);await phone.locator('#pair [type=submit]').click();await phone.waitForFunction(()=>document.querySelector('#stats [data-kpi="0"]')?.textContent==='4');
+ const counts=async selector=>phone.locator(selector+' [data-kpi]').allTextContents();assert.deepEqual(await counts('#stats'),['4','1','1','1']);
+ await phone.locator('#search').fill('No such title');assert.deepEqual(await counts('#stats'),['4','1','1','1']);await phone.locator('#search').fill('');
+ assert.equal(await phone.locator('#request-bell').getAttribute('aria-label'),'Active requests: 1');await phone.locator('#request-bell').click();await phone.waitForSelector('.request-card');await phone.locator('#close-form').click();
+ for(const width of [390,768,1440]){await phone.setViewportSize({width,height:1000});assert(await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));if(width===390){const boxes=await phone.locator('#stats .dashboard-kpi').evaluateAll(es=>es.map(e=>({x:e.offsetLeft,y:e.offsetTop})));assert.equal(boxes[0].y,boxes[1].y);assert(boxes[2].y>boxes[0].y);assert.equal(boxes[0].x,boxes[2].x);}assert.equal(new Set(await phone.locator('#stats .dashboard-kpi').evaluateAll(es=>es.map(e=>getComputedStyle(e).backgroundImage))).size,4);await phone.screenshot({path:output+`/iphone-catalog-${width}.png`,fullPage:true});}
+ await phone.setViewportSize({width:390,height:900});await phone.locator('[data-view=dashboard]:visible').click();await phone.waitForSelector('#admin-dashboard .dashboard-kpi');assert.deepEqual(await counts('#admin-dashboard'),['4','1','1','1']);await phone.screenshot({path:output+'/iphone-home-390.png',fullPage:true});
+ await phone.locator('#dashboard-search').fill('Quiet');await phone.locator('#dashboard-search').press('Enter');await phone.waitForFunction(()=>document.querySelector('#stats [data-kpi="0"]')?.textContent==='4');assert.equal(await phone.locator('#search').inputValue(),'Quiet');assert.deepEqual(await counts('#stats'),['4','1','1','1']);
+ await phone.evaluate(()=>document.documentElement.style.fontSize='200%');assert(await phone.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await phone.screenshot({path:output+'/iphone-large-text.png',fullPage:true});await phone.evaluate(()=>document.documentElement.style.fontSize='');
+ await page.evaluate(async()=>{const s=await(await fetch('/api/state')).json();const r=await fetch('/api/action',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'returnBook',revision:s.revision,input:{copyId:'BK-0001'}})});if(!r.ok)throw Error(await r.text());});await phone.reload();await phone.waitForFunction(()=>document.querySelector('#stats [data-kpi="0"]')?.textContent==='4');assert.deepEqual(await counts('#stats'),['4','2','0','1']);assert.deepEqual(errors,[]);
+ console.log('PASS real paired companion four panels, whole-library filter scope, hold exclusion, request bell/action, Home parity, header search, return refresh, colors, phone/tablet/desktop and large text');
+}finally{await browser.close();}

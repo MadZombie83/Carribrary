@@ -14,6 +14,7 @@ const sectionIcons={'Recent requests':'requests','Lending & holds':'swap','Quick
 const heading=(label,tool)=>`<div class="dashboard-card-head"><h2>${icon(sectionIcons[label]||'book')}${label}</h2>${tool?action(tool,'View all →','text'):''}</div>`;
 function cover(book){return book.coverUrl?`<img class="dashboard-cover" src="${esc(book.coverUrl)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:'<span class="dashboard-cover placeholder" aria-hidden="true">'+icon('book')+'</span>';}
 function requestDate(value){const d=new Date(value);return Number.isNaN(d.getTime())?'Date unavailable':new Intl.DateTimeFormat(undefined,{dateStyle:'medium'}).format(d);}
+export function summaryPanels(s){return `${[['book',s.books.length,'Physical copies'],['check',s.available,'Available'],['clock',s.loans.length,'On loan'],['people',s.requests.length,'Active requests']].map(([symbol,n,label],i)=>`<div class="dashboard-kpi kpi-${i}"><span class="kpi-icon">${icon(symbol)}</span><div><strong data-kpi="${i}">${n}</strong><span>${label}</span></div></div>`).join('')}`;}
 export function renderDashboard(state,{today,offline,onAction,onBook}){
  const s=dashboardSummary(state,today),target=document.querySelector('#admin-dashboard');
  const labels={pending:'Awaiting approval',approved:'Approved · on hold',fulfilled:'Handed over',declined:'Declined',cancelled:'Cancelled'};
@@ -21,7 +22,7 @@ export function renderDashboard(state,{today,offline,onAction,onBook}){
  const recentHTML=recent.map(r=>{const b=(state.books||[]).find(b=>b.id===r.copyId)||{title:r.copyId};return `<li>${cover(b)}<div><strong>${esc(b.title)}</strong><p class="request-author">${esc(b.author||'Author not recorded')}</p><p>${esc(r.name||'Borrower')} · ${esc(requestDate(r.submittedAt))}</p><span class="badge request-${esc(r.status)}">${esc(labels[r.status]||r.status)}</span>${googleCredit(b.coverUrl||'')}</div>${action('requests','Review','text')}</li>`;}).join('');
  const rows=[['loans','On loan',s.loans.length],['holds','Holds waiting',s.holds.length],['loans','Overdue',s.overdue]];
  target.innerHTML=`<div class="dashboard-heading"><h1>${esc(state.libraryName||'Carribrary')}</h1><p>${esc(state.bannerSubtitle??'A shelf worth sharing')}</p></div>
- <div class="dashboard-kpis" aria-label="Whole-library summary">${[['book',s.books.length,'Physical copies'],['check',s.available,'Available'],['clock',s.loans.length,'On loan'],['people',s.requests.length,'Active requests']].map(([symbol,n,label],i)=>`<div class="dashboard-kpi kpi-${i}"><span class="kpi-icon">${icon(symbol)}</span><div><strong data-kpi="${i}">${n}</strong><span>${label}</span></div></div>`).join('')}</div>
+ <div class="dashboard-kpis" aria-label="Whole-library summary">${summaryPanels(s)}</div>
  <div class="dashboard-upper"><section class="dashboard-card recent-requests">${heading('Recent requests','requests')}<ul class="dashboard-list">${recentHTML||'<li class="dashboard-empty">No requests yet. Share your library to invite readers.</li>'}</ul></section>
  <section class="dashboard-card">${heading('Lending & holds','holds')}<div class="dashboard-lending">${rows.map(([tool,label,n],i)=>action(tool,`<i class="lending-icon lending-${i}">${icon(['clock','hourglass','alert'][i])}</i><span>${label}</span><strong>${n}</strong><span aria-hidden="true">›</span>`)).join('')}</div></section>
  <section class="dashboard-card quick-actions">${heading('Quick Actions')}<div>${action('add',icon('plus')+'<span>Add Book</span>','primary')}${action('holds',icon('people')+'<span>Create Hold</span>')}${action('batch',icon('swap')+'<span>Batch Checkout</span>')}${action('backup',icon('backup')+'<span>Backup Now</span>')}</div><p class="help">Choose a backup type before downloading.</p></section></div>
@@ -33,6 +34,8 @@ export function renderDashboard(state,{today,offline,onAction,onBook}){
  target.querySelectorAll('img').forEach(img=>img.onerror=()=>{const fallback=document.createElement('span');fallback.className='dashboard-cover placeholder';fallback.setAttribute('aria-hidden','true');fallback.innerHTML=icon('book');img.replaceWith(fallback);});
 }
 export function syncAdminShell(state,view){
+ const count=(state.requests||[]).filter(r=>["pending","approved"].includes(r.status)).length;
+ const bell=document.querySelector("#request-bell"),badge=document.querySelector("#request-bell-count");if(bell){bell.setAttribute("aria-label",`Active requests: ${count}`);badge.hidden=count===0;badge.textContent=count>99?"99+":String(count);}
  document.body.dataset.adminView=view;
  document.body.dataset.libraryTheme=state.libraryTheme||'classic';
  const name=document.querySelector('[data-sidebar-name]');name.textContent=state.libraryName||'Carribrary';

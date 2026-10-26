@@ -1,6 +1,7 @@
 package com.household.homelibrary
 import android.os.Bundle
 import android.content.Intent
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.LocalContext
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -50,21 +51,29 @@ fun duplicates(books:List<JSONObject>,draft:JSONObject)=books.filter{edition(it.
  fun scan(kind:String){scanner=kind}
  LaunchedEffect(paired){if(paired){runCatching{snapshot=api.refresh();online=true}.onFailure{online=false;notice=it.message?:"Offline — showing cached library. Connect to make changes."}}}
  Surface(Modifier.fillMaxSize()){
- Scaffold(containerColor=MaterialTheme.colorScheme.background,bottomBar={if(paired)NavigationBar{for((target,label,glyph)in listOf(Triple("Catalog","Catalog","▤"),Triple("On loan","Loans","↗"),Triple("Reading","Reading","✓"),Triple("More","Settings","☰")))NavigationBarItem(selected=view==target||(target=="More"&&view in listOf("Borrowers","Requests","History")),onClick={view=target;search="";page=1},icon={PhoneNavIcon(target)},label={Text(label)})}}){screenPadding->
+ Scaffold(containerColor=MaterialTheme.colorScheme.background,bottomBar={if(paired)NavigationBar{for((target,label,glyph)in listOf(Triple("Home","Home","⌂"),Triple("Catalog","Catalog","▤"),Triple("On loan","Loans","↗"),Triple("Reading","Reading","✓"),Triple("More","Settings","☰")))NavigationBarItem(selected=view==target||(target=="More"&&view in listOf("Borrowers","Requests","History")),onClick={view=target;search="";page=1},icon={PhoneNavIcon(target)},label={Text(label)})}}){screenPadding->
  Column(Modifier.fillMaxSize().padding(screenPadding).consumeWindowInsets(screenPadding).safeDrawingPadding().verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)){
-  PhoneLibraryBanner(state){dialog="help"}
+  PhoneLibraryBanner(state,onHelp={dialog="help"},requests=(state.optJSONArray("requests")?.objects()?:emptyList()).count{it.optString("status") in listOf("pending","approved")},onRequests=if(paired)({view="Requests";search="";page=1}) else null)
   Column(Modifier.padding(horizontal=16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
   Text(if(paired){if(online)"Connected to library server" else "Offline · cached books"}else "Pair with your library server",style=MaterialTheme.typography.bodySmall)
   val message=state.optString("encouragingMessage","A place for every book.");if(message.isNotBlank())Text(message,style=MaterialTheme.typography.titleLarge.copy(fontFamily=FontFamily.Serif),color=MaterialTheme.colorScheme.primary)
-  if(paired&&view=="Catalog")PhoneLibrarySummary(books.size,loans.size,books.count{b->loans.none{it.optString("copyId")==b.optString("id")}&&(state.optJSONArray("holds")?.objects()?:emptyList()).none{it.optString("copyId")==b.optString("id")}})
+  if(paired&&view in listOf("Home","Catalog"))PhoneLibrarySummary(phoneSummaryCounts(
+   (state.optJSONArray("books")?.objects()?:emptyList()).map{SummaryCopy(it.optString("id"),it.optBoolean("archived"))},
+   (state.optJSONArray("loans")?.objects()?:emptyList()).map{SummaryLoan(it.optString("copyId"),!it.isNull("returnedDate"))},
+   (state.optJSONArray("holds")?.objects()?:emptyList()).map{it.optString("copyId")},
+   (state.optJSONArray("requests")?.objects()?:emptyList()).map{it.optString("status")}))
   if(!paired){Text("Install Carribrary Server on your own Windows, Linux or Raspberry Pi computer, then scan its private pairing QR. The phone companion requires that server; no hosted library is included.");OutlinedTextField(phoneName,{phoneName=it},label={Text("Phone name")},modifier=Modifier.fillMaxWidth());Button(onClick={scan("pair")}){Text("Scan pairing QR")};OutlinedTextField(pairingText,{pairingText=it},label={Text("Pairing code (manual fallback)")},modifier=Modifier.fillMaxWidth());Button(enabled=!busy&&pairingText.isNotBlank(),onClick={launchTask{api.pair(pairingText,phoneName);paired=true;pairingText="";snapshot=api.refresh();online=true}}){Text("Pair phone")}}
   else{
    if(view=="Borrowers")PhoneSectionHeading("Borrowers","Lending contacts, active loans and reminder permissions.")
    if(view=="Requests")PhoneSectionHeading("Requests","Review holds and approve a handover when the book reaches its borrower.")
    if(view=="History")PhoneSectionHeading("Loan history","Past and current borrowing, separate from personal reading.")
-   if(view!="More")OutlinedTextField(search,{search=it;page=1},label={Text(if(view in listOf("Catalog","On loan"))"Search title, author, series, ISBN or copy ID" else if(view=="Reading")"Search reading titles, authors or notes" else "Search books or borrowers")},modifier=Modifier.fillMaxWidth())
+   if(view!="More")OutlinedTextField(search,{search=it;page=1;if(view=="Home")view="Catalog"},leadingIcon={Icon(painterResource(R.drawable.nav_search),null)},shape=MaterialTheme.shapes.medium,label={Text(if(view in listOf("Catalog","On loan"))"Search title, author, series, ISBN or copy ID" else if(view=="Reading")"Search reading titles, authors or notes" else "Search books or borrowers")},modifier=Modifier.fillMaxWidth())
    if(api.hasPending())Button(onClick={launchTask{snapshot=api.retryPending();online=true;notice="Previous change confirmed"}},enabled=!busy){Text("Retry pending change")}
-   if(view=="More"){PhoneMoreMenu(online&&!busy,(state.optJSONArray("requests")?.objects()?:emptyList()).count{it.optString("status") in listOf("pending","approved")},canRefresh=!busy){action->when(action){"Borrowers","Requests","History"->{view=action;search="";page=1};"refresh"->refresh();"csv","devices","backup","restore"->{manageAction=action;dialog="manage"};"settings"->{manageAction="";dialog="manage"};"collections"->{collectionDraft=JSONObject();collectionName="";dialog="collections"};else->dialog=action}}}else if(view=="Reading"){ReadingTracker(state,api,search,online&&!busy,notice,onChange={action,input,done->launchTask{snapshot=api.mutate(action,input,snapshot.optLong("revision"));notice="Reading tracker updated";done()}},onShare={id->draft=JSONObject().put("readerId",id);dialog="readingShare"})}else if(view=="History"){LoanHistory(state,search)}else if(view=="Requests"){
+   if(view=="More"){PhoneMoreMenu(online&&!busy,(state.optJSONArray("requests")?.objects()?:emptyList()).count{it.optString("status") in listOf("pending","approved")},canRefresh=!busy){action->when(action){"Borrowers","Requests","History"->{view=action;search="";page=1};"refresh"->refresh();"csv","devices","backup","restore"->{manageAction=action;dialog="manage"};"settings"->{manageAction="";dialog="manage"};"collections"->{collectionDraft=JSONObject();collectionName="";dialog="collections"};else->dialog=action}}}else if(view=="Home"){
+    PhoneSectionHeading("Dashboard","Your library at a glance. Search above or choose an everyday action.")
+    PhonePanel{Text("Quick actions",style=MaterialTheme.typography.titleLarge);FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)){Button(enabled=online&&!busy,onClick={draft=JSONObject();dialog="book"}){Text("Add book")};OutlinedButton(enabled=online&&!busy,onClick={draft=JSONObject();borrower="";due="";checkoutDate=LocalDate.now().toString();dialog="checkout"}){Text("Check out")};OutlinedButton(enabled=online&&!busy,onClick={draft=JSONObject();dialog="return"}){Text("Return")}}}
+    PhonePanel{Text("People & lending",style=MaterialTheme.typography.titleLarge);TextButton(onClick={view="Borrowers";search="";page=1}){Text("Borrowers (${people.size})")};TextButton(onClick={view="Requests";search="";page=1}){Text("Review requests")};TextButton(onClick={view="On loan";search="";page=1}){Text("View active loans")}}
+   }else if(view=="Reading"){ReadingTracker(state,api,search,online&&!busy,notice,onChange={action,input,done->launchTask{snapshot=api.mutate(action,input,snapshot.optLong("revision"));notice="Reading tracker updated";done()}},onShare={id->draft=JSONObject().put("readerId",id);dialog="readingShare"})}else if(view=="History"){LoanHistory(state,search)}else if(view=="Requests"){
     RequestInbox(state,search,online&&!busy,onDecision={action,id->launchTask{snapshot=api.mutate(action,JSONObject().put("requestId",id),snapshot.optLong("revision"));notice="Request updated"}},onHandOver={request->draft=request;borrower="";due="";checkoutDate=LocalDate.now().toString();dialog="handover"})
    }else if(view=="Borrowers"){
     Button(enabled=online&&!busy,onClick={draft=JSONObject();dialog="borrower"}){Text("Add borrower")}

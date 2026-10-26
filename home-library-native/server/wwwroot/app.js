@@ -5,7 +5,7 @@ import {applyPalette} from './theme-palette.js';
 import {customThemeEditor} from './theme-editor.js';
 import {sidebarArtworkSettings} from './sidebar-artwork.js';
 import {dashboardAccounts} from './dashboard-accounts.js';
-import {renderDashboard,syncAdminShell} from './admin-dashboard.js';
+import {renderDashboard,syncAdminShell,dashboardSummary,summaryPanels} from './admin-dashboard.js';
 import {copyLabels} from './copy-labels.js';
 import {libraryIconSettings} from './library-branding.js';
 import {bookAbout} from './book-about.js';
@@ -73,6 +73,7 @@ for(const id of ['checkout','return','share-list','share-qr'])$('#'+id).style.di
 $('#connection-status').textContent=!stateReady?'Connecting to library server':readOnly?'Server unavailable':'Connected to library server';
 $('#connection-status').classList.toggle('server-offline',readOnly);
 syncPageHeading(state,view,today());
+const companionSummary=location.pathname.startsWith('/companion/')&&view==='catalog';$('#stats').classList.toggle('companion-summary',companionSummary);$('#stats').setAttribute('aria-label',companionSummary?'Whole-library summary':'View summary');if(companionSummary)$('#stats').innerHTML=summaryPanels(dashboardSummary(state,today()));
 if(view==='settings'){if(!stateReady){const target=$('#settings-page');target.hidden=false;target.innerHTML='<p role="status">'+(readOnly?'The server is unavailable. Reconnect and refresh to open settings.':'Loading your library settings…')+'</p>';$('#content').replaceChildren();$('#pagination').replaceChildren();return;}settingsNavigation?.render(state);$('#content').replaceChildren();$('#pagination').replaceChildren();return;}
 settingsNavigation?.hide();
 if(view==='dashboard'){ $('#content').replaceChildren();$('#pagination').replaceChildren();return;}

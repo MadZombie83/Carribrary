@@ -17,21 +17,37 @@ import org.json.JSONObject
 
 val phoneShapes=Shapes(small=RoundedCornerShape(8.dp),medium=RoundedCornerShape(14.dp),large=RoundedCornerShape(22.dp))
 val phoneTypography=Typography().let{it.copy(headlineMedium=it.headlineMedium.copy(fontFamily=FontFamily.Serif),titleLarge=it.titleLarge.copy(fontFamily=FontFamily.Serif))}
-@Composable fun PhoneNavIcon(target:String){Icon(painterResource(when(target){"Catalog"->R.drawable.nav_catalog;"On loan"->R.drawable.nav_loans;"Reading"->R.drawable.nav_reading;else->R.drawable.nav_more}),contentDescription=null,modifier=Modifier.size(24.dp))}
-@Composable fun PhoneLibraryBanner(state:JSONObject,onHelp:()->Unit){
+@Composable fun PhoneNavIcon(target:String){Icon(painterResource(when(target){"Home"->R.drawable.nav_home;"Catalog"->R.drawable.nav_catalog;"On loan"->R.drawable.nav_loans;"Reading"->R.drawable.nav_reading;else->R.drawable.nav_more}),contentDescription=null,modifier=Modifier.size(24.dp))}
+@Composable fun PhoneLibraryBanner(state:JSONObject,onHelp:()->Unit,requests:Int=0,onRequests:(()->Unit)?=null){
  val colors=MaterialTheme.colorScheme
  Column(Modifier.fillMaxWidth().background(Brush.linearGradient(listOf(colors.primary,colors.primary.copy(alpha=.88f)))).padding(horizontal=20.dp,vertical=22.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
   Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)){
    LibraryBrandIcon(state)
    if(state.optString("libraryIcon192").isBlank())Icon(painterResource(R.drawable.nav_catalog),null,tint=colors.onPrimary,modifier=Modifier.size(34.dp))
    Column(Modifier.weight(1f)){Text(state.optString("libraryName","Carribrary"),style=MaterialTheme.typography.headlineMedium,color=colors.onPrimary);val subtitle=state.optString("bannerSubtitle","A shelf worth sharing");if(subtitle.isNotBlank())Text(subtitle,style=MaterialTheme.typography.bodySmall,color=colors.tertiary)}
+   if(onRequests!=null)BadgedBox(badge={if(requests>0)Badge{Text(if(requests>99)"99+" else requests.toString())}}){IconButton(onClick=onRequests){Icon(painterResource(R.drawable.nav_bell),"Active requests: $requests",tint=colors.onPrimary)}}
    TextButton(onClick=onHelp,colors=ButtonDefaults.textButtonColors(contentColor=colors.onPrimary)){Text("Help")}
   }
  }
 }
-@Composable fun PhoneLibrarySummary(copies:Int,onLoan:Int,available:Int){
- OutlinedCard(Modifier.fillMaxWidth(),colors=CardDefaults.outlinedCardColors(containerColor=MaterialTheme.colorScheme.surface),border=BorderStroke(1.dp,MaterialTheme.colorScheme.outlineVariant)){
-  Row(Modifier.fillMaxWidth().padding(vertical=14.dp),horizontalArrangement=Arrangement.SpaceEvenly){for((number,label)in listOf(copies to "Books",onLoan to "On loan",available to "Available"))Column(horizontalAlignment=Alignment.CenterHorizontally){Text(number.toString(),style=MaterialTheme.typography.titleLarge,color=MaterialTheme.colorScheme.primary);Text(label,style=MaterialTheme.typography.labelMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)}}
+@Composable fun PhoneLibrarySummary(summary:PhoneSummaryCounts){
+ val colors=MaterialTheme.colorScheme
+ val items=listOf(Triple(summary.physicalCopies,"Physical copies",R.drawable.nav_catalog),Triple(summary.available,"Available",R.drawable.summary_check),Triple(summary.onLoan,"On loan",R.drawable.summary_clock),Triple(summary.activeRequests,"Active requests",R.drawable.summary_people))
+ val backgrounds=listOf(colors.secondaryContainer,Color(0xffedf9f6),Color(0xfffff5ee),Color(0xffedf5ff))
+ val accents=listOf(colors.primary,Color(0xff087955),Color(0xffb85306),Color(0xff2853be))
+ BoxWithConstraints(Modifier.fillMaxWidth()){
+  val columns=if(maxWidth>=600.dp)4 else 2
+  Column(verticalArrangement=Arrangement.spacedBy(12.dp)){
+   for(row in items.indices.chunked(columns))Row(horizontalArrangement=Arrangement.spacedBy(12.dp)){
+    for(index in row)OutlinedCard(Modifier.weight(1f),shape=MaterialTheme.shapes.medium,colors=CardDefaults.outlinedCardColors(containerColor=backgrounds[index]),border=BorderStroke(1.dp,colors.outlineVariant)){
+     Column(Modifier.fillMaxWidth().padding(14.dp),verticalArrangement=Arrangement.spacedBy(7.dp)){
+      Surface(shape=RoundedCornerShape(50),color=accents[index].copy(alpha=.1f)){Icon(painterResource(items[index].third),null,tint=accents[index],modifier=Modifier.padding(10.dp).size(26.dp))}
+      Text(items[index].first.toString(),style=MaterialTheme.typography.headlineMedium,color=if(index==0)colors.primary else Color(0xff18363c))
+      Text(items[index].second,style=MaterialTheme.typography.labelLarge,color=if(index==0)colors.primary else Color(0xff18363c))
+     }
+    }
+   }
+  }
  }
 }
 @OptIn(ExperimentalLayoutApi::class)
