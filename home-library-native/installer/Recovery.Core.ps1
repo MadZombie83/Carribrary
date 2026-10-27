@@ -33,7 +33,7 @@ function Get-CarribraryHash([string]$Path) {
 }
 function Test-CarribraryCompatible([string]$Version) {
     # Format-5 boundary: older programs discard artwork saved within custom themes.
-    return $Version -match '^2\.0\.45(?:[.+-].*)?$'
+    return $Version -match '^2\.0\.(45|46)(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

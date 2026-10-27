@@ -37,15 +37,15 @@ fun defaultPalette(theme:String="purple-blue"):JSONObject { val p=JSONObject("""
 @Composable fun CustomThemeDialog(state:JSONObject,theme:String,online:Boolean,busy:Boolean,message:String,onPreset:(String)->Unit,onSave:(JSONObject)->Unit,onClose:()->Unit){
  val saved=state.optJSONArray("savedThemes")?.objects()?:emptyList()
  fun withArtwork(p:JSONObject)=JSONObject(p.toString()).apply{if(!has("sidebarArtwork")||isNull("sidebarArtwork"))put("sidebarArtwork",state.optString("librarySidebarArtwork"))}
- var draft by remember{mutableStateOf(withArtwork(saved.find{"custom-"+it.optString("id")==theme}?.let{JSONObject(it.toString())}?:defaultPalette(theme)))}
+ var draft by remember{mutableStateOf(saved.find{"custom-"+it.optString("id")==theme}?.let{withArtwork(it)}?:defaultPalette(theme).put("sidebarArtwork",""))}
  var selectedColor by remember{mutableStateOf("")}
  fun update(key:String,value:String){draft=JSONObject(draft.toString()).put(key,value)}
  Dialog(onDismissRequest={if(!busy)onClose()}){Surface(shape=MaterialTheme.shapes.large){Column(Modifier.padding(20.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)){
   Text("Colors & custom themes",style=MaterialTheme.typography.headlineSmall)
   Text("Presets change this phone. Save a custom palette to the server to use across the library. Use your colors for shared library in Settings publishes a selected preset.",style=MaterialTheme.typography.bodySmall)
   libraryThemes.forEach{(key,label)->OutlinedButton(enabled=!busy,onClick={onPreset(key)},modifier=Modifier.fillMaxWidth()){Text((if(theme==key)"✓ " else "")+label)}}
-  if(saved.isNotEmpty()){Text("Saved custom themes",style=MaterialTheme.typography.titleMedium);saved.forEach{p->Row{TextButton(enabled=!busy,onClick={onPreset("custom-"+p.getString("id"))},modifier=Modifier.weight(1f)){Text(p.optString("name"))};TextButton(enabled=!busy,onClick={draft=withArtwork(p)}){Text("Edit")}}}}
-  Text("Each saved theme includes its sidebar PNG or a no-artwork choice. Applying it to the shared library restores colors and artwork together. Phone preset selection remains local until published.",style=MaterialTheme.typography.bodySmall)
+  if(saved.isNotEmpty()){Text("Saved custom themes",style=MaterialTheme.typography.titleMedium);saved.forEach{p->Row{TextButton(enabled=!busy,onClick={draft=withArtwork(p);selectedColor="";onPreset("custom-"+p.getString("id"))},modifier=Modifier.weight(1f)){Text(p.optString("name"))};TextButton(enabled=!busy,onClick={draft=withArtwork(p)}){Text("Edit")}}}}
+  Text("Each saved theme includes its sidebar PNG or a no-artwork choice. Applying it to the shared library restores colors and artwork together. New theme clears the artwork draft; use current library artwork to copy the current overlay. Phone preset selection remains local until published.",style=MaterialTheme.typography.bodySmall)
   Text(if(draft.optString("sidebarArtwork").isBlank())"Sidebar: no artwork" else "Sidebar: saved PNG included")
   OutlinedButton(enabled=!busy,onClick={update("sidebarArtwork",state.optString("librarySidebarArtwork"))}){Text("Use current library artwork")}
   TextButton(enabled=!busy,onClick={update("sidebarArtwork","")}){Text("No artwork for this theme")}
@@ -57,7 +57,7 @@ fun defaultPalette(theme:String="purple-blue"):JSONObject { val p=JSONObject("""
   val readable=readablePalette(draft)
   Text(if(readable)"Text contrast passes (at least 4.5:1)." else "Increase text contrast on page, cards and highlights. Banner needs readable white and accent text.",color=if(readable)MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error)
   Button(enabled=online&&!busy&&readable&&draft.optString("name").isNotBlank(),onClick={onSave(JSONObject(draft.toString()))},modifier=Modifier.fillMaxWidth()){Text(if(draft.has("id"))"Update & use theme" else "Save & use theme")}
-  if(draft.has("id"))TextButton(enabled=!busy,onClick={draft=JSONObject(draft.toString()).apply{remove("id");put("name","")}}){Text("Save as a new theme")}
+  TextButton(enabled=!busy,onClick={selectedColor="";draft=JSONObject(draft.toString()).apply{remove("id");put("name","");put("sidebarArtwork","")}}){Text("New theme")}
   if(!online)Text("Connect to the server to save a custom theme.")
   if(message.isNotBlank())Text(message,color=MaterialTheme.colorScheme.error)
   TextButton(enabled=!busy,onClick=onClose){Text("Done")}
