@@ -32,8 +32,8 @@ function Get-CarribraryHash([string]$Path) {
     finally { $Stream.Dispose(); $Sha.Dispose() }
 }
 function Test-CarribraryCompatible([string]$Version) {
-    # Format-4 boundary: older programs cannot preserve ISBN-less books and renewal records.
-    return $Version -match '^2\.0\.(43|44)(?:[.+-].*)?$'
+    # Format-5 boundary: older programs discard artwork saved within custom themes.
+    return $Version -match '^2\.0\.45(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'
@@ -92,6 +92,7 @@ function Restore-CarribraryProgram([string]$Root,[string]$Data,[string]$Recovery
     if (!(Test-CarribraryWithin $Point $RecoveryHome) -or (Get-CarribraryPath $Point) -eq (Get-CarribraryPath $RecoveryHome)) { throw 'Choose a recovery point inside this installation protected recovery folder.' }
     $Meta=Get-CarribraryRecoveryPoint $Point
     if ($Meta.purpose -ne 'update') { throw 'This is a safety copy of a recovery attempt, not a verified previous-application candidate.' }
+    if (Test-Path -LiteralPath (Join-Path $Data '.recovery-review-required')) { throw 'Finish the authenticated restored-library access review before program rollback. Keep remote access paused.' }
     if (!(Test-CarribraryCompatible $Meta.sourceVersion) -or !(Test-CarribraryCompatible $CurrentVersion)) { throw 'These releases do not have verified data compatibility. Automatic program recovery cannot cross this boundary. The complete private snapshot is retained for supervised recovery.' }
     if ($Meta.root -ne (Get-CarribraryPath $Root) -or $Meta.data -ne (Get-CarribraryPath $Data)) { throw 'This recovery point belongs to another installation or data folder.' }
     & $Stop

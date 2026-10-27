@@ -5,6 +5,7 @@ void Check(bool value,string name){if(!value)throw new Exception("FAILED: "+name
 void Throws(Action action,string text){try{action();throw new Exception("Expected failure: "+text);}catch(LibraryError e){Check(e.Message.Contains(text,StringComparison.OrdinalIgnoreCase),text);}}
 JsonElement Input(object value)=>JsonSerializer.SerializeToElement(value,Library.Json);
 try{
+ if(args.Contains("--complete-recovery-only")){await CompleteRecoveryTests.Run(Path.Combine(directory,"complete-recovery"));return;}
  if(args.Contains("--backup-verification-only")){await BackupVerificationTests.Run(Path.Combine(directory,"backup-verification"),protection);return;}
  if(args.Contains("--batch-renewals-only")){await BatchRenewalTests.Run(Path.Combine(directory,"batch-renewals"),protection);return;}
  CustomThemeTests.Run(Path.Combine(directory,"themes"),protection);
@@ -97,6 +98,8 @@ try{
  AcquisitionTests.Run(Path.Combine(directory,"acquisitions"),protection);
  HistoryToolsTests.Run(Path.Combine(directory,"history-tools"),protection);
  await LendingPolicyTests.Run(Path.Combine(directory,"lending-policy"),protection);
+ await BatchRenewalTests.Run(Path.Combine(directory,"batch-renewals"),protection);
+ await CompleteRecoveryTests.Run(Path.Combine(directory,"complete-recovery"));
  await BackupVerificationTests.Run(Path.Combine(directory,"backup-verification"),protection);
  await CompleteBackupTests.Run(Path.Combine(directory,"complete-backup"),protection);
  CopyIdentityTests.Run(Path.Combine(directory,"copy-identity"),protection);

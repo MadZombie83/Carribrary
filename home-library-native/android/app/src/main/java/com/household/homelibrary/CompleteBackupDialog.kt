@@ -33,6 +33,7 @@ import java.time.LocalDate
   Button(enabled=!busy&&password.length in 12..128&&password==confirmation,onClick={save.launch("Carribrary-complete-${LocalDate.now()}.carribrary-backup")}){Text("Choose where to save")}
   if(busy)LinearProgressIndicator(Modifier.fillMaxWidth())
   if(note.isNotBlank())Text(note)
+  Text("Complete recovery: on the server computer open Start → Carribrary → Complete Backup Recovery (Windows) or Carribrary Complete Backup Recovery in the Linux/Pi application menu. It verifies a backup, runs an isolated test and offers confirmed restore. The phone cannot launch operating-system recovery. See Help for headless Pi instructions.",style=MaterialTheme.typography.bodySmall)
   TextButton(enabled=!busy,onClick=onClose){Text("Close")}
  }}}
 }

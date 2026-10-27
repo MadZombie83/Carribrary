@@ -21,6 +21,9 @@ if only in ['all','flatpak']:
  tree(root/'release/linux-x64',flat/'files/lib/home-library')
  copy(root/'linux/flatpak/home-library',flat/'files/bin/home-library')
  (flat/'files/bin/home-library').chmod(0o755)
+ recovery=flat/'files/share/applications/com.household.HomeLibrary.Recovery.desktop'
+ recovery.parent.mkdir(parents=True,exist_ok=True)
+ recovery.write_text('[Desktop Entry]\nType=Application\nName=Carribrary Complete Backup Recovery\nComment=Verify, test or restore a complete backup\nExec=home-library --recovery %u\nIcon=com.household.HomeLibrary\nCategories=Office;Database;\nTerminal=false\nMimeType=x-scheme-handler/carribrary-recovery;\n')
  copy(root/'linux/flatpak/com.household.HomeLibrary.desktop',flat/f'files/share/applications/{app_id}.desktop')
  copy(root/'linux/flatpak/com.household.HomeLibrary.metainfo.xml',flat/f'files/share/metainfo/{app_id}.metainfo.xml')
  icon(flat/f'files/share/icons/hicolor/512x512/apps/{app_id}.png')
@@ -34,9 +37,12 @@ if only in ['all','pi']:
  if deb.exists():shutil.rmtree(deb)
  tree(root/'release/linux-arm64',deb/'opt/home-library/server')
  control=deb/'DEBIAN';control.mkdir()
- (control/'control').write_text(f'Package: home-library-server\nVersion: {version.replace("-preview","~preview")}\nArchitecture: arm64\nMaintainer: Carribrary <home-library@localhost>\nSection: misc\nPriority: optional\nRecommends: xdg-utils\nDepends: adduser, libc6 (>= 2.35), libgcc-s1, libstdc++6, zlib1g, libssl3 | libssl3t64, libicu72 | libicu76 | libicu74 | libicu78 | libicu80\nDescription: Household library server and Android companion API\n Self-contained ASP.NET Core and SQLite server for 64-bit Raspberry Pi OS.\n')
+ (control/'control').write_text(f'Package: home-library-server\nVersion: {version.replace("-preview","~preview")}\nArchitecture: arm64\nMaintainer: Carribrary <home-library@localhost>\nSection: misc\nPriority: optional\nRecommends: xdg-utils\nDepends: adduser, pkexec, libc6 (>= 2.35), libgcc-s1, libstdc++6, zlib1g, libssl3 | libssl3t64, libicu72 | libicu76 | libicu74 | libicu78 | libicu80\nDescription: Household library server and Android companion API\n Self-contained ASP.NET Core and SQLite server for 64-bit Raspberry Pi OS.\n')
  for name in ['postinst','prerm','postrm']:
   copy(root/f'linux/pi/{name}',control/name);(control/name).chmod(0o755)
+ copy(root/'linux/pi/home-library-recovery',deb/'usr/bin/home-library-recovery');(deb/'usr/bin/home-library-recovery').chmod(0o755)
+ recovery=deb/'usr/share/applications/com.household.HomeLibrary.Recovery.desktop';recovery.parent.mkdir(parents=True,exist_ok=True)
+ recovery.write_text('[Desktop Entry]\nType=Application\nName=Carribrary Complete Backup Recovery\nComment=Verify, test or restore a complete backup\nExec=home-library-recovery %u\nIcon=com.household.HomeLibrary\nCategories=Office;Database;\nTerminal=true\nMimeType=x-scheme-handler/carribrary-recovery;\n')
  copy(root/'linux/pi/home-library.service',deb/'usr/lib/systemd/system/home-library.service')
  copy(root/'linux/pi/home-library.env',deb/'etc/home-library/home-library.env')
  (control/'conffiles').write_text('/etc/home-library/home-library.env\n')

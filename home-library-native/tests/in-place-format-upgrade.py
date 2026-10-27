@@ -40,6 +40,10 @@ with tempfile.TemporaryDirectory(prefix='carribrary-in-place-upgrade-') as tmp:
  try:
   start(old);password='Disposable upgrade fixture passphrase 241!';local('/local-auth/enroll',{'username':'Upgrade Admin','password':password,'code':(Path(tmp)/'local-admin-setup.txt').read_text().strip()})
   change('addBook',{'isbn':'9780140328721','title':'Upgrade fixture book','author':'Test Author'});borrower=change('addBorrower',{'name':'Upgrade Reader','contact':'upgrade@example.test'});reader=change('addReader',{'name':'Household Reader'});change('saveReading',{'readerId':reader['id'],'copyId':'BK-0001','status':'want','rating':0,'notes':'Private household fixture note'});change('checkout',{'copyId':'BK-0001','borrowerId':borrower['id'],'checkoutDate':'2026-10-01','dueDate':'2026-11-01'})
+  import struct,zlib
+  def png_chunk(name,value):return struct.pack('>I',len(value))+name+value+struct.pack('>I',zlib.crc32(name+value)&0xffffffff)
+  png=b'\x89PNG\r\n\x1a\n'+png_chunk(b'IHDR',struct.pack('>IIBBBBB',512,1536,8,6,0,0,0))+png_chunk(b'IDAT',zlib.compress((b'\0'+b'\x79\x41\xa5\xff'*512)*1536))+png_chunk(b'IEND',b'')
+  change('setLibrarySidebarArtwork',{'artwork':base64.b64encode(png).decode()});change('saveCustomTheme',{'name':'Original household theme'})
   sharing=local('/api/sharing',{'action':'enable'});token=sharing['url'].split('/s/')[1].strip('/');before=local('/api/state')
   code=local('/api/browser-admins/pair',{})['code'];_,headers=request(public+'/companion/enroll',{'code':code,'name':'Upgrade Browser'},session=False);cookie=headers['Set-Cookie'].split(';')[0]
   assert request(public+'/companion/api/state',headers={'Cookie':cookie},session=False)[0]['state']==before['state']
@@ -50,13 +54,22 @@ with tempfile.TemporaryDirectory(prefix='carribrary-in-place-upgrade-') as tmp:
   assert request(mobile+'/mobile/state',context=ctx)[0]['state']==before['state'];stop();start(new)
   try:local('/api/state');raise AssertionError('Local session must expire across restart')
   except urllib.error.HTTPError as error:assert error.code==401
-  local('/local-auth/login',{'username':'Upgrade Admin','password':password});after=copy.deepcopy(before);after['state']['version']=4;after['state']['renewalPolicy']={'enabled':True,'automatic':False,'days':14,'maximum':2}
+  local('/local-auth/login',{'username':'Upgrade Admin','password':password});after=copy.deepcopy(before);after['state']['version']=5;after['state']['renewalPolicy']={'enabled':True,'automatic':False,'days':14,'maximum':2}
   for book in after['state']['books']:book['importNotes']=''
   for loan in after['state']['loans']:loan['renewals']=[]
+  for theme in after['state']['savedThemes']:theme.setdefault('sidebarArtwork',None)
   assert local('/api/state')==after
-  assert list((Path(tmp)/'backups').glob('before-catalog-v4-*.hlbackup'))
+  if before['state']['version']<4:assert list((Path(tmp)/'backups').glob('before-catalog-v4-*.hlbackup'))
+  assert list((Path(tmp)/'backups').glob('before-theme-art-v5-*.hlbackup'))
   assert local('/api/sharing')['url']==sharing['url'];assert request(public+'/s/'+token+'/books.json',session=False)[0]['books'][0]['title']=='Upgrade fixture book'
   assert request(public+'/companion/api/state',headers={'Cookie':cookie},session=False)[0]['state']==after['state'];assert request(mobile+'/mobile/state',context=ctx)[0]['state']==after['state'];assert ssl.get_server_certificate(('localhost',p))==pem
   welcome=request(public+'/',session=False)[0];assert 'welcome-cards' in welcome and token not in welcome and 'upgrade@example.test' not in welcome and 'Private household fixture note' not in welcome
-  print('PASS real in-place format-3→4 server upgrade preserves catalog, contacts, active loan, household reading, local credentials, shared link, native mTLS identity and paired browser; private pre-format backup exists and local session expires safely; branded front door reveals no token/private records.')
+  stop()
+  try:start(old);raise AssertionError('An older server must reject format 5')
+  except RuntimeError:pass
+  finally:stop()
+  import sqlite3
+  with sqlite3.connect(Path(tmp)/'library.sqlite') as db:assert json.loads(db.execute('SELECT data FROM library WHERE id=1').fetchone()[0])['version']==5
+  start(new);local('/local-auth/login',{'username':'Upgrade Admin','password':password});assert local('/api/state')==after
+  print('PASS real in-place format-3/4→5 server upgrade preserves catalog, contacts, active loan, household reading, local credentials, shared link, native mTLS identity and paired browser; private pre-format backups exist, saved palette/PNG survive, older server rejects format 5 and local session expires safely; branded front door reveals no token/private records.')
  finally:stop()

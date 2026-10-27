@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+# The privileged engine stays local; open its one-time link as the desktop user.
+# No password, archive path or script is interpolated into a shell command.
+if [ "$(id -u)" -eq 0 ]; then
+    exec /opt/home-library/server/HomeLibrary.Server --complete-recovery pi --no-browser
+fi
+pkexec /opt/home-library/server/HomeLibrary.Server --complete-recovery pi --no-browser | while IFS= read -r line; do
+    case "$line" in
+        'RECOVERY-OPEN http://localhost:'*)
+            url=${line#RECOVERY-OPEN }
+            if [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then xdg-open "$url" || printf '%s\n' "$line"; else printf '%s\n' "$line"; fi
+            ;;
+        *) printf '%s\n' "$line" ;;
+    esac
+done

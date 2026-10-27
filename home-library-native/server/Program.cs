@@ -14,12 +14,17 @@ if(args.Length>0&&args[0]=="--unpack-complete-backup"){
  if(args.Length!=3){Console.Error.WriteLine("Usage: HomeLibrary.Server --unpack-complete-backup ARCHIVE NEW-FOLDER. The password is prompted; do not pass it as an argument.");Environment.ExitCode=1;return;}
  try{CompleteBackupRecovery.Command(args[1],args[2]);}catch(Exception error){Console.Error.WriteLine(error is LibraryError?error.Message:"The backup could not be unpacked. Check the file, password, destination permissions and available disk space.");Environment.ExitCode=1;}return;
 }
+if(args.Length>0&&args[0]=="--complete-recovery"){
+ try{await RecoveryWizard.Run(args.Skip(1).ToArray());}catch(Exception error){Console.Error.WriteLine(error is LibraryError?error.Message:"Complete Backup Recovery could not open. Keep all backups/data and check installation permissions.");Environment.ExitCode=1;}return;
+}
 var builder=WebApplication.CreateBuilder(new WebApplicationOptions{Args=args,ContentRootPath=AppContext.BaseDirectory});
 builder.Host.UseWindowsService(options=>options.ServiceName="HomeLibraryNative");
 var settings=builder.Configuration.GetSection("Library").Get<Settings>()??new();
+if(settings.RecoveryRehearsal){settings.EnableDiscovery=false;settings.PublicCatalogOrigin="";settings.RemoteAddress="";}
 var data=Environment.GetEnvironmentVariable("HOME_LIBRARY_DATA")??settings.DataDirectory;
 if(string.IsNullOrWhiteSpace(data))data=OperatingSystem.IsWindows()?Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),"HomeLibraryNative","data"):Path.Combine(AppContext.BaseDirectory,"data");
 data=Path.GetFullPath(data);Directory.CreateDirectory(data);
+if(File.Exists(Path.Combine(data,CompleteRecovery.ReviewMarker))){settings.RecoveryReviewRequired=true;settings.EnableDiscovery=false;settings.PublicCatalogOrigin="";}
 if(OperatingSystem.IsLinux())File.SetUnixFileMode(data,UnixFileMode.UserRead|UnixFileMode.UserWrite|UnixFileMode.UserExecute);
 if(args.Contains("--stop-desktop")){if(!DesktopSession.IsFlatpak)throw new LibraryError("Desktop shutdown is only available inside the Carribrary Flatpak.");await DesktopSession.Stop(settings.AdminPort);return;}
 using var desktopLock=args.Contains("--desktop")?DesktopSession.Acquire(data):null;
@@ -35,7 +40,7 @@ builder.Services.AddSingleton<SnapshotGate>();
 builder.Services.AddSingleton(sp=>new BackupVerification(data));
 builder.Services.AddSingleton(sp=>new CompleteBackup(data,settings,sp.GetRequiredService<SnapshotGate>()));
 builder.Services.AddSingleton<IPushTransport,WebPushTransport>();
-builder.Services.AddSingleton(sp=>new PushNotifications(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<IPushTransport>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<BorrowerAccounts>(),sp.GetRequiredService<BrowserAdmins>()));builder.Services.AddHostedService<PushWorker>();
+builder.Services.AddSingleton(sp=>new PushNotifications(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<IPushTransport>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<BorrowerAccounts>(),sp.GetRequiredService<BrowserAdmins>()));if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService<PushWorker>();
 builder.Services.AddHttpClient("registration-verification",client=>client.Timeout=TimeSpan.FromSeconds(8)).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false,UseCookies=false});
 builder.Services.AddSingleton(sp=>new RegistrationProtection(sp.GetRequiredService<IHttpClientFactory>().CreateClient("registration-verification"),builder.Configuration["BorrowerSecurity:TurnstileSiteKey"]??"",builder.Configuration["BorrowerSecurity:TurnstileSecretKey"]??"",settings.PublicCatalogOrigin));
 builder.Services.AddSingleton(sp=>new BorrowerAccounts(data));
@@ -43,20 +48,20 @@ builder.Services.AddSingleton(sp=>new BorrowerVault(data));
 builder.Services.AddSingleton(sp=>new Store(data,sp.GetRequiredService<IDataProtectionProvider>()));
 builder.Services.AddSingleton(sp=>new Identity(data,sp.GetRequiredService<IDataProtectionProvider>(),args.Contains("--prepare-windows-identity")));builder.Services.AddSingleton(settings);
 builder.Services.AddSingleton<IReminderSender,SmtpReminderSender>();
-builder.Services.AddSingleton(sp=>new Reminders(data,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<IReminderSender>()));builder.Services.AddHostedService<ReminderWorker>();builder.Services.AddSingleton<AccountRecovery>();builder.Services.AddHostedService(sp=>sp.GetRequiredService<AccountRecovery>());
+builder.Services.AddSingleton(sp=>new Reminders(data,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<IReminderSender>()));if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService<ReminderWorker>();builder.Services.AddSingleton<AccountRecovery>();if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService(sp=>sp.GetRequiredService<AccountRecovery>());
 builder.Services.AddSingleton(sp=>new CoverSettings(data,sp.GetRequiredService<IDataProtectionProvider>(),builder.Configuration["GoogleBooks:ApiKey"]??""));
 builder.Logging.AddFilter("System.Net.Http.HttpClient.covers",Microsoft.Extensions.Logging.LogLevel.None);
 builder.Services.AddHttpClient("covers",client=>{client.Timeout=TimeSpan.FromSeconds(6);client.DefaultRequestHeaders.UserAgent.ParseAdd("HomeLibrary/2.0.23");}).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false}).AddTypedClient((http,sp)=>new CoverLookup(http,sp.GetRequiredService<CoverSettings>().Key));
 builder.Services.AddHttpClient("book-about",client=>{client.Timeout=TimeSpan.FromSeconds(12);client.DefaultRequestHeaders.UserAgent.ParseAdd("HomeLibrary/2.0.23");}).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false});
 builder.Services.AddSingleton(sp=>new BookAbout(sp.GetRequiredService<IHttpClientFactory>().CreateClient("book-about"),sp.GetRequiredService<CoverSettings>()));
-builder.Services.AddSingleton(new Sharing(data,settings.PublicCatalogOrigin));builder.Services.AddSingleton(sp=>new ReadingAccess(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>()));builder.Services.AddHostedService<Discovery>();builder.Services.AddHostedService<BackupWorker>();
+builder.Services.AddSingleton(new Sharing(data,settings.PublicCatalogOrigin));builder.Services.AddSingleton(sp=>new ReadingAccess(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>()));if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService<Discovery>();builder.Services.AddHostedService<BackupWorker>();
 builder.Services.ConfigureHttpJsonOptions(options=>options.SerializerOptions.PropertyNamingPolicy=JsonNamingPolicy.CamelCase);
 builder.Services.AddRateLimiter(AccountRateLimits.Configure);
 // Resolve identity through the final service provider; no duplicate provider/key store.
 builder.WebHost.ConfigureKestrel((context,kestrel)=>{
  kestrel.Limits.MaxRequestBodySize=10*1024*1024;kestrel.Limits.RequestHeadersTimeout=TimeSpan.FromSeconds(15);
  kestrel.Listen(IPAddress.Loopback,settings.AdminPort);
- kestrel.Listen(IPAddress.Any,settings.PhonePort,listen=>listen.UseHttps(https=>{
+ kestrel.Listen((settings.RecoveryRehearsal||settings.RecoveryReviewRequired)?IPAddress.Loopback:IPAddress.Any,settings.PhonePort,listen=>listen.UseHttps(https=>{
   https.ServerCertificateSelector=(_,_)=>identityHolder!.Server;
   https.ClientCertificateMode=ClientCertificateMode.AllowCertificate;
   https.ClientCertificateValidation=(cert,_,_)=>identityHolder!.Approved(cert)!=null;
@@ -96,7 +101,7 @@ app.Use(async(context,next)=>{
    // Revalidate the existing paired-browser credential on the inner proxy request,
    // including reused connections and the interval after outer proxy authorization.
    var paired=path.StartsWith("/api/",StringComparison.Ordinal)&&companionToken!=""&&app.Services.GetRequiredService<BrowserAdmins>().Resolve(companionToken)!=null;
-   var signedIn=localAdministrators.Authorized(context.Request.Cookies[LocalAdministrators.Cookie]);
+   var signedIn=localAdministrators.Authorized(context.Request.Cookies[LocalAdminEndpoints.Cookie(settings)]);
    context.Items["Carribrary.AdminAuthorized"]=signedIn||paired;
    if(!authenticationRoute&&!loginAsset&&!signedIn&&!paired){
     if(path.StartsWith("/api/",StringComparison.Ordinal)){context.Response.StatusCode=401;await context.Response.WriteAsJsonAsync(new{error="Sign in as the local administrator."});}
@@ -138,6 +143,11 @@ bool Mobile(HttpContext c)=>c.Connection.LocalPort==settings.PhonePort;
 app.MapPost("/api/backup/complete",async(CompleteBackupInput input,HttpContext c,CompleteBackup backups)=>Admin(c)?await backups.Create(input.Password,c.RequestAborted):Results.NotFound());
 app.MapPost("/mobile/backup/complete",async(CompleteBackupInput input,HttpContext c,CompleteBackup backups)=>Mobile(c)?await backups.Create(input.Password,c.RequestAborted):Results.NotFound());
 foreach(var prefix in new[]{"/api","/mobile"})app.MapPost(prefix+"/backup/verify",async(HttpContext c,BackupVerification verification)=>(prefix=="/api"?Admin(c):Mobile(c))?await verification.Upload(c):Results.NotFound());
+app.MapPost("/api/recovery-review/complete",(RecoveryWizard.RecoveryConfirmation input,HttpContext c)=>{
+ if(!Admin(c)||!localAdministrators.Authorized(c.Request.Cookies[LocalAdminEndpoints.Cookie(settings)]))return Results.NotFound();
+ if(!settings.RecoveryReviewRequired||input.Confirmation!="RESUME REMOTE ACCESS"||!input.Checked)throw new LibraryError("Review restored borrower accounts and paired devices, confirm the check and type RESUME REMOTE ACCESS exactly.");
+ File.Delete(Path.Combine(data,CompleteRecovery.ReviewMarker));return Results.Ok(new{reviewRecorded=true,restartRequired=true});
+});
 app.MapGet("/api/state",(HttpContext c)=>Admin(c)?Results.Json(store.AdminRead(),Library.Json):Results.NotFound());
 app.MapPost("/api/action",(ActionRequest req,HttpContext c)=>Admin(c)?(req.Action=="requestBook"?Results.BadRequest(new{error="Use the shared catalog to submit requests."}):Results.Json(store.AdminApply(req),Library.Json)):Results.NotFound());
 app.MapGet("/api/receipts/{copyId}",(string copyId,HttpContext c)=>Admin(c)?Results.Json(BorrowingReceipt.Create(store.Read().State,copyId)):Results.NotFound());
@@ -224,16 +234,17 @@ app.MapGet("/{**path}",(string? path,HttpContext c)=>{
  if(file=="login")file="local-login.html";
  if(file=="local-login.html"||file=="local-login.js"){
   c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
-  return Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file),file.EndsWith(".html")?"text/html":"text/javascript");
+  return settings.RecoveryRehearsal&&file.EndsWith(".html")?Results.Content(RecoveryPlatform.Banner(File.ReadAllText(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file))),"text/html"):Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file),file.EndsWith(".html")?"text/html":"text/javascript");
  }
  if(!files.Contains(file))return Results.NotFound();c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: http:; connect-src 'self' https://openlibrary.org; media-src 'self' blob:; object-src 'none'; base-uri 'self'; frame-ancestors 'none'";
- if(file=="index.html")return Results.Content(File.ReadAllText(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file)).Replace("</head>","<script src=\"local-dashboard.js\" defer></script></head>"),"text/html");
+ if(file=="index.html")return Results.Content(RecoveryPlatform.ReviewBanner(RecoveryPlatform.Banner(File.ReadAllText(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file)),settings.RecoveryRehearsal),settings.RecoveryReviewRequired).Replace("</head>","<script src=\"local-dashboard.js\" defer></script></head>"),"text/html");
  return Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file),file.EndsWith(".html")?"text/html":file.EndsWith(".js")?"text/javascript":file.EndsWith(".css")?"text/css":file.EndsWith(".ico")?"image/x-icon":file.EndsWith(".svg")?"image/svg+xml":file.EndsWith(".png")?"image/png":"application/octet-stream");
 });
 Console.WriteLine($"Admin: {adminOrigin} | Phone HTTPS: {settings.PhonePort} | Data: {data}");
-if(args.Contains("--desktop"))app.Lifetime.ApplicationStarted.Register(()=>{_ = Task.Run(()=>DesktopSession.Open(adminOrigin));});
+if(args.Contains("--desktop")&&!args.Contains("--no-browser"))app.Lifetime.ApplicationStarted.Register(()=>{_ = Task.Run(()=>DesktopSession.Open(adminOrigin));});
 app.Run();
 public partial class Program{static Identity? identityHolder;}
-public sealed class Settings{public string DataDirectory{get;set;}="";public int AdminPort{get;set;}=4173;public int PhonePort{get;set;}=7443;public int CatalogPort{get;set;}=4174;public int DiscoveryPort{get;set;}=7445;public bool EnableDiscovery{get;set;}=true;public string RemoteAddress{get;set;}="";public string PublicCatalogOrigin{get;set;}="";}
+public sealed class Settings{public bool RecoveryRehearsal{get;set;}public bool RecoveryReviewRequired{get;set;}
+public string DataDirectory{get;set;}="";public int AdminPort{get;set;}=4173;public int PhonePort{get;set;}=7443;public int CatalogPort{get;set;}=4174;public int DiscoveryPort{get;set;}=7445;public bool EnableDiscovery{get;set;}=true;public string RemoteAddress{get;set;}="";public string PublicCatalogOrigin{get;set;}="";}
 
 public sealed record GoogleKeyInput(string? ApiKey);

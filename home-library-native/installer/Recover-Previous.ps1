@@ -21,7 +21,7 @@ try {
     }
     $RecoveryHome=Join-Path $env:ProgramData 'HomeLibraryNative\recovery'
     $Form=New-Object Windows.Forms.Form; $Form.Text='Carribrary Update & Recovery'; $Form.Width=720; $Form.Height=460; $Form.StartPosition='CenterScreen'
-    $Label=New-Object Windows.Forms.Label; $Label.Text="Restore a previous compatible application while keeping CURRENT books, loans, accounts, private lists and connection settings.`r`n`r`nThis tool does not restore an old database. Complete private snapshots are retained separately for supervised recovery. Supported program versions: 2.0.43–2.0.44 (library format 4). Earlier programs cannot preserve format-4 catalog and renewal fields; automatic recovery cannot cross this boundary."; $Label.SetBounds(20,15,660,110); $Form.Controls.Add($Label)
+    $Label=New-Object Windows.Forms.Label; $Label.Text="Restore a previous compatible application while keeping CURRENT books, loans, accounts, private lists and connection settings.`r`n`r`nThis tool does not restore an old database. Complete private snapshots are retained separately for supervised recovery. Supported program versions: 2.0.45 (library format 5). Earlier programs cannot preserve theme-specific sidebar artwork; automatic recovery cannot cross this boundary."; $Label.SetBounds(20,15,660,110); $Form.Controls.Add($Label)
     $List=New-Object Windows.Forms.ListBox; $List.SetBounds(20,135,660,150); $Form.Controls.Add($List)
     $Points=New-Object 'Collections.Generic.List[string]'
     if (Test-Path -LiteralPath $RecoveryHome) {
@@ -36,7 +36,7 @@ try {
         if ($List.SelectedIndex -lt 0 -or $List.SelectedIndex -ge $Points.Count) { return }
         if ([Windows.Forms.MessageBox]::Show('Stop Carribrary and restore the selected application? Current library data and private lists will be kept. A fresh private safety snapshot is created first.','Confirm recovery','YesNo','Question') -ne 'Yes') { return }
         $Restore.Enabled=$false; $Status.Text='Checking snapshots and restoring the application. Please wait...'; $Form.Refresh()
-        try { $Version=Invoke-CarribraryWindowsRecovery $Root $Point -UseSavedSettingss[$List.SelectedIndex]; $Status.Text='Carribrary '+$Version+' is running. Current library data was kept.' }
+        try { $Version=Invoke-CarribraryWindowsRecovery $Root $Points[$List.SelectedIndex] -UseSavedSettings; $Status.Text='Carribrary '+$Version+' is running. Current library data was kept.' }
         catch { $Status.Text='Recovery did not finish. Safety snapshots were retained.'; [Windows.Forms.MessageBox]::Show($_.Exception.Message,'Carribrary recovery','OK','Error') | Out-Null }
         finally { $Restore.Enabled=$true }
     })

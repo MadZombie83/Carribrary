@@ -40,3 +40,5 @@ button.danger{color:#9b3225}.delete-book{align-self:flex-end;margin-top:.5rem}bu
 .theme-color-input{display:flex;gap:.5rem;align-items:center}.theme-color-input input[type=color]{width:56px;padding:3px;flex-shrink:0}.theme-preview{background:var(--surface);color:var(--text);border:1px solid var(--line);padding:1rem;border-radius:12px}.theme-preview strong{display:block;background:var(--ink);color:white;padding:1rem}.theme-preview span{color:var(--muted)}.theme-preview button{background:var(--ink);color:white}
 
 .theme-preview strong small{display:block;color:var(--accent);margin-top:.3rem}.theme-soft-preview{background:var(--soft);padding:.5rem;border:1px solid var(--line)}
+
+.recovery-test-banner{padding:1rem;background:#fff1bf;color:#4b350d;text-align:center;font-weight:700;border-bottom:2px solid #b88a24}

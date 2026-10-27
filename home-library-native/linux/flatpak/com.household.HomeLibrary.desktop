@@ -6,8 +6,13 @@ Exec=home-library
 Icon=com.household.HomeLibrary
 Categories=Office;Database;
 Terminal=false
-Actions=Stop;
+Actions=Stop;Recovery;
 
 [Desktop Action Stop]
 Name=Stop library server
 Exec=home-library --stop
+
+
+[Desktop Action Recovery]
+Name=Complete Backup Recovery
+Exec=home-library --recovery

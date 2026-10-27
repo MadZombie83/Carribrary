@@ -38,14 +38,17 @@ public sealed class BackupVerification(string data) {
   var stage=CompleteBackup.PrivateDirectory(Path.GetDirectoryName(Path.GetFullPath(archive))!,".complete-backup-verify-");
   try{
    var m=CompleteBackupRecovery.Unpack(archive,Path.Combine(stage,"checked"),password,stop);
-   using(var db=new SqliteConnection(new SqliteConnectionStringBuilder{DataSource=Path.Combine(stage,"checked","data","library.sqlite"),Mode=SqliteOpenMode.ReadOnly,Pooling=false}.ToString())){
+   return InspectRecovered(Path.Combine(stage,"checked"),m);
+  }finally{if(Directory.Exists(stage))Directory.Delete(stage,true);}
+ }
+ public static BackupVerificationReport InspectRecovered(string recovered,CompleteManifest m){
+   using(var db=new SqliteConnection(new SqliteConnectionStringBuilder{DataSource=Path.Combine(recovered,"data","library.sqlite"),Mode=SqliteOpenMode.ReadOnly,Pooling=false}.ToString())){
     db.Open();using var command=db.CreateCommand();command.CommandText="SELECT data FROM library WHERE id=1";var saved=command.ExecuteScalar() as string;
     if(saved==null)throw new LibraryError("The backup library database is missing its library record.");
     using var state=JsonDocument.Parse(saved);if(!state.RootElement.TryGetProperty("version",out var format)||!format.TryGetInt32(out var actual)||actual!=m.LibraryFormat)throw new LibraryError("The backup library format does not match its manifest.");
    }
    // Return no filenames, settings, keys, borrowers or private reading data.
-   return new(true,m.Files.Count,m.Files.Sum(f=>f.Length),Label(m.Version),m.LibraryFormat,Label(m.CreatedUtc),Label(m.Platform),string.Equals(m.Platform,"Windows",StringComparison.OrdinalIgnoreCase),m.LibraryFormat is >=1 and <=4);
-  }finally{if(Directory.Exists(stage))Directory.Delete(stage,true);}
+   return new(true,m.Files.Count,m.Files.Sum(f=>f.Length),Label(m.Version),m.LibraryFormat,Label(m.CreatedUtc),Label(m.Platform),string.Equals(m.Platform,"Windows",StringComparison.OrdinalIgnoreCase),m.LibraryFormat is >=1 and <=5);
  }
  static string Label(string value)=>new((value??"").Where(c=>!char.IsControl(c)).Take(100).ToArray());
 }
