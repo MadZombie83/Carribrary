@@ -36,6 +36,7 @@ export const settingsTools=[
  ['iphone-companion','people-access','iPhone / browser pairing','Approve or revoke token-based browser companions.','devices'],
  ['household-readers','people-access','Household readers','Manage household profiles in Reading tracker.','reading'],
  ['export','data-history','Backups','Complete password-protected server backup or library JSON export.','backup'],
+ ['library-insights','data-history','Analytics & insights','Private aggregate library activity, charts and collection trends.','activity'],
  ['portable-backups','data-history','Portable replacement backup','Weekly password-encrypted recovery backups; retain four and download an off-device copy.','backup'],
  ['complete-recovery','data-history','Complete Backup Recovery','Open the independent server recovery wizard for verification, testing or confirmed restore.','backup'],
  ['verify-backup','data-history','Verify complete backup','Check a saved archive and password without restoring live records.','backup'],

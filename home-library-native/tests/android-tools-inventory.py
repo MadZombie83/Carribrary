@@ -7,6 +7,8 @@ text=(source/'PhoneNavigation.kt').read_text();block=text[text.index('internal v
 ids=re.findall(r'"([A-Za-z]+)" to ',block)
 previous={'lending','Borrowers','Requests','accounts','History','acquisitions','sharing','collections','dataControls','theme','settings','copyTools','recycle','reminders','setup','csv','backup','restore','devices','connection'}
 assert previous<=set(ids),'A previous tool lost its settings route'
+assert 'libraryInsights' in set(ids),'Analytics lost its Settings & Tools route'
+assert 'PhonePanel{TextButton(enabled=online&&!busy,onClick={dialog="libraryInsights"})' not in (source/'MainActivity.kt').read_text(),'Analytics remains on Home'
 assert len(ids)==len(set(ids)),'Duplicate native tool action'
 assert len(re.findall(r'"[^"\n]+ & [^"\n]+" to listOf',block))==6
 print('PASS 20 previous Android tool actions retained across six categories, plus Bulk edit. Native device interaction is a separate check.')

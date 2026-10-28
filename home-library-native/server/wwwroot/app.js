@@ -1,3 +1,4 @@
+import {mountLibraryInsights} from './library-insights.js';
 import {progressMarkup,pageFields,statsMarkup,readingDetails,goalDialog} from './reading-features.js';
 import {libraryIdentity} from './appearance.js';
 import {portableBackupSettings} from './portable-backups.js';
@@ -69,7 +70,7 @@ function dashboardAction(action){
 function render(){
  syncAdminShell(state,view);
  $('#admin-dashboard').hidden=view!=='dashboard';
- if(view==='dashboard')renderDashboard(state,{request,today:today(),offline:readOnly,onAction:dashboardAction,onBook:id=>{view='catalog';$('#search').value=id;page=1;render();$('#content').scrollIntoView({block:'start'});}});
+ if(view==='dashboard')renderDashboard(state,{today:today(),offline:readOnly,onAction:dashboardAction,onBook:id=>{view='catalog';$('#search').value=id;page=1;render();$('#content').scrollIntoView({block:'start'});}});
 
  const themeSelect=$("#theme");themeSelect.querySelectorAll("[data-saved-theme]").forEach(o=>o.remove());for(const theme of state.savedThemes||[]){const option=new Option(theme.name,"custom-"+theme.id);option.dataset.savedTheme="";themeSelect.add(option);}
  if(state.libraryTheme&&[...$("#theme").options].some(o=>o.value===state.libraryTheme)){$("#theme").value=state.libraryTheme;savePreference("theme",state.libraryTheme);applyTheme();}
@@ -445,6 +446,7 @@ async function completeRecoveryGuidance(){
  openForm('Complete Backup Recovery',`<form><h3>Open it on the library server computer</h3><p>Windows: <strong>Start → Carribrary → Complete Backup Recovery</strong> (also available in the tray menu). Approve administrator access.</p><p>Linux/Flatpak: open <strong>Carribrary Complete Backup Recovery</strong> from the application menu, or the Recovery desktop action. On Pi desktop, use the same application-menu entry and approve administrator access.</p>${companion?'':'<p><a class="receipt-open" href="carribrary-recovery:">Open installed recovery wizard</a></p><p>If the browser cannot open that link, use the server’s Start/application menu instead.</p>'}<p>The local wizard verifies a selected .carribrary-backup file, starts a separate test copy, and offers confirmed live restoration only after a successful rehearsal. It keeps current data privately and checks startup. Failed startup attempts an undo; interrupted replacements have a separate Undo option.</p><p>Restore rewinds old passwords, deletions and device revocations. Current connection settings and external Caddy/service configuration stay separate. Recovered email/push settings are paused for review. New portable archives support replacement-computer recovery. Older Windows archives require the original computer. Install Carribrary on the new computer, open this wizard, rehearse, restore and review access, then configure its hostname/router/Caddy.</p><p>Flatpak: use the working dashboard’s authenticated Stop confirmation before replacing live data. Headless Pi: open the bundled recovery launcher over SSH, then use an SSH localhost tunnel to its printed private URL; see Help. No public recovery port or router forwarding.</p><p>Opening this guidance does not stop or restore your server. Phone companions cannot replace the server’s operating-system recovery launcher.</p>${errorHTML}</form>`,async()=>{});
 }
 async function performSetting(id){
+ if(id==='library-insights'){openForm('Library analytics & insights','<section id="library-insights-page"></section>',async()=>{});return mountLibraryInsights($('#library-insights-page'),request);}
  if(id==='library-identity')return libraryIdentity({state,mutate,openForm,toast});
  if(id==='portable-backups')return portableBackupSettings({request,openForm,toast});
  if(['rename-library','library-icon','edit-library-name'].includes(id))return libraryIdentity({state,mutate,openForm,toast});

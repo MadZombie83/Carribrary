@@ -1,4 +1,4 @@
-# Carribrary for Linux and Raspberry Pi — 2.0.47 preview
+# Carribrary for Linux and Raspberry Pi — 2.0.48 preview
 
 LOCAL ADMINISTRATOR SIGN-IN AND SEPARATE ACCOUNTS
 
@@ -266,4 +266,4 @@ Current source 2.0.45: Complete Backup Recovery is an independent application-me
 
 Current source 2.0.46: New theme clears name/artwork draft; saved themes restore their own PNG with colors. Use current library artwork explicitly copies the current overlay. Closing without saving preserves the live library. Library/credential formats remain 5/2, compatible program-only recovery supports 2.0.45–2.0.46. See distribution/RELEASE-2.0.46.md. Extract into the separate numbered source folder; owner builds release packages.
 
-2.0.47 recovery: create a portable complete archive before replacing the computer. Optional weekly backups retain four managed copies; download one off-device. Library format 6 protects rereading sessions/annotations/goals from older server serializers. Complete recovery and program rollback are different operations; see current Help and release notes.
+2.0.48 recovery: create a portable complete archive before replacing the computer. Optional weekly backups retain four managed copies; download one off-device. Library format 6 protects rereading sessions/annotations/goals from older server serializers. Complete recovery and program rollback are different operations; see current Help and release notes.

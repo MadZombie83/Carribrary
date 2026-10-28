@@ -1,14 +1,14 @@
-CARRIBRARY — 2.0.47 PREVIEW
+CARRIBRARY — 2.0.48 PREVIEW
 
 This is source. Follow BUILD-LOCALLY.md or run the included local builder to create
-packages. Build into a separate Carribrary-2.0.47 folder; do not merge source with
+packages. Build into a separate Carribrary-2.0.48 folder; do not merge source with
 an older build directory. No signing keys or library data belong in the source.
 
 Before updating, create a complete password-encrypted backup and download a copy
 off the server. Library JSON exports are not complete account/key/vault backups.
 Update the server first, then companions, retaining existing application data.
 Library format upgrades to 6, credentials remain 2. Older server programs cannot
-open the new reading history safely. Program-only rollback supports 2.0.47 only;
+open the new reading history safely. Program-only rollback supports 2.0.47–2.0.48;
 guided complete restoration is a separate operation.
 
 Windows: run your newly built installer over the existing installation. Do not
@@ -36,7 +36,7 @@ lets you download the latest. Copies on the same drive do not protect drive loss
 Routine catalog snapshots keep sixteen scheduled and seven daily files; manual
 and migration safety copies remain separate.
 
-On a replacement computer install Carribrary 2.0.47, launch Complete Backup
+On a replacement computer install Carribrary 2.0.48, launch Complete Backup
 Recovery from the server application menu, verify the portable archive, rehearse,
 confirm restoration and complete local access review. Configure the replacement
 computer's router/DuckDNS/Caddy connection separately. Stop the old server before
@@ -47,9 +47,9 @@ codes safe: they cannot be reset by the developer.
 Reading Tracker adds page progress, earlier rereading sessions, goals/statistics
 and favorite quotes/page notes. Borrower-owned entries stay in the encrypted
 personal vault; household profiles remain administrator-managed. Optional
-anonymous aggregate library analytics is under Dashboard (Android: Home) and is
+anonymous aggregate library analytics is under Settings & Tools → Data & History → Analytics & insights and is
 off until enabled. It never contains private reading data or search phrases.
 
-See current Help, distribution/RELEASE-2.0.47.md and INSTALLER-GUIDE.txt. Device
+See current Help, distribution/RELEASE-2.0.48.md and INSTALLER-GUIDE.txt. Device
 installation, scanner, Safari, Flatpak portal and actual Windows machine-recovery
 tests remain necessary before public distribution.

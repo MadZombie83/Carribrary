@@ -1,6 +1,8 @@
-# Carribrary 2.0.47 — portable recovery and reading polish
+# Carribrary 2.0.48 — standalone analytics settings
 
-**2.0.47 current source update:** Unified Library identity / Theme & artwork, dashboard sharing/acquisition shortcuts, portable complete recovery and optional weekly backups retaining four. Opt-in aggregate dashboard analytics; reading page progress, preserved rereads, annual goals/statistics and quotes/page notes, including encrypted borrower vault support. Library format upgrades to 6; credentials stay 2. Compatible program-only rollback supports 2.0.47 only. [Release notes and owner checks](distribution/RELEASE-2.0.47.md). Source only; owner builds packages.
+**2.0.48 current source update:** Analytics & insights moves off Dashboard/Android Home to its own Settings & Tools → Data & History page/card. Period/chart selections stay within that page; Help updated. Data formats remain6/2 and compatible program-only recovery covers47–48. [Release notes](distribution/RELEASE-2.0.48.md). Source only; owner builds packages.
+
+**2.0.47 earlier source update:** Unified Library identity / Theme & artwork, dashboard sharing/acquisition shortcuts, portable complete recovery and optional weekly backups retaining four. Opt-in aggregate dashboard analytics; reading page progress, preserved rereads, annual goals/statistics and quotes/page notes, including encrypted borrower vault support. Library format upgrades to 6; credentials stay 2. Compatible program-only rollback supports 2.0.47 only. [Release notes and owner checks](distribution/RELEASE-2.0.47.md). Source only; owner builds packages.
 
 **2.0.46 earlier source update:** New theme clears the draft name and sidebar artwork instead of inheriting the last theme's PNG. Selecting a saved theme loads its colors and saved artwork; saving a new no-artwork theme does not alter existing themes. Android has the same reset and selection behavior. Help updated. [Release notes](distribution/RELEASE-2.0.46.md). Library/credential formats remain 5/2; compatible program-only recovery supports 2.0.45–2.0.46. Source only; owner builds packages.
 

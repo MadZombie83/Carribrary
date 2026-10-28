@@ -33,7 +33,7 @@ function Get-CarribraryHash([string]$Path) {
 }
 function Test-CarribraryCompatible([string]$Version) {
     # Format-6 boundary: older programs discard rereading sessions, goals and annotations.
-    return $Version -match '^2\.0\.47(?:[.+-].*)?$'
+    return $Version -match '^2\.0\.(47|48)(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'
