@@ -4,12 +4,12 @@ Self-hosted household book lending: catalog physical copies, manage borrowers an
 
 ## Source status
 
-Private development repository. Current source: **2.0.50**, including shared-link book/series purchase suggestions, server/PWA/Android review, and clear optional-account/TBR/reading-tracker guidance. Previously built installers are not rebuilt by committing this source. No installer, APK, AAB or signing material is included here.
+Private development repository. Current source: **2.0.51**, including themed artwork banners across borrower/PWA/Android and removal of the public root install control while preserving Account installation. Previously built installers are not rebuilt by committing this source. No installer, APK, AAB or signing material is included here.
 
-- [What changed in 2.0.50](home-library-native/distribution/RELEASE-2.0.50.md)
-- [Administration tool inventory](home-library-native/distribution/ADMIN-TOOLS-INVENTORY-2.0.50.md)
-- [Package and hardware test checklist](home-library-native/distribution/RELEASE-2.0.50.md)
-- [Current help guide](Carribrary-Help-2.0.50.md)
+- [What changed in 2.0.51](home-library-native/distribution/RELEASE-2.0.51.md)
+- [Administration tool inventory](home-library-native/distribution/ADMIN-TOOLS-INVENTORY-2.0.51.md)
+- [Package and hardware test checklist](home-library-native/distribution/RELEASE-2.0.51.md)
+- [Current help guide](Carribrary-Help-2.0.51.md)
 - [Build packages locally](home-library-native/BUILD-LOCALLY.md)
 - [Server setup and architecture](home-library-native/README.md)
 - [Windows installer instructions](home-library-native/INSTALLER-GUIDE.txt)
@@ -19,7 +19,7 @@ Private development repository. Current source: **2.0.50**, including shared-lin
 
 The server uses ASP.NET Core/.NET 10 and SQLite. Android is a Kotlin companion; iPhone/browser companions can use the server-hosted PWA. Native iPhone source requires a Mac/Xcode and has not been verified as an iPhone build.
 
-Keep the `home-library-native` folder: the local builder places tool caches and output alongside it. First create a private, complete backup before updating an existing installation. The protected administrator-credential format introduced in 2.0.36 is incompatible with earlier programs. Library/credential formats remain 6/2. Compatible program-only recovery supports 2.0.47–2.0.50. Older programs reject format6 rather than discard reading sessions, goals or annotations. Guided complete recovery continues to accept supported43/44 format4,45/46 format5 and47/48/49/50 format6 data with machine-bound/portable restrictions as applicable. Keep a complete backup off the server drive.
+Keep the `home-library-native` folder: the local builder places tool caches and output alongside it. First create a private, complete backup before updating an existing installation. The protected administrator-credential format introduced in 2.0.36 is incompatible with earlier programs. Library/credential formats remain 6/2. Compatible program-only recovery supports 2.0.47–2.0.51. Older programs reject format6 rather than discard reading sessions, goals or annotations. Guided complete recovery continues to accept supported43/44 format4,45/46 format5 and47/48/49/50 format6 data with machine-bound/portable restrictions as applicable. Keep a complete backup off the server drive.
 
 ## Privacy and credentials
 
@@ -31,4 +31,4 @@ Public support: **chezburbermerch@gmail.com**.
 
 No open-source license has been selected for Carribrary. Keep this repository private until its source licensing and publication terms are decided. Third-party code and notices retain their respective licenses; see [notices](home-library-native/THIRD-PARTY-NOTICES.txt). Android store binaries are kept private; the planned paid companion is separate from the free server and borrower interface.
 
-The supplied Carribrary-2.0.50-source.zip extracts into Carribrary-2.0.50. GitHub Download ZIP still extracts as Carribrary-main; rename its top-level folder to the release version before building. Never merge a fresh source version into an older build folder.
+The supplied Carribrary-2.0.51-source.zip extracts into Carribrary-2.0.51. GitHub Download ZIP still extracts as Carribrary-main; rename its top-level folder to the release version before building. Never merge a fresh source version into an older build folder.

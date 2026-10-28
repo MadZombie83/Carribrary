@@ -1,6 +1,8 @@
-# Carribrary 2.0.50 — reader purchase suggestions and optional-account guidance
+# Carribrary 2.0.51 — shared artwork and landing-page cleanup
 
-**2.0.50 current source update:** Shared-link guests and approved borrowers can suggest books or series to acquire, without an ISBN requirement. Admins review suggestions in Books to buy and the notification bell across server/PWA/Android. Shared-catalog and account pages explain that sign-up is optional and adds personal TBR/reading tracking. [Release notes](distribution/RELEASE-2.0.50.md). Library/credential formats remain6/2; source only, owner builds packages.
+**2.0.51 current source update:** Removes the public root install button and its script; Account → This device installation is retained. Saved theme artwork follows borrower pages, librarian PWA and Android banners, including clearing on plain themes. [Release notes](distribution/RELEASE-2.0.51.md). Formats6/2 unchanged; source only, owner builds packages.
+
+**2.0.50 earlier source update:** Shared-link guests and approved borrowers can suggest books or series to acquire, without an ISBN requirement. Admins review suggestions in Books to buy and the notification bell across server/PWA/Android. Shared-catalog and account pages explain that sign-up is optional and adds personal TBR/reading tracking. [Release notes](distribution/RELEASE-2.0.50.md). Library/credential formats remain6/2; source only, owner builds packages.
 
 **2.0.47 earlier source update:** Unified Library identity / Theme & artwork, dashboard sharing/acquisition shortcuts, portable complete recovery and optional weekly backups retaining four. Opt-in aggregate dashboard analytics; reading page progress, preserved rereads, annual goals/statistics and quotes/page notes, including encrypted borrower vault support. Library format upgrades to 6; credentials stay 2. Compatible program-only rollback supports 2.0.47 only. [Release notes and owner checks](distribution/RELEASE-2.0.47.md). Source only; owner builds packages.
 

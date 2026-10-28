@@ -1,5 +1,10 @@
 package com.household.homelibrary
 
+import androidx.compose.foundation.Image
+import android.graphics.BitmapFactory
+import android.util.Base64
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +25,10 @@ val phoneTypography=Typography().let{it.copy(headlineMedium=it.headlineMedium.co
 @Composable fun PhoneNavIcon(target:String){Icon(painterResource(when(target){"Home"->R.drawable.nav_home;"Catalog"->R.drawable.nav_catalog;"On loan"->R.drawable.nav_loans;"Reading"->R.drawable.nav_reading;else->R.drawable.nav_more}),contentDescription=null,modifier=Modifier.size(24.dp))}
 @Composable fun PhoneLibraryBanner(state:JSONObject,onHelp:()->Unit,requests:Int=0,onRequests:(()->Unit)?=null){
  val colors=MaterialTheme.colorScheme
- Column(Modifier.fillMaxWidth().background(Brush.linearGradient(listOf(colors.primary,colors.primary.copy(alpha=.88f)))).padding(horizontal=20.dp,vertical=22.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
+ val artwork=state.optString("librarySidebarArtwork");val bitmap=remember(artwork){if(artwork.isBlank())null else runCatching{val bytes=Base64.decode(artwork,Base64.DEFAULT);BitmapFactory.decodeByteArray(bytes,0,bytes.size)}.getOrNull()}
+ Box(Modifier.fillMaxWidth().background(Brush.linearGradient(listOf(colors.primary,colors.primary.copy(alpha=.88f))))){
+ if(bitmap!=null){Image(bitmap.asImageBitmap(),contentDescription=null,modifier=Modifier.matchParentSize(),contentScale=ContentScale.Crop);Box(Modifier.matchParentSize().background(Brush.horizontalGradient(listOf(colors.primary.copy(alpha=.90f),colors.primary.copy(alpha=.70f)))))}
+ Column(Modifier.fillMaxWidth().padding(horizontal=20.dp,vertical=22.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){
   Row(verticalAlignment=Alignment.CenterVertically,horizontalArrangement=Arrangement.spacedBy(12.dp)){
    LibraryBrandIcon(state)
    if(state.optString("libraryIcon192").isBlank())Icon(painterResource(R.drawable.nav_catalog),null,tint=colors.onPrimary,modifier=Modifier.size(34.dp))
@@ -28,6 +36,7 @@ val phoneTypography=Typography().let{it.copy(headlineMedium=it.headlineMedium.co
    if(onRequests!=null)BadgedBox(badge={if(requests>0)Badge{Text(if(requests>99)"99+" else requests.toString())}}){IconButton(onClick=onRequests){Icon(painterResource(R.drawable.nav_bell),"Admin notifications: $requests",tint=colors.onPrimary)}}
    TextButton(onClick=onHelp,colors=ButtonDefaults.textButtonColors(contentColor=colors.onPrimary)){Text("Help")}
   }
+ }
  }
 }
 @Composable fun PhoneLibrarySummary(summary:PhoneSummaryCounts){

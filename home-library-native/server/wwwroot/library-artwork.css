@@ -1,0 +1,12 @@
+/* Artwork is confined to banners; catalog cards, controls and navigation remain readable. */
+.library-artwork-banner{position:relative;isolation:isolate}
+.library-artwork-banner>.library-banner-artwork{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;z-index:-2;pointer-events:none;border-radius:inherit}
+.library-artwork-banner::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;background:linear-gradient(100deg,color-mix(in srgb,var(--ink,#493276) 88%,transparent),color-mix(in srgb,var(--ink,#493276) 65%,transparent))}
+.admin-header.library-artwork-banner::after,.dashboard-heading.library-artwork-banner::after{background:linear-gradient(100deg,color-mix(in srgb,var(--page,#f2f1fc) 95%,transparent),color-mix(in srgb,var(--page,#f2f1fc) 68%,transparent))}
+.dashboard-heading.library-artwork-banner{padding:clamp(1rem,3vw,1.75rem);border:1px solid var(--line);border-radius:18px}
+@media(prefers-reduced-transparency:reduce){.library-artwork-banner::after{background:var(--ink,#493276)}.admin-header.library-artwork-banner::after,.dashboard-heading.library-artwork-banner::after{background:var(--page,#f2f1fc)}}
+@media(forced-colors:active){.library-banner-artwork{display:none}.library-artwork-banner::after{display:none}}
+
+.admin-shell .admin-header.library-artwork-banner .brand small,.dashboard-heading.library-artwork-banner p{color:var(--ui-muted,var(--muted,#625875))}
+
+.admin-shell .admin-header.library-artwork-banner .mark{color:var(--ink)}

@@ -139,3 +139,5 @@ Current source 2.0.45: Complete Backup Recovery is an independent application-me
 Current source 2.0.50: reader purchase suggestions and optional-account guidance. Build server packages and the updated Android APK for suggestion review. Browser PWAs receive the server update after refresh. Library/credential formats remain6/2; compatible program recovery47–50. Suggestions use a separate protected SQLite database included in complete server backups, not library-only JSON. See distribution/RELEASE-2.0.50.md. Owner builds packages; Pi ARM64 remains experimental.
 
 This source also consolidates Library identity and Theme & artwork, adds portable weekly complete backups retaining four, opt-in library analytics and reading progress/rereads/goals/quotes. Build after Help synchronization; run tests before distributing packages. Portable backups still need an off-device copy.
+
+Current source 2.0.51: build server packages and Android for themed artwork banners. Root welcome install control removed; Account installation remains. Formats6/2, compatible recovery47–51; no installers built here. See distribution/RELEASE-2.0.51.md.

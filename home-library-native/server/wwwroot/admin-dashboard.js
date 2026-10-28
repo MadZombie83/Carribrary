@@ -1,3 +1,4 @@
+import {applyLibraryArtwork,artworkSource} from './library-artwork.js';
 import {googleCredit} from './cover-credit.js';
 // Presentation only: reuse server state and existing actions; never fetch private reader data.
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -29,11 +30,13 @@ export function renderDashboard(state,{today,offline,onAction,onBook}){
  <div class="dashboard-lower"><section class="dashboard-card">${heading('Borrower snapshot','borrowers')}<ul class="dashboard-list">${s.people.slice(0,3).map(p=>{const n=s.loans.filter(l=>l.borrowerId===p.id).length;return `<li><span class="borrower-avatar" aria-hidden="true">${esc(p.name.slice(0,1))}</span><div><strong>${esc(p.name)}</strong><p>${n} ${n===1?'book':'books'} on loan</p></div>${action('borrowers','View','text')}</li>`;}).join('')||'<li class="dashboard-empty">No borrowers yet. Add someone when you are ready to lend.</li>'}</ul></section>
  <section class="dashboard-card">${heading('Activity / System Status')}<dl class="dashboard-status"><div><dt>Library server</dt><dd class="${offline?'status-offline':''}">${offline?'Unavailable · showing last loaded data':'Connected'}</dd></div><div><dt>Paired devices</dt><dd>${action('devices','Manage devices','text')}</dd></div><div><dt>Automatic backups</dt><dd>${action('setup','Check latest backup','text')}</dd></div><div><dt>Email reminders</dt><dd>${action('reminders','Review settings','text')}</dd></div></dl><p class="help">Review devices, backup history and reminder settings.</p></section></div>
  <section class="dashboard-card dashboard-preview">${heading('Catalog preview','catalog')}<div class="dashboard-books">${s.books.slice(0,4).map(b=>{const l=s.loans.some(l=>l.copyId===b.id),h=s.holds.some(h=>h.copyId===b.id);return `<article class="preview-book">${cover(b)}<div><button type="button" class="text" data-dashboard-book="${esc(b.id)}">${esc(b.title)}</button><span class="muted">${esc(b.author||'Author not recorded')}</span><span class="copy-id">${esc(b.id)}</span><span class="badge ${l?'loan':''}">${l?'On loan':h?'On hold':'Available'}</span>${googleCredit(b.coverUrl||'')}</div></article>`;}).join('')||'<p class="dashboard-empty">Your shelf is ready. Add a book to begin.</p>'}</div></section>`;
+ applyLibraryArtwork(target.querySelector('.dashboard-heading'),artworkSource(state.librarySidebarArtwork));
  target.querySelectorAll('[data-dashboard-action]').forEach(b=>b.onclick=()=>onAction(b.dataset.dashboardAction));
  target.querySelectorAll('[data-dashboard-book]').forEach(b=>b.onclick=()=>onBook(b.dataset.dashboardBook));
  target.querySelectorAll('img').forEach(img=>img.onerror=()=>{const fallback=document.createElement('span');fallback.className='dashboard-cover placeholder';fallback.setAttribute('aria-hidden','true');fallback.innerHTML=icon('book');img.replaceWith(fallback);});
 }
 export function syncAdminShell(state,view){
+ applyLibraryArtwork(document.querySelector('.admin-header'),artworkSource(state.librarySidebarArtwork));
  document.body.dataset.adminView=view;
  document.body.dataset.libraryTheme=state.libraryTheme||'classic';
  const name=document.querySelector('[data-sidebar-name]');name.textContent=state.libraryName||'Carribrary';

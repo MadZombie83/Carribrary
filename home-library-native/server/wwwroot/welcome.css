@@ -5,5 +5,3 @@
 @media(forced-colors:active){.welcome-artwork{display:none}.welcome-card,.welcome-note{border:1px solid CanvasText}.library-welcome header,.library-welcome footer{background:Canvas;color:CanvasText}}
 
 .welcome-lock{width:36px;height:42px;flex-shrink:0;color:var(--ink)}
-
-.welcome-install{text-align:center;margin:1rem auto;max-width:52rem}.welcome-install p{padding:1rem;}
