@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.DataProtection;
 using System.Net.Http.Json;
 using System.Runtime.Versioning;
 using System.Security.AccessControl;
@@ -40,7 +41,10 @@ public sealed class RecoveryPlatform : IRecoveryHost {
   for(var i=0;i<30;i++){try{var result=await client.GetFromJsonAsync<Health>($"http://localhost:{settings.AdminPort}/local-auth/health",stop);if(result is{Ready:true}&&result.Version==SetupStatus.Version)return true;}catch(HttpRequestException){}catch(TaskCanceledException)when(!stop.IsCancellationRequested){}await Task.Delay(500,stop);}return false;
  }
  sealed record Health(bool Ready,string Version);
- public void PrepareData(string directory){CompleteRecovery.AssertTree(directory);if(mode=="windows"&&OperatingSystem.IsWindows()){var current=Path.Combine(AppContext.BaseDirectory,"appsettings.json");if(File.Exists(current))File.Copy(current,Path.Combine(directory,"installation-appsettings.json"),true);GrantService(directory);}else if(mode=="pi")Run("/usr/bin/chown",["-R","home-library:home-library",directory],CancellationToken.None).GetAwaiter().GetResult();}
+ public void PrepareData(string directory){CompleteRecovery.AssertTree(directory);if(mode=="windows"&&OperatingSystem.IsWindows()){var current=Path.Combine(AppContext.BaseDirectory,"appsettings.json");if(File.Exists(current))File.Copy(current,Path.Combine(directory,"installation-appsettings.json"),true);ProvisionWindowsIdentity(directory);GrantService(directory);}else if(mode=="pi")Run("/usr/bin/chown",["-R","home-library:home-library",directory],CancellationToken.None).GetAwaiter().GetResult();}
+ [SupportedOSPlatform("windows")] public static void ProvisionWindowsIdentity(string directory){
+  var provider=Microsoft.AspNetCore.DataProtection.DataProtectionProvider.Create(new DirectoryInfo(Path.Combine(directory,"keyring")),b=>{b.SetApplicationName("HomeLibrary.Native.v1");b.ProtectKeysWithDpapi(true);});using var identity=new Identity(directory,provider,true);
+ }
  [SupportedOSPlatform("windows")] static void GrantService(string path){var info=new DirectoryInfo(path);var acl=info.GetAccessControl();acl.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.LocalServiceSid,null),FileSystemRights.Modify,InheritanceFlags.ContainerInherit|InheritanceFlags.ObjectInherit,PropagationFlags.None,AccessControlType.Allow));info.SetAccessControl(acl);}
  public static string ReviewBanner(string html,bool enabled){if(!enabled)return html;var body=html.IndexOf("<body",StringComparison.OrdinalIgnoreCase);if(body<0)return html;var end=html.IndexOf('>',body);return html.Insert(end+1,"<aside class=\"recovery-test-banner\" role=\"status\">RESTORED LIBRARY — remote access and automatic notifications are paused. Review borrower accounts and paired devices. <button id=\"complete-recovery-review\" type=\"button\">Record local review</button></aside>");}
  public static string Banner(string html,bool enabled=true){if(!enabled)return html;var body=html.IndexOf("<body",StringComparison.OrdinalIgnoreCase);if(body<0)return html;var end=html.IndexOf('>',body);return html.Insert(end+1,"<aside class=\"recovery-test-banner\" role=\"status\">RECOVERY TEST — this is a disposable copy. Your working library is unchanged.</aside>");}

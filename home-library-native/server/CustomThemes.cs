@@ -35,7 +35,7 @@ public static class CustomThemes {
  }
  public static object Save(LibraryState s,JsonElement input){
   LibraryPalette palette;try{palette=input.Deserialize<LibraryPalette>(Library.Json)??throw new JsonException();}catch(JsonException){throw new LibraryError("Enter a valid theme palette.");}
-  palette.SidebarArtwork??=s.LibrarySidebarArtwork;
+  palette.SidebarArtwork??="";
   palette.Name=(palette.Name??"").Trim();
   if(palette.Id=="")palette.Id=Guid.NewGuid().ToString("N");
   ValidatePalette(palette);

@@ -1,6 +1,8 @@
 import SwiftUI
-struct ReaderProfile: Codable, Identifiable { var id: String; var name: String; var borrowerId: String? }
-struct ReadingEntry: Codable, Identifiable { var id: String; var readerId: String; var copyId: String; var status: String; var startedDate: String; var finishedDate: String; var rating: Int; var notes: String }
+struct ReaderProfile: Codable, Identifiable { var id: String; var name: String; var borrowerId: String?; var annualGoals: [String:Int]? = nil }
+struct ReadingEntry: Codable, Identifiable { var id: String; var readerId: String; var copyId: String; var status: String; var startedDate: String; var finishedDate: String; var rating: Int; var notes: String; var currentPage: Int? = nil; var totalPages: Int? = nil; var sessions: [ReadingSession]? = nil; var annotations: [ReadingAnnotation]? = nil }
+struct ReadingSession: Codable, Identifiable { var id: String; var startedDate: String; var finishedDate: String; var currentPage: Int; var totalPages: Int; var rating: Int; var notes: String }
+struct ReadingAnnotation: Codable, Identifiable { var id: String; var kind: String; var text: String; var page: Int? }
 private let readingLabels = ["want": "Want to read", "reading": "Currently reading", "finished": "Finished"]
 struct ReadingTrackerView: View {
  @EnvironmentObject var store: LibraryStore

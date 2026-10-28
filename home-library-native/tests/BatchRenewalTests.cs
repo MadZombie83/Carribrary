@@ -9,7 +9,7 @@ public static class BatchRenewalTests {
  public static async Task Run(string directory,IDataProtectionProvider protection){
   Directory.CreateDirectory(directory);using var store=new Store(directory,protection);
   object Apply(string action,object input)=>store.Apply(new(action,Input(input),store.Read().Revision));
-  Check(store.Read().State.Version==5,"format-5 startup and pre-migration backup");
+  Check(store.Read().State.Version==6,"format-6 startup and pre-migration backup");
   var rows=new List<CatalogBatchRow>{Row("9780140328721","Matilda"),Row("","Unnumbered family book")};var preview=CatalogBatch.Preview(store.Read().State,rows);Check(preview.All(r=>r.Valid)&&store.Read().State.Books.Count==0,"batch dry run assigns copies without writes and permits no ISBN");
   var request=new ActionRequest("addBooksBatch",Input(new{rows,revision=store.Read().Revision}),store.Read().Revision,Guid.NewGuid().ToString());store.Apply(request);store.Apply(request);Check(store.Read().State.Books.Count==2&&store.Read().State.Books[1].ImportNotes=="Private migration note","batch save is atomic, idempotent and preserves private source notes");
   var before=store.Read().Revision;Reject(()=>Apply("addBooksBatch",new{rows=new[]{Row("9780141439518","Valid first"),Row("bad","Invalid second")}}),"invalid batch rejects all rows");Check(store.Read().Revision==before&&store.Read().State.Books.Count==2,"failed batch leaves catalog and revision unchanged");

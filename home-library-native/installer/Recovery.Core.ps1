@@ -32,8 +32,8 @@ function Get-CarribraryHash([string]$Path) {
     finally { $Stream.Dispose(); $Sha.Dispose() }
 }
 function Test-CarribraryCompatible([string]$Version) {
-    # Format-5 boundary: older programs discard artwork saved within custom themes.
-    return $Version -match '^2\.0\.(45|46)(?:[.+-].*)?$'
+    # Format-6 boundary: older programs discard rereading sessions, goals and annotations.
+    return $Version -match '^2\.0\.47(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

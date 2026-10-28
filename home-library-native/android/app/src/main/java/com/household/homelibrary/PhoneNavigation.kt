@@ -12,11 +12,11 @@ import androidx.compose.ui.window.DialogProperties
 import org.json.JSONObject
 
 internal val phoneToolCategories=listOf(
- "Library & Appearance" to listOf("theme" to "Colors & custom themes","settings" to "Library name, logo & sayings"),
+ "Library & Appearance" to listOf("theme" to "Theme & artwork","settings" to "Library identity"),
  "Books & Organization" to listOf("acquisitions" to "Books to buy","sharing" to "Share library / QR","collections" to "Manage collections","copyTools" to "Copy labels & numbering","bulk" to "Bulk edit books","catalogBatch" to "Batch add / CSV import"),
- "Borrowing & Reminders" to listOf("lending" to "Lending & holds / batch lending","Requests" to "Book requests","renewals" to "Borrower renewals","reminders" to "Email reminders"),
- "People & Access" to listOf("Borrowers" to "Borrowers","accounts" to "Borrower accounts & approvals","devices" to "Paired admin phones"),
- "Data & History" to listOf("History" to "Loan history","dataControls" to "Data & privacy / clear history","recycle" to "Recycle Bin","csv" to "Export catalog CSV","backup" to "Complete server data backup","backupVerify" to "Verify complete backup","restore" to "Restore library backup"),
+ "Borrowing & Reminders" to listOf("lending" to "Lending & holds / batch lending","Requests" to "Book requests","renewals" to "Borrower renewals","reminders" to "Email reminders","requestAlerts" to "Request notifications"),
+ "People & Access" to listOf("Borrowers" to "Borrowers","accounts" to "Borrower accounts & approvals","devices" to "Paired admin phones","browserAdmins" to "iPhone / browser pairing"),
+ "Data & History" to listOf("History" to "Loan history","dataControls" to "Data & privacy / clear history","recycle" to "Recycle Bin","csv" to "Export catalog CSV","backup" to "Complete server data backup","portableBackups" to "Weekly portable backups","backupVerify" to "Verify complete backup","restore" to "Restore library backup"),
  "System & Advanced" to listOf("setup" to "Setup & updates","connection" to "Connection")
 )
 @Composable fun PhoneMoreMenu(enabled:Boolean,requests:Int,canRefresh:Boolean=true,onSelect:(String)->Unit){
@@ -36,3 +36,5 @@ internal val phoneToolCategories=listOf(
 @Composable fun PhoneHelpDialog(onClose:()->Unit){val context=LocalContext.current;val topics=remember{runCatching{JSONObject(context.assets.open("help.json").bufferedReader().use{it.readText()}).getJSONArray("topics").objects()}.getOrDefault(emptyList())};var search by remember{mutableStateOf("")}
  Dialog(onDismissRequest=onClose,properties=DialogProperties(usePlatformDefaultWidth=false)){Surface(Modifier.fillMaxSize()){Column(Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){Row{Text("Carribrary help",style=MaterialTheme.typography.headlineSmall,modifier=Modifier.weight(1f));TextButton(onClick=onClose){Text("Close")}};OutlinedTextField(search,{search=it},label={Text("Search help")},modifier=Modifier.fillMaxWidth());Column(Modifier.weight(1f).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){topics.filter{(it.optString("title")+" "+it.optString("body")).contains(search,true)}.forEach{topic->var open by remember(topic.optString("title")){mutableStateOf(false)};Card(Modifier.fillMaxWidth()){Column(Modifier.padding(14.dp)){TextButton(onClick={open=!open}){Text((if(open)"▾ " else "▸ ")+topic.optString("title"))};if(open||search.isNotBlank())Text(topic.optString("body"))}}};Text("Android ${BuildConfig.VERSION_NAME}",style=MaterialTheme.typography.bodySmall)}}}}
 }
+
+@Composable fun RequestAlertsDialog(api:NativeApi,onClose:()->Unit){Dialog(onDismissRequest=onClose){Surface(shape=MaterialTheme.shapes.large){Column(Modifier.padding(20.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){Text("Request notifications",style=MaterialTheme.typography.headlineSmall);RequestAlertControls(api);TextButton(onClick=onClose){Text("Close")}}}}}

@@ -23,7 +23,7 @@ public static class BackupVerificationTests {
   var inconsistent=Path.Combine(root,"inconsistent.carribrary-backup");using(var input=File.OpenRead(inconsistentZip))using(var output=File.Create(inconsistent))BackupCipher.Encrypt(input,output,Password);File.Delete(inconsistentZip);
   await Reject(()=>{BackupVerification.Verify(inconsistent,Password);return Task.CompletedTask;},"manifest must agree with the actual library format");
   var bytes=File.ReadAllBytes(archive);var service=new BackupVerification(data);
-  var report=BackupVerification.Verify(archive,Password);Check(report.Verified&&report.LibraryFormat==5&&report.SupportedLibraryFormat&&report.Files>=3,"offline verifier checks full archive and identifies format without starting a server");
+  var report=BackupVerification.Verify(archive,Password);Check(report.Verified&&report.LibraryFormat==6&&report.SupportedLibraryFormat&&report.Files>=3,"offline verifier checks full archive and identifies format without starting a server");
   var result=(JsonHttpResult<BackupVerificationReport>)await service.Upload(Request(Body(bytes)));Check(result.Value!.Verified&&result.Value.Files==report.Files,"framed streamed upload verifies a saved complete archive");
   var json=JsonSerializer.Serialize(result.Value,Library.Json);Check(!json.Contains("PRIVATE TEST KEY")&&!json.Contains("library.sqlite")&&!json.Contains("Verification sample")&&!json.Contains(Password),"verification report exposes no records, file paths, passwords or keys");
   await Reject(async()=>{await service.Upload(Request(Body(bytes,"incorrect backup password")));},"wrong password rejected");

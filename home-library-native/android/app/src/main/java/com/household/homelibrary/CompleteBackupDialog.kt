@@ -26,7 +26,7 @@ import java.time.LocalDate
  Dialog(onDismissRequest={if(!busy)onClose()}){Surface(shape=MaterialTheme.shapes.large){Column(Modifier.padding(20.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)){
   Text("Complete server data backup",style=MaterialTheme.typography.titleLarge)
   Text("Includes current books, loans, accounts, encrypted borrower vaults, pairing keys, keyring and saved server settings. The server prepares the snapshot consistently; you do not need to stop it.")
-  Text("Password-protected. Keep the password safely: it cannot be reset. Borrower private lists still need their separate passphrases. Windows-protected settings/keys require the same Windows computer.")
+  Text("Password-protected. Keep the password safely: it cannot be reset. Borrower private lists still need their separate passphrases. New complete backups carry their keys inside password encryption for a replacement computer. Older Windows archives still require the original computer. Keep a copy off the server.")
   OutlinedTextField(password,{password=it},label={Text("Backup password (12–128 characters)")},visualTransformation=PasswordVisualTransformation(),enabled=!busy,modifier=Modifier.fillMaxWidth())
   OutlinedTextField(confirmation,{confirmation=it},label={Text("Confirm password")},visualTransformation=PasswordVisualTransformation(),enabled=!busy,modifier=Modifier.fillMaxWidth())
   Text("Current data only, up to 2 GB / 10,000 files. Earlier backups, program files, external HTTPS/proxy certificates, system service/tasks and environment-only secrets are separate. Recovery uses the offline tool with the server stopped; Restore library export is for JSON only.",style=MaterialTheme.typography.bodySmall)

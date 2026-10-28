@@ -1,90 +1,55 @@
-CARRIBRARY — 2.0.32 PREVIEW
+CARRIBRARY — 2.0.47 PREVIEW
 
-Windows: export a backup, then run Carribrary-Setup-2.0.31-preview.exe.
-Install over your existing Home Library/Carribrary installation. Do not uninstall
-or delete app data. Open Carribrary from the desktop or Start menu.
-See INSTALLER-GUIDE.txt for setup, remote access, updates and troubleshooting.
+This is source. Follow BUILD-LOCALLY.md or run the included local builder to create
+packages. Build into a separate Carribrary-2.0.47 folder; do not merge source with
+an older build directory. No signing keys or library data belong in the source.
 
-Android: install Carribrary-Android-2.0.31-preview.apk over the existing app.
-Keep its app data to preserve pairing. No private signing folder is needed on
-the phone. A new phone pairs using the server's private admin-phone QR.
+Before updating, create a complete password-encrypted backup and download a copy
+off the server. Library JSON exports are not complete account/key/vault backups.
+Update the server first, then companions, retaining existing application data.
+Library format upgrades to 6, credentials remain 2. Older server programs cannot
+open the new reading history safely. Program-only rollback supports 2.0.47 only;
+guided complete restoration is a separate operation.
 
-Linux: open Carribrary-Linux-x86_64-2.0.31-preview.flatpak in your software manager.
-Pi 4/5, 64-bit Raspberry Pi OS: install Carribrary-Pi-ARM64-2.0.31-preview.deb.
-See linux/README.md. Existing package identities and data paths are preserved.
+Windows: run your newly built installer over the existing installation. Do not
+uninstall or delete app data. Open Carribrary from the desktop or Start menu.
+Each administrator signs into the local dashboard with Carribrary credentials.
+Paired remote devices continue using their approved tokens without extra login.
 
-iPhone: open your server's public HTTPS /companion/ address in Safari, then
-Share > Add to Home Screen. Native Swift source requires Mac/Xcode validation.
+Android: install your newly built APK over the existing app, preserving app data
+and signing identity. Only the APK goes on the phone; never copy private signing
+folders there. New phones pair from the server's private administrator-phone QR.
 
-Your own library name and custom icon remain unchanged. Existing technical
-HomeLibrary/home-library names are retained for compatibility. No data move or
-new pairing is required when updating the same server and phone.
+iPhone: open your server's HTTPS /companion/ address in Safari, pair using the
+private browser-companion code, then Share > Add to Home Screen. This is the
+hosted PWA. Native Swift source still requires a Mac/Xcode for validation.
 
+Linux: open your newly built Flatpak bundle in the software manager and update.
+Raspberry Pi 4/5, 64-bit Raspberry Pi OS: install the newly built ARM64 DEB.
+See linux/README.md. Keep existing package identities and data paths.
 
-Carribrary 2.0.27 — private lists, Books to buy and shelf locations
+Settings & Tools → Library & Appearance has two pages: Library identity and
+Theme & artwork. Presets clear artwork; saved themes restore their own PNG.
+Settings & Tools → Data & History → Portable replacement backup optionally makes
+a complete backup every seven days, retains four managed verified copies and
+lets you download the latest. Copies on the same drive do not protect drive loss.
+Routine catalog snapshots keep sixteen scheduled and seven daily files; manual
+and migration safety copies remain separate.
 
-Update the server first, then Android, retaining application data. Borrowers set up
-a separate private-list passphrase and save their recovery code at first use.
-Personal TBR, reading, notes, ratings and wishlists are encrypted on the borrower
-device; admins manage lending but cannot view these through Carribrary. Unlinked
-household reading profiles remain admin-managed. Old plaintext backups, exports
-and device caches are not retroactively encrypted. A host that modifies delivered
-browser code is outside this protection. Keep the recovery code safely: resetting
-the sign-in password cannot unlock private lists.
+On a replacement computer install Carribrary 2.0.47, launch Complete Backup
+Recovery from the server application menu, verify the portable archive, rehearse,
+confirm restoration and complete local access review. Configure the replacement
+computer's router/DuckDNS/Caddy connection separately. Stop the old server before
+bringing its restored identity online. Older Windows machine-bound archives still
+need their original machine. Keep backup passwords and borrower vault recovery
+codes safe: they cannot be reset by the developer.
 
-Library JSON exports and automatic library snapshots exclude borrower vaults and
-credentials. Borrowers can export/import their own encrypted private backup. For
-server disaster recovery, stop the server and privately back up the complete data
-directory and keyring together; platform key protection may prevent portability.
-Account deletion removes the encrypted vault in either deletion scope.
+Reading Tracker adds page progress, earlier rereading sessions, goals/statistics
+and favorite quotes/page notes. Borrower-owned entries stay in the encrypted
+personal vault; household profiles remain administrator-managed. Optional
+anonymous aggregate library analytics is under Dashboard (Android: Home) and is
+off until enabled. It never contains private reading data or search phrases.
 
-Books to buy holds intended acquisitions without allocating Copy IDs. Confirm
-purchase to add a physical copy. Room, bookcase and shelf are admin-only fields;
-borrower catalogs, shared lists and private reading views omit those locations.
-Use the matching 2.0.27 Help for complete steps.
-
-
-2.0.31 recovery and illustrated onboarding
-Server Help → Illustrated quick start has current fictional-library screenshots,
-short success checks and Print / save as PDF. Normal offline phone Help remains
-available as text. Library JSON exports are not complete account/key/vault backups.
-
-Windows: Start → Carribrary → Update and recovery (administrator prompt) works
-independently of the main server. Create recovery point briefly stops the library
-and saves verified server/tray programs and the complete library-data directory.
-Updates do this automatically, then verify new files, startup and catalog access.
-Compatible failed updates attempt program recovery. Select a prior point and
-Restore selected application to keep CURRENT data while restoring compatible
-program files. Only 2.0.31 program compatibility is supported here. Historical data
-is never automatically restored; incompatible schema rollback remains planned.
-
-Points live under ProgramData/HomeLibraryNative/recovery, accessible only to
-Windows administrators and SYSTEM. Local registry seals bind trusted manifests.
-Recovery-attempt safety copies are retained but not offered as prior versions.
-Use Delete recovery points and type DELETE RECOVERY POINTS to remove them, losing
-rollback capability. Ordinary account/backup cleanup cannot remove these points.
-Old snapshots/external copies can retain historical private data. No automatic
-retention cleanup is applied; monitor disk space. Uninstall keeps recovery data.
-
-These are same-machine core-library recovery points, not complete Windows or
-portable disaster backups. Caddy's external certificate folder and scheduled-task
-definitions are separate; program recovery keeps the current proxy/tasks in place.
-Windows key protection can tie data to the original machine. Keep separate private
-off-device backups. Linux/Pi retain existing stopped-server backups and package
-updates; guided rollback there is planned. Native iPhone source requires Xcode.
-
-IMPORTANT: Before 2.0.31, make a complete private stopped-server backup. The server migrates once to library format 3. 2.0.30 and earlier cannot read it; do not downgrade. BK numbers and gap filling remain unchanged.
-
-
-2.0.31 — COMPLETE SERVER DATA BACKUP
-Open Backups > Create complete backup on the server. Android: More > Settings & backups > Complete server data backup. Choose and confirm a 12-128-character backup password, save the .carribrary-backup file and wait for completion. Keep the password separately: it cannot be reset. The server briefly pauses changes while capturing current databases consistently, then resumes automatically. No manual shutdown/folder-copying is needed to create this archive. Library export (JSON) remains a smaller books/lending export without sign-ins, private vaults or server keys.
-
-Complete archives include current databases, accounts, encrypted borrower vaults, pairing identities, keyring and saved configuration. They exclude old backups/recovery points, programs, external HTTPS/Caddy certificates, OS service/task definitions and environment-only secrets. Current data limit: 2 GB / 10,000 files. Windows DPAPI keys/settings require the same Windows computer; this is not a guaranteed cross-machine migration. Borrowers still need their own vault passphrase/recovery code. Keep archives private; copies can retain data deleted later.
-
-RECOVERY (OFFLINE, NEW FOLDER ONLY): Stop the server. Keep the existing data folder separately. Run HomeLibrary.Server --unpack-complete-backup ARCHIVE NEW-FOLDER using the compatible server executable (Windows: HomeLibrary.Server.exe). It asks for the password without displaying it, checks encryption, file hashes and database integrity, and unpacks only into a new folder. Follow RECOVERY-READ-ME.txt there. Do not merge individual databases into a live server. Restore library export accepts JSON only, not this archive. Programs and external proxy/service configuration are separate. Get recovery help if unsure.
-
-Complete snapshot recovery warning: Restoring an earlier complete snapshot rewinds account deletions, passwords, device revocations and lending history. Review accounts and paired devices before making the restored server reachable. Compatible program-only recovery keeps current data instead.
-
-2.0.31: Optional permanent-copy QR labels and copy-number allocation choice. Create a complete backup before upgrading. Library format 3 protects the new preference; versions 2.0.30 and earlier cannot open it. Use the matching Help for label printing, sheet alignment and numbering policy. Existing history-linked numbers remain reserved.
-
-2.0.32 repair update: cancellation confirmation/feedback and request status on all borrower tabs are corrected. History safeguards and operational hold rules remain. Registration protection is optional; default local rate limits and librarian approval work without Cloudflare. See the matching Help for private deployment configuration. Library format remains 3, with Windows program recovery compatibility for 2.0.31–2.0.32. Back up first and update the server before companion apps.
+See current Help, distribution/RELEASE-2.0.47.md and INSTALLER-GUIDE.txt. Device
+installation, scanner, Safari, Flatpak portal and actual Windows machine-recovery
+tests remain necessary before public distribution.

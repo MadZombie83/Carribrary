@@ -3,7 +3,7 @@ import Foundation
 struct Book: Codable, Identifiable {
     var copyUid: String? = nil
     var room: String? = nil; var bookcase: String? = nil; var shelf: String? = nil
-    var description: String? = nil
+    var description: String? = nil; var genre: String? = nil
     var id: String; var isbn: String; var title: String; var author: String
     var publisher: String; var coverUrl: String; var series: String?; var archived: Bool?; var collectionId: String? = nil
 }

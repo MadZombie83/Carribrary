@@ -23,7 +23,7 @@ public static class CompleteBackupTests {
    var archive=Path.Combine(root,"complete.carribrary-backup");using(var plain=File.OpenRead(Path.Combine(temporary,"snapshot.zip")))using(var output=File.Create(archive))BackupCipher.Encrypt(plain,output,Password);
    Directory.Delete(temporary,true);
    var recovered=Path.Combine(root,"recovered");var manifest=CompleteBackupRecovery.Unpack(archive,recovered,Password);
-   Check(manifest.LibraryFormat==5&&manifest.Files.Any(f=>f.Path=="data/library.sqlite")&&manifest.Files.Any(f=>f.Path=="data/server.protected"),"complete data inventory includes library and identity keys");
+   Check(manifest.LibraryFormat==6&&manifest.Files.Any(f=>f.Path=="data/library.sqlite")&&manifest.Files.Any(f=>f.Path=="data/server.protected"),"complete data inventory includes library and identity keys");
    Check(!Directory.Exists(Path.Combine(recovered,"data/backups"))&&!manifest.Files.Any(f=>f.Path.EndsWith("-wal")||f.Path.EndsWith("-shm")||f.Path.Contains(".complete-backup-")),"history, transient WAL files and staging folders are excluded");
    Check(File.ReadAllText(Path.Combine(recovered,"data/keyring/key.xml"))=="CURRENT KEYRING SECRET","full keyring is preserved");
    using(var restored=new SqliteConnection($"Data Source={Path.Combine(recovered,"data/borrower-accounts.sqlite")}")){restored.Open();using var cmd=restored.CreateCommand();cmd.CommandText="SELECT value FROM test_secret";Check((string?)cmd.ExecuteScalar()=="CURRENT ACCOUNT SECRET","online SQLite snapshot includes committed WAL account data");}

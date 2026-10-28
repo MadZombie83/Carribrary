@@ -2,5 +2,5 @@
 export const isToBeRead = entry => !!entry && ['want', 'reading'].includes(entry.status);
 export const matchesReadingFilter = (entry, filter) => !filter || (filter === 'tbr' ? isToBeRead(entry) : entry.status === filter);
 export function finishReading(entry, today) {
- return {copyId: entry.copyId, status: 'finished', startedDate: entry.startedDate || '', finishedDate: today, rating: entry.rating || 0, notes: entry.notes || ''};
+ return {currentPage:entry.totalPages||entry.currentPage||0,totalPages:entry.totalPages||0,copyId: entry.copyId, status: 'finished', startedDate: entry.startedDate || '', finishedDate: today, rating: entry.rating || 0, notes: entry.notes || ''};
 }

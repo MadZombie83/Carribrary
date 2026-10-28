@@ -23,7 +23,7 @@ try{
  assert.deepEqual(await page.locator('[data-kpi]').allTextContents(),['12','9','1','1']);
  assert.match(await page.locator('.recent-requests').innerText(),/Declined/);assert.match(await page.locator('.recent-requests').innerText(),/Awaiting approval/);
  assert.match(await page.locator('.dashboard-lower').innerText(),/1 book on loan/);
- assert.deepEqual(await page.locator('.quick-actions [data-dashboard-action]').allTextContents(),['Add Book','Create Hold','Batch Checkout','Backup Now']);
+ assert.deepEqual(await page.locator('.quick-actions [data-dashboard-action]').allTextContents(),['Add Book','Create Hold','Batch Checkout','Backup Now','Share Library','Books to Buy']);
  const revisionBefore=await page.evaluate(async()=>(await(await fetch('/api/state')).json()).revision);
  for(const [key,title]of [['add','Add a physical copy'],['holds','Lending & holds'],['batch','Lending & holds'],['backup','Backups']]){
   await page.locator(`.quick-actions [data-dashboard-action=${key}]`).click();await page.waitForFunction(()=>document.querySelector('#form-dialog').open);assert.match(await page.locator('#dialog-title').innerText(),new RegExp(title));

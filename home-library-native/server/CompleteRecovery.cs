@@ -72,5 +72,5 @@ public sealed class CompleteRecovery(string live,string work,IRecoveryHost host)
  public static void AssertStopped(string data){
   foreach(var name in new[]{"local-admin.lock","desktop.lock"}){var path=Path.Combine(data,name);if(!File.Exists(path))continue;try{using var locked=new FileStream(path,FileMode.Open,FileAccess.ReadWrite,FileShare.None);}catch(IOException){throw new LibraryError("Carribrary is still using this data folder. Stop it before restoring.",409);}}
  }
- public static void PauseNotifications(string data){foreach(var name in new[]{"reminder-settings.protected","web-push.protected"}){var path=Path.Combine(data,name);if(File.Exists(path))File.Move(path,path+".paused-by-recovery-"+Guid.NewGuid().ToString("N"));}}
+ public static void PauseNotifications(string data){foreach(var name in new[]{"reminder-settings.protected","web-push.protected","portable-backup-settings.protected"}){var path=Path.Combine(data,name);if(File.Exists(path))File.Move(path,path+".paused-by-recovery-"+Guid.NewGuid().ToString("N"));}}
 }

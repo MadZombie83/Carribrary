@@ -8,11 +8,12 @@ export const settingsCategories=[
  {id:'system-advanced',title:'System & Advanced',icon:'settings',description:'Connection guidance, updates, integrations and help.'}
 ];
 export const settingsTools=[
+ ['library-identity','library-appearance','Library identity','Name, icon, banner subtitle and encouraging saying.','home'],
  ['rename-library','library-appearance','Library name','Change the name shown on library pages.','home'],
  ['library-icon','library-appearance','Library icon','Upload your own icon, preserving transparency.','book'],
  ['edit-library-name','library-appearance','Library sayings','Edit the subtitle and encouraging message.','reading'],
  ['palette','library-appearance','Colors & saved themes','Choose a preset or edit a named custom palette.','settings'],
- ['custom-theme','library-appearance','Custom theme editor','Full color pickers, hex values and readable contrast.','settings'],
+ ['custom-theme','library-appearance','Theme & artwork','Presets, saved colors and sidebar artwork in one editor.','settings'],
  ['sidebar-artwork-settings','library-appearance','Full sidebar overlay','Upload a portrait PNG beneath the sidebar navigation.','home'],
  ['manage-collections','books-organization','Collections','Organize books without separating household borrowers.','book'],
  ['copy-labels','books-organization','Print copy labels','Optional labels for individual physical copies.','book'],
@@ -35,6 +36,7 @@ export const settingsTools=[
  ['iphone-companion','people-access','iPhone / browser pairing','Approve or revoke token-based browser companions.','devices'],
  ['household-readers','people-access','Household readers','Manage household profiles in Reading tracker.','reading'],
  ['export','data-history','Backups','Complete password-protected server backup or library JSON export.','backup'],
+ ['portable-backups','data-history','Portable replacement backup','Weekly password-encrypted recovery backups; retain four and download an off-device copy.','backup'],
  ['complete-recovery','data-history','Complete Backup Recovery','Open the independent server recovery wizard for verification, testing or confirmed restore.','backup'],
  ['verify-backup','data-history','Verify complete backup','Check a saved archive and password without restoring live records.','backup'],
  ['export-csv','data-history','Export catalog CSV','Download book details for spreadsheets.','book'],
@@ -43,7 +45,8 @@ export const settingsTools=[
  ['import','data-history','Restore library export','Replace library records only after the existing restore confirmation.','backup',true],
  ['history-controls','data-history','Clear completed history','Preview protected records and type the existing confirmation.','alert',true],
  ['setup','system-advanced','Setup & updates','Server details, DNS / DuckDNS checks, remote access, pairing and updates.','settings'],
- ['google-cover-settings','system-advanced','Google Books integration','Optional user-provided API key; never included in library exports.','book'],
+ ['google-cover-settings','books-organization','Google Books integration','Optional user-provided API key; never included in library exports.','book'],
  ['help-button','system-advanced','Help & instructions','Search the synchronized guide and illustrated quick start.','reading']
 ].map(([id,category,title,description,icon,danger=false])=>({id,category,title,description,icon,danger}));
-export const toolRoute=id=>{const t=settingsTools.find(t=>t.id===id);return t?'#settings/'+t.category+'/'+t.id:null;};
+export const settingsAliases={'rename-library':'library-identity','library-icon':'library-identity','edit-library-name':'library-identity','palette':'custom-theme','sidebar-artwork-settings':'custom-theme','lending-limits':'lending-tools'};
+export const toolRoute=id=>{id=settingsAliases[id]||id;const t=settingsTools.find(t=>t.id===id);return t?'#settings/'+t.category+'/'+t.id:null;};

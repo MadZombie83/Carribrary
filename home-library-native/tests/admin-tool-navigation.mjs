@@ -1,6 +1,7 @@
-import {toolRoute,settingsTools} from '../server/wwwroot/admin-tool-inventory.js';
+import {toolRoute,settingsTools,settingsAliases} from '../server/wwwroot/admin-tool-inventory.js';
 // Exercise the actual new navigation, rather than clicking hidden compatibility controls.
 export async function openAdminTool(page,id){
+ id=settingsAliases[id]||id;
  if(id==='requests'||id==='lending-tools'){
   const primary=page.locator('.sidebar-nav [data-admin-tool="'+id+'"]');
   if(await primary.isVisible()){await primary.click();return;}

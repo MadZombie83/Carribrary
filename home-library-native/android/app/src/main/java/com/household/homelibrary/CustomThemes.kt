@@ -1,5 +1,13 @@
 package com.household.homelibrary
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.Image
+import androidx.compose.ui.graphics.asImageBitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -34,33 +42,42 @@ fun defaultPalette(theme:String="purple-blue"):JSONObject { val p=JSONObject("""
  return p
 }
 
-@Composable fun CustomThemeDialog(state:JSONObject,theme:String,online:Boolean,busy:Boolean,message:String,onPreset:(String)->Unit,onSave:(JSONObject)->Unit,onClose:()->Unit){
+@Composable fun CustomThemeDialog(state:JSONObject,theme:String,online:Boolean,busy:Boolean,message:String,onPreset:(String)->Unit,onSave:(JSONObject)->Unit,onPublish:(String)->Unit,onClose:()->Unit){
+ val context=LocalContext.current;val scope=rememberCoroutineScope();var artworkBusy by remember{mutableStateOf(false)};var artworkNote by remember{mutableStateOf("")}
  val saved=state.optJSONArray("savedThemes")?.objects()?:emptyList()
- fun withArtwork(p:JSONObject)=JSONObject(p.toString()).apply{if(!has("sidebarArtwork")||isNull("sidebarArtwork"))put("sidebarArtwork",state.optString("librarySidebarArtwork"))}
+ fun withArtwork(p:JSONObject)=JSONObject(p.toString()).apply{if(!has("sidebarArtwork")||isNull("sidebarArtwork"))put("sidebarArtwork","" )}
  var draft by remember{mutableStateOf(saved.find{"custom-"+it.optString("id")==theme}?.let{withArtwork(it)}?:defaultPalette(theme).put("sidebarArtwork",""))}
  var selectedColor by remember{mutableStateOf("")}
  fun update(key:String,value:String){draft=JSONObject(draft.toString()).put(key,value)}
- Dialog(onDismissRequest={if(!busy)onClose()}){Surface(shape=MaterialTheme.shapes.large){Column(Modifier.padding(20.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)){
-  Text("Colors & custom themes",style=MaterialTheme.typography.headlineSmall)
+ val chooseArtwork=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()){uri->if(uri!=null)scope.launch{artworkBusy=true;artworkNote="";try{val value=withContext(Dispatchers.IO){val bytes=context.contentResolver.openInputStream(uri)!!.use{input->val output=java.io.ByteArrayOutputStream();val buffer=ByteArray(8192);while(true){val n=input.read(buffer);if(n<0)break;require(output.size()+n<=10*1024*1024){"Choose a PNG under 10 MB."};output.write(buffer,0,n)};output.toByteArray()};val options=android.graphics.BitmapFactory.Options().apply{inJustDecodeBounds=true};android.graphics.BitmapFactory.decodeByteArray(bytes,0,bytes.size,options);require(options.outMimeType=="image/png"&&options.outWidth in 1..8192&&options.outHeight in 1..8192&&options.outWidth.toLong()*options.outHeight<=20000000){"Choose a PNG under 20 million pixels."};val image=android.graphics.BitmapFactory.decodeByteArray(bytes,0,bytes.size)?:error("Cannot read image");val canvasBitmap=android.graphics.Bitmap.createBitmap(512,1536,android.graphics.Bitmap.Config.ARGB_8888);try{val scale=minOf(512f/image.width,1536f/image.height);val width=image.width*scale;val height=image.height*scale;android.graphics.Canvas(canvasBitmap).drawBitmap(image,null,android.graphics.RectF((512-width)/2,(1536-height)/2,(512+width)/2,(1536+height)/2),android.graphics.Paint(android.graphics.Paint.FILTER_BITMAP_FLAG));val output=java.io.ByteArrayOutputStream();canvasBitmap.compress(android.graphics.Bitmap.CompressFormat.PNG,100,output);require(output.size()<=2097152){"Try a simpler sidebar image."};android.util.Base64.encodeToString(output.toByteArray(),android.util.Base64.NO_WRAP)}finally{image.recycle();canvasBitmap.recycle()}};update("sidebarArtwork",value);artworkNote="Ready to save with this theme."}catch(e:Exception){artworkNote=e.message?:"Could not prepare PNG"}finally{artworkBusy=false}}}
+
+ Dialog(onDismissRequest={if(!busy&&!artworkBusy)onClose()}){Surface(shape=MaterialTheme.shapes.large){Column(Modifier.padding(20.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)){
+  Text("Theme & artwork",style=MaterialTheme.typography.headlineSmall)
   Text("Presets change this phone. Save a custom palette to the server to use across the library. Use your colors for shared library in Settings publishes a selected preset.",style=MaterialTheme.typography.bodySmall)
-  libraryThemes.forEach{(key,label)->OutlinedButton(enabled=!busy,onClick={onPreset(key)},modifier=Modifier.fillMaxWidth()){Text((if(theme==key)"✓ " else "")+label)}}
-  if(saved.isNotEmpty()){Text("Saved custom themes",style=MaterialTheme.typography.titleMedium);saved.forEach{p->Row{TextButton(enabled=!busy,onClick={draft=withArtwork(p);selectedColor="";onPreset("custom-"+p.getString("id"))},modifier=Modifier.weight(1f)){Text(p.optString("name"))};TextButton(enabled=!busy,onClick={draft=withArtwork(p)}){Text("Edit")}}}}
+  libraryThemes.forEach{(key,label)->OutlinedButton(enabled=!busy&&!artworkBusy,onClick={draft=defaultPalette(key).put("sidebarArtwork","");onPreset(key)},modifier=Modifier.fillMaxWidth()){Text((if(theme==key)"✓ " else "")+label)}}
+  if(saved.isNotEmpty()){Text("Saved custom themes",style=MaterialTheme.typography.titleMedium);saved.forEach{p->Row{TextButton(enabled=!busy&&!artworkBusy,onClick={draft=withArtwork(p);selectedColor="";onPreset("custom-"+p.getString("id"))},modifier=Modifier.weight(1f)){Text(p.optString("name"))};TextButton(enabled=!busy&&!artworkBusy,onClick={draft=withArtwork(p)}){Text("Edit")}}}}
   Text("Each saved theme includes its sidebar PNG or a no-artwork choice. Applying it to the shared library restores colors and artwork together. New theme clears the artwork draft; use current library artwork to copy the current overlay. Phone preset selection remains local until published.",style=MaterialTheme.typography.bodySmall)
+  OutlinedButton(enabled=!busy&&!artworkBusy,onClick={onPublish(theme)}){Text("Apply phone's selected theme to shared library")}
+  Text("Apply uses the selected saved theme or preset; save draft edits below to publish them. Built-in presets clear the shared sidebar artwork.",style=MaterialTheme.typography.bodySmall)
+  val imagePreview=remember(draft.optString("sidebarArtwork")){runCatching{val bytes=android.util.Base64.decode(draft.optString("sidebarArtwork"),android.util.Base64.DEFAULT);android.graphics.BitmapFactory.decodeByteArray(bytes,0,bytes.size)?.asImageBitmap()}.getOrNull()}
+  imagePreview?.let{Image(it,"Sidebar artwork preview",Modifier.width(64.dp).height(192.dp))}
+  OutlinedButton(enabled=!busy&&!artworkBusy,onClick={chooseArtwork.launch(arrayOf("image/png"))}){Text("Choose sidebar PNG")}
+  if(artworkNote.isNotBlank())Text(artworkNote)
   Text(if(draft.optString("sidebarArtwork").isBlank())"Sidebar: no artwork" else "Sidebar: saved PNG included")
-  OutlinedButton(enabled=!busy,onClick={update("sidebarArtwork",state.optString("librarySidebarArtwork"))}){Text("Use current library artwork")}
-  TextButton(enabled=!busy,onClick={update("sidebarArtwork","")}){Text("No artwork for this theme")}
+  OutlinedButton(enabled=!busy&&!artworkBusy,onClick={update("sidebarArtwork",state.optString("librarySidebarArtwork"))}){Text("Use current library artwork")}
+  TextButton(enabled=!busy&&!artworkBusy,onClick={update("sidebarArtwork","")}){Text("No artwork for this theme")}
   HorizontalDivider();Text("Custom palette",style=MaterialTheme.typography.titleLarge)
-  OutlinedTextField(draft.optString("name"),{if(it.length<=60)update("name",it)},label={Text("Theme name")},modifier=Modifier.fillMaxWidth(),enabled=!busy,singleLine=true)
-  paletteFields.forEach{(key,label)->OutlinedButton(enabled=!busy,onClick={selectedColor=key},modifier=Modifier.fillMaxWidth()){Box(Modifier.size(24.dp).background(paletteColor(draft.optString(key))));Spacer(Modifier.width(8.dp));Text("$label · ${draft.optString(key)}",modifier=Modifier.weight(1f))}}
+  OutlinedTextField(draft.optString("name"),{if(it.length<=60)update("name",it)},label={Text("Theme name")},modifier=Modifier.fillMaxWidth(),enabled=!busy&&!artworkBusy,singleLine=true)
+  paletteFields.forEach{(key,label)->OutlinedButton(enabled=!busy&&!artworkBusy,onClick={selectedColor=key},modifier=Modifier.fillMaxWidth()){Box(Modifier.size(24.dp).background(paletteColor(draft.optString(key))));Spacer(Modifier.width(8.dp));Text("$label · ${draft.optString(key)}",modifier=Modifier.weight(1f))}}
   val preview=libraryColors("custom-preview",draft.toString())
   MaterialTheme(colorScheme=preview){OutlinedCard(colors=CardDefaults.outlinedCardColors(containerColor=preview.surface)){Column(Modifier.padding(12.dp),verticalArrangement=Arrangement.spacedBy(8.dp)){Surface(color=preview.primary,contentColor=preview.onPrimary,modifier=Modifier.fillMaxWidth()){Text("Library preview",Modifier.padding(12.dp))};Text("Book title · Author",color=preview.onSurface);Text("Secondary text",color=preview.onSurfaceVariant);Button(onClick={}){Text("Check out")}}}}
   val readable=readablePalette(draft)
   Text(if(readable)"Text contrast passes (at least 4.5:1)." else "Increase text contrast on page, cards and highlights. Banner needs readable white and accent text.",color=if(readable)MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error)
-  Button(enabled=online&&!busy&&readable&&draft.optString("name").isNotBlank(),onClick={onSave(JSONObject(draft.toString()))},modifier=Modifier.fillMaxWidth()){Text(if(draft.has("id"))"Update & use theme" else "Save & use theme")}
-  TextButton(enabled=!busy,onClick={selectedColor="";draft=JSONObject(draft.toString()).apply{remove("id");put("name","");put("sidebarArtwork","")}}){Text("New theme")}
+  Button(enabled=online&&!busy&&!artworkBusy&&readable&&draft.optString("name").isNotBlank(),onClick={onSave(JSONObject(draft.toString()))},modifier=Modifier.fillMaxWidth()){Text(if(draft.has("id"))"Update & use theme" else "Save & use theme")}
+  TextButton(enabled=!busy&&!artworkBusy,onClick={selectedColor="";draft=JSONObject(draft.toString()).apply{remove("id");put("name","");put("sidebarArtwork","")}}){Text("New theme")}
   if(!online)Text("Connect to the server to save a custom theme.")
   if(message.isNotBlank())Text(message,color=MaterialTheme.colorScheme.error)
-  TextButton(enabled=!busy,onClick=onClose){Text("Done")}
+  TextButton(enabled=!busy&&!artworkBusy,onClick=onClose){Text("Done")}
  }}}
  if(selectedColor.isNotBlank())FullColorPicker(paletteFields.getValue(selectedColor),draft.getString(selectedColor),onSave={update(selectedColor,it);selectedColor=""},onClose={selectedColor=""})
 }

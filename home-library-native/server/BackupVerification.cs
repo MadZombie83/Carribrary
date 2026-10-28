@@ -5,7 +5,7 @@ using Microsoft.Data.Sqlite;
 namespace HomeLibrary;
 // Verification uploads never become live data. Password is framed inside the body,
 // never a URL, header, persistent setting or log. Only administrators reach this service.
-public sealed record BackupVerificationReport(bool Verified,int Files,long Bytes,string Version,int LibraryFormat,string CreatedUtc,string Platform,bool SameWindowsComputerRequired,bool SupportedLibraryFormat);
+public sealed record BackupVerificationReport(bool Verified,int Files,long Bytes,string Version,int LibraryFormat,string CreatedUtc,string Platform,bool SameWindowsComputerRequired,bool SupportedLibraryFormat,bool Portable=false);
 public sealed class BackupVerification(string data) {
  readonly SemaphoreSlim active=new(1,1);
  public const long MaxRequestBytes=CompleteBackup.MaxArchiveBytes+1028;
@@ -48,7 +48,7 @@ public sealed class BackupVerification(string data) {
     using var state=JsonDocument.Parse(saved);if(!state.RootElement.TryGetProperty("version",out var format)||!format.TryGetInt32(out var actual)||actual!=m.LibraryFormat)throw new LibraryError("The backup library format does not match its manifest.");
    }
    // Return no filenames, settings, keys, borrowers or private reading data.
-   return new(true,m.Files.Count,m.Files.Sum(f=>f.Length),Label(m.Version),m.LibraryFormat,Label(m.CreatedUtc),Label(m.Platform),string.Equals(m.Platform,"Windows",StringComparison.OrdinalIgnoreCase),m.LibraryFormat is >=1 and <=5);
+   return new(true,m.Files.Count,m.Files.Sum(f=>f.Length),Label(m.Version),m.LibraryFormat,Label(m.CreatedUtc),Label(m.Platform),string.Equals(m.Platform,"Windows",StringComparison.OrdinalIgnoreCase)&&m.Format==1,m.LibraryFormat is >=1 and <=6,m.Format==2);
  }
  static string Label(string value)=>new((value??"").Where(c=>!char.IsControl(c)).Take(100).ToArray());
 }

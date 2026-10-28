@@ -5,9 +5,12 @@ void Check(bool value,string name){if(!value)throw new Exception("FAILED: "+name
 void Throws(Action action,string text){try{action();throw new Exception("Expected failure: "+text);}catch(LibraryError e){Check(e.Message.Contains(text,StringComparison.OrdinalIgnoreCase),text);}}
 JsonElement Input(object value)=>JsonSerializer.SerializeToElement(value,Library.Json);
 try{
+ if(args.Contains("--portable-only")){await PortableBackupTests.Run(Path.Combine(directory,"portable-backups-test"));return;}
  if(args.Contains("--complete-recovery-only")){await CompleteRecoveryTests.Run(Path.Combine(directory,"complete-recovery"));return;}
  if(args.Contains("--backup-verification-only")){await BackupVerificationTests.Run(Path.Combine(directory,"backup-verification"),protection);return;}
  if(args.Contains("--batch-renewals-only")){await BatchRenewalTests.Run(Path.Combine(directory,"batch-renewals"),protection);return;}
+ ReadingPolishTests.Run(Path.Combine(directory,"reading-polish"),protection);
+ if(args.Contains("--reading-polish-only"))return;
  CustomThemeTests.Run(Path.Combine(directory,"themes"),protection);
  if(args.Contains("--custom-themes-only"))return;
  SidebarArtworkTests.Run(Path.Combine(directory,"sidebar-artwork"),protection);
@@ -102,6 +105,7 @@ try{
  await CompleteRecoveryTests.Run(Path.Combine(directory,"complete-recovery"));
  await BackupVerificationTests.Run(Path.Combine(directory,"backup-verification"),protection);
  await CompleteBackupTests.Run(Path.Combine(directory,"complete-backup"),protection);
+await PortableBackupTests.Run(Path.Combine(directory,"portable-backups-test"));
  CopyIdentityTests.Run(Path.Combine(directory,"copy-identity"),protection);
  LocalAdministratorTests.Run(Path.Combine(directory,"local-admin"),protection);
  AccountSecurityAuditTests.Run(Path.Combine(directory,"account-audit"));

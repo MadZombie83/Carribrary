@@ -44,7 +44,8 @@ class NativeApi(private val context:Context) {
  suspend fun about(copyId:String)=withContext(Dispatchers.IO){currentRequest("/mobile/books/"+android.net.Uri.encode(copyId)+"/about")}
  suspend fun browserAdmins(action:String?=null,input:JSONObject?=null)=withContext(Dispatchers.IO){currentRequest("/mobile/browser-admins"+(action?.let{"/"+it}?:""),input)}
  suspend fun receipt(copyId:String)=withContext(Dispatchers.IO){currentRequest("/mobile/receipts/"+android.net.Uri.encode(copyId))}
- suspend fun tools(path:String,input:JSONObject?=null)=withContext(Dispatchers.IO){require(path in listOf("reminders","reminders/test","setup","setup/dns","catalog-batch/csv","catalog-batch/preview"));currentRequest("/mobile/"+path,input)}
+ suspend fun insights(range:String,input:JSONObject?=null)=withContext(Dispatchers.IO){require(range in listOf("7","30","90","all"));currentRequest("/mobile/insights"+(if(input==null)"?range=$range"else ""),input)}
+ suspend fun tools(path:String,input:JSONObject?=null)=withContext(Dispatchers.IO){require(path in listOf("backup/portable","backup/portable/run","reminders","reminders/test","setup","setup/dns","catalog-batch/csv","catalog-batch/preview"));currentRequest("/mobile/"+path,input)}
  suspend fun accountAdmin(action:String?=null,input:JSONObject?=null)=withContext(Dispatchers.IO){
   if(action=="delete")check(!hasPending()){ "Resolve Retry pending change before deleting an account." }
   val result=currentRequest("/mobile/accounts"+(action?.let{"/"+it}?:""),input)
@@ -136,7 +137,7 @@ class NativeApi(private val context:Context) {
  private fun request(base:String,path:String,expectedPin:String,client:Boolean,body:JSONObject?=null):JSONObject {
   val url=URL(base+path);require(url.protocol=="https"&&url.userInfo==null){"HTTPS address required"}
   val connection=url.openConnection() as HttpsURLConnection
-  connection.instanceFollowRedirects=false;connection.connectTimeout=5000;connection.readTimeout=if(path=="/mobile/accounts/delete")45000 else if(path.startsWith("/mobile/covers?")||path.startsWith("/mobile/reminders"))35000 else 15000;connection.sslSocketFactory=socketFactory(expectedPin,client)
+  connection.instanceFollowRedirects=false;connection.connectTimeout=5000;connection.readTimeout=if(path=="/mobile/backup/portable/run")180000 else if(path=="/mobile/accounts/delete")45000 else if(path.startsWith("/mobile/covers?")||path.startsWith("/mobile/reminders"))35000 else 15000;connection.sslSocketFactory=socketFactory(expectedPin,client)
   // The QR binds the public key to this endpoint; no trust-all or redirect fallback.
   connection.hostnameVerifier=HostnameVerifier{hostname,session->hostname==url.host&&runCatching{pin(session.peerCertificates[0] as X509Certificate)==expectedPin}.getOrDefault(false)}
   try{if(body!=null){connection.requestMethod="POST";connection.doOutput=true;connection.setRequestProperty("Content-Type","application/json");connection.outputStream.use{it.write(body.toString().toByteArray())}}
@@ -158,6 +159,23 @@ class NativeApi(private val context:Context) {
    connection.hostnameVerifier=HostnameVerifier{host,session->host==url.host&&runCatching{pin(session.peerCertificates[0] as X509Certificate)==expected}.getOrDefault(false)}
    try{
     connection.requestMethod="POST";connection.doOutput=true;connection.setRequestProperty("Content-Type","application/json");connection.outputStream.use{it.write(JSONObject().put("password",password).toString().toByteArray())}
+    val status=connection.responseCode;if(status !in 200..299){val error=connection.errorStream?.bufferedReader()?.use{it.readText()}?:"{}";throw ApiError(status,runCatching{JSONObject(error).optString("error")}.getOrDefault("").ifBlank{if(status==404)"Update Carribrary Server to 2.0.30 or later to use complete backups." else "Complete backup failed ($status)."})}
+    val expectedLength=connection.contentLengthLong
+    connection.inputStream.use{source->val buffer=ByteArray(65536);while(true){val n=source.read(buffer);if(n<0)break;output.write(buffer,0,n);written+=n}}
+    if(expectedLength>=0&&written!=expectedLength)throw java.io.IOException("The backup download was incomplete.")
+    return@withContext
+   }catch(error:Exception){if(error is ApiError||written>0||index==candidates.lastIndex)throw error}finally{connection.disconnect()}
+  }
+ }
+ suspend fun latestPortableBackup(output:java.io.OutputStream)=withContext(Dispatchers.IO){
+  check(paired){"Pair this phone first."}
+  val remote=prefs.getString("url","")!!;val expected=prefs.getString("pin","")!!;val candidates=listOfNotNull(discover(),remote).distinct();var written=0L
+  for((index,base) in candidates.withIndex()){
+   val url=URL(base+"/mobile/backup/portable/latest");val connection=url.openConnection() as HttpsURLConnection
+   connection.instanceFollowRedirects=false;connection.connectTimeout=5000;connection.readTimeout=180000;connection.sslSocketFactory=socketFactory(expected,true)
+   connection.hostnameVerifier=HostnameVerifier{host,session->host==url.host&&runCatching{pin(session.peerCertificates[0] as X509Certificate)==expected}.getOrDefault(false)}
+   try{
+    connection.requestMethod="GET"
     val status=connection.responseCode;if(status !in 200..299){val error=connection.errorStream?.bufferedReader()?.use{it.readText()}?:"{}";throw ApiError(status,runCatching{JSONObject(error).optString("error")}.getOrDefault("").ifBlank{if(status==404)"Update Carribrary Server to 2.0.30 or later to use complete backups." else "Complete backup failed ($status)."})}
     val expectedLength=connection.contentLengthLong
     connection.inputStream.use{source->val buffer=ByteArray(65536);while(true){val n=source.read(buffer);if(n<0)break;output.write(buffer,0,n);written+=n}}
