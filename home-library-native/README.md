@@ -1,6 +1,6 @@
-# Carribrary 2.0.48 — standalone analytics settings
+# Carribrary 2.0.49 — unified admin alerts and PWA installation
 
-**2.0.48 current source update:** Analytics & insights moves off Dashboard/Android Home to its own Settings & Tools → Data & History page/card. Period/chart selections stay within that page; Help updated. Data formats remain6/2 and compatible program-only recovery covers47–48. [Release notes](distribution/RELEASE-2.0.48.md). Source only; owner builds packages.
+**2.0.49 current source update:** Unified admin notification bell on server, iPhone/browser PWA and Android. Account/book/renewal approvals and operational alerts link to existing tools. Welcome-page app installation, canonical PWA routes and visible install controls restored. [Release notes](distribution/RELEASE-2.0.49.md). Data formats remain 6/2; owner builds packages.
 
 **2.0.47 earlier source update:** Unified Library identity / Theme & artwork, dashboard sharing/acquisition shortcuts, portable complete recovery and optional weekly backups retaining four. Opt-in aggregate dashboard analytics; reading page progress, preserved rereads, annual goals/statistics and quotes/page notes, including encrypted borrower vault support. Library format upgrades to 6; credentials stay 2. Compatible program-only rollback supports 2.0.47 only. [Release notes and owner checks](distribution/RELEASE-2.0.47.md). Source only; owner builds packages.
 

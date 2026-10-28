@@ -34,8 +34,6 @@ export function renderDashboard(state,{today,offline,onAction,onBook}){
  target.querySelectorAll('img').forEach(img=>img.onerror=()=>{const fallback=document.createElement('span');fallback.className='dashboard-cover placeholder';fallback.setAttribute('aria-hidden','true');fallback.innerHTML=icon('book');img.replaceWith(fallback);});
 }
 export function syncAdminShell(state,view){
- const count=(state.requests||[]).filter(r=>["pending","approved"].includes(r.status)).length;
- const bell=document.querySelector("#request-bell"),badge=document.querySelector("#request-bell-count");if(bell){bell.setAttribute("aria-label",`Active requests: ${count}`);badge.hidden=count===0;badge.textContent=count>99?"99+":String(count);}
  document.body.dataset.adminView=view;
  document.body.dataset.libraryTheme=state.libraryTheme||'classic';
  const name=document.querySelector('[data-sidebar-name]');name.textContent=state.libraryName||'Carribrary';

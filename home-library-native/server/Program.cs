@@ -158,6 +158,7 @@ app.MapPost("/api/recovery-review/complete",(RecoveryWizard.RecoveryConfirmation
  if(!settings.RecoveryReviewRequired||input.Confirmation!="RESUME REMOTE ACCESS"||!input.Checked)throw new LibraryError("Review restored borrower accounts and paired devices, confirm the check and type RESUME REMOTE ACCESS exactly.");
  File.Delete(Path.Combine(data,CompleteRecovery.ReviewMarker));return Results.Ok(new{reviewRecorded=true,restartRequired=true});
 });
+foreach(var prefix in new[]{"/api","/mobile"})app.MapGet(prefix+"/notifications",(HttpContext c,BorrowerAccounts accounts,PortableBackups backups,Reminders reminders,PushNotifications push)=>(prefix=="/api"?Admin(c):Mobile(c))?Results.Json(AdminNotifications.Read(store,accounts,settings,backups,reminders,push),Library.Json):Results.NotFound());
 app.MapGet("/api/state",(HttpContext c)=>Admin(c)?Results.Json(store.AdminRead(),Library.Json):Results.NotFound());
 app.MapPost("/api/action",(ActionRequest req,HttpContext c)=>Admin(c)?(req.Action=="requestBook"?Results.BadRequest(new{error="Use the shared catalog to submit requests."}):Results.Json(store.AdminApply(req),Library.Json)):Results.NotFound());
 app.MapGet("/api/receipts/{copyId}",(string copyId,HttpContext c)=>Admin(c)?Results.Json(BorrowingReceipt.Create(store.Read().State,copyId)):Results.NotFound());
@@ -227,6 +228,7 @@ app.MapPost("/s/{token}/requests",(string token,PublicBookRequest input,HttpCont
 }).RequireRateLimiting("book-requests");
 app.MapMethods("/s/{token}/{**leaf}",new[]{"GET","HEAD"},async(string token,string? leaf,HttpContext c,Sharing sharing)=>{
  if(c.Connection.LocalPort!=settings.CatalogPort||!sharing.Allowed(token))return Results.NotFound();
+ if(string.IsNullOrEmpty(leaf)&&!c.Request.Path.Value!.EndsWith("/"))return Results.Redirect(c.Request.Path+"/"+c.Request.QueryString);
  if(leaf!=null&&leaf.StartsWith("about/")){var book=store.Read().State.Books.Find(b=>b.Id==leaf[6..]&&!b.Archived);return book==null?Results.NotFound():Results.Json(await c.RequestServices.GetRequiredService<BookAbout>().Find(book,c.RequestAborted),Library.Json);}
  if(leaf=="manifest.webmanifest")return BorrowerApp.Manifest(store);
  if(leaf=="books.json"){var state=store.Read().State;return Results.Json(new{libraryName=state.LibraryName,libraryTheme=LibraryAppearance.Theme(state),bannerSubtitle=state.BannerSubtitle,encouragingMessage=state.EncouragingMessage,collections=state.Collections,books=Sharing.Books(state)});}

@@ -21,7 +21,7 @@ try {
     }
     $RecoveryHome=Join-Path $env:ProgramData 'HomeLibraryNative\recovery'
     $Form=New-Object Windows.Forms.Form; $Form.Text='Carribrary Update & Recovery'; $Form.Width=720; $Form.Height=460; $Form.StartPosition='CenterScreen'
-    $Label=New-Object Windows.Forms.Label; $Label.Text="Restore a previous compatible application while keeping CURRENT books, loans, accounts, private lists and connection settings.`r`n`r`nThis tool does not restore an old database. Complete private snapshots are retained separately for supervised recovery. Supported program versions: 2.0.47–2.0.48 (library format 6). Earlier programs cannot preserve rereading sessions, goals and annotations; automatic recovery cannot cross this boundary."; $Label.SetBounds(20,15,660,110); $Form.Controls.Add($Label)
+    $Label=New-Object Windows.Forms.Label; $Label.Text="Restore a previous compatible application while keeping CURRENT books, loans, accounts, private lists and connection settings.`r`n`r`nThis tool does not restore an old database. Complete private snapshots are retained separately for supervised recovery. Supported program versions: 2.0.47–2.0.49 (library format 6). Earlier programs cannot preserve rereading sessions, goals and annotations; automatic recovery cannot cross this boundary."; $Label.SetBounds(20,15,660,110); $Form.Controls.Add($Label)
     $List=New-Object Windows.Forms.ListBox; $List.SetBounds(20,135,660,150); $Form.Controls.Add($List)
     $Points=New-Object 'Collections.Generic.List[string]'
     if (Test-Path -LiteralPath $RecoveryHome) {

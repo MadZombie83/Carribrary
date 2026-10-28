@@ -38,7 +38,8 @@ class NativeApi(private val context:Context) {
   try{currentRequest("/mobile/covers?isbn="+android.net.Uri.encode(isbn)+"&title="+android.net.Uri.encode(title)+"&author="+android.net.Uri.encode(author))}
   catch(error:ApiError){if(error.status==404)throw IllegalStateException("Update the server to 2.0.12 or later to search cover sources.");throw error}
  }
- suspend fun requestAlertIds()=withContext(Dispatchers.IO){currentRequest("/mobile/state").getJSONObject("state").optJSONArray("requests")?.objects()?.filter{it.optString("status")=="pending"}?.map{it.optString("id")}?:emptyList()}
+ suspend fun adminNotifications()=withContext(Dispatchers.IO){try{currentRequest("/mobile/notifications")}catch(e:ApiError){if(e.status==404)throw IllegalStateException("Update Carribrary Server to 2.0.49 or later for the unified notification bell.");throw e}}
+ suspend fun requestAlertIds()=withContext(Dispatchers.IO){val ids=adminNotifications().optJSONArray("eventIds");(0 until (ids?.length()?:0)).map{ids!!.getString(it)}}
  suspend fun historyPreview(input:JSONObject)=withContext(Dispatchers.IO){currentRequest("/mobile/history/preview",input)}
  fun clearCachedLibrary(){check(!hasPending()){"Resolve Retry pending change before clearing downloaded data."};for(name in listOf("library.cache","sharing.cache")){val file=File(context.filesDir,name);check(!file.exists()||file.delete()){"Could not clear downloaded data."}};online=false}
  suspend fun about(copyId:String)=withContext(Dispatchers.IO){currentRequest("/mobile/books/"+android.net.Uri.encode(copyId)+"/about")}

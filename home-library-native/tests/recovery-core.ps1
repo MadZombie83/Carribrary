@@ -4,7 +4,7 @@ $Temp=Join-Path ([IO.Path]::GetTempPath()) ('carribrary-recovery-test-'+[Guid]::
 function Check($Value,$Message) { if (!$Value) { throw $Message }; Write-Output ('PASS '+$Message) }
 function Reject([scriptblock]$Action,$Message) { try { & $Action; throw ('NOT_REJECTED '+$Message) } catch { if ($_.Exception.Message.StartsWith('NOT_REJECTED')) { throw }; Write-Output ('PASS '+$Message) } }
 try {
-    Check (!(Test-CarribraryCompatible '2.0.45-preview') -and !(Test-CarribraryCompatible '2.0.44-preview') -and !(Test-CarribraryCompatible '2.0.46-preview') -and (Test-CarribraryCompatible '2.0.47-preview') -and (Test-CarribraryCompatible '2.0.48-preview') -and !(Test-CarribraryCompatible '2.0.49-preview')) 'format-6 boundary rejects older and unverified future programs'
+    Check (!(Test-CarribraryCompatible '2.0.45-preview') -and !(Test-CarribraryCompatible '2.0.44-preview') -and !(Test-CarribraryCompatible '2.0.46-preview') -and (Test-CarribraryCompatible '2.0.47-preview') -and (Test-CarribraryCompatible '2.0.48-preview') -and (Test-CarribraryCompatible '2.0.49-preview') -and !(Test-CarribraryCompatible '2.0.50-preview')) 'format-6 boundary rejects older and unverified future programs'
     $Root=Join-Path $Temp 'app'; $Data=Join-Path $Temp 'data'; $RecoveryHome=Join-Path $Temp 'recovery'
     New-Item -ItemType Directory -Path (Join-Path $Root 'server'),(Join-Path $Root 'tray'),$Data -Force | Out-Null
     Set-Content (Join-Path $Root 'server/HomeLibrary.Server.dll') 'old application'; Set-Content (Join-Path $Root 'server/appsettings.json') '{"Library":{"AdminPort":4173}}'; Set-Content (Join-Path $Root 'tray/app') 'old tray'

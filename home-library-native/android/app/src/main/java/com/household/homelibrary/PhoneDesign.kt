@@ -25,7 +25,7 @@ val phoneTypography=Typography().let{it.copy(headlineMedium=it.headlineMedium.co
    LibraryBrandIcon(state)
    if(state.optString("libraryIcon192").isBlank())Icon(painterResource(R.drawable.nav_catalog),null,tint=colors.onPrimary,modifier=Modifier.size(34.dp))
    Column(Modifier.weight(1f)){Text(state.optString("libraryName","Carribrary"),style=MaterialTheme.typography.headlineMedium,color=colors.onPrimary);val subtitle=state.optString("bannerSubtitle","A shelf worth sharing");if(subtitle.isNotBlank())Text(subtitle,style=MaterialTheme.typography.bodySmall,color=colors.tertiary)}
-   if(onRequests!=null)BadgedBox(badge={if(requests>0)Badge{Text(if(requests>99)"99+" else requests.toString())}}){IconButton(onClick=onRequests){Icon(painterResource(R.drawable.nav_bell),"Active requests: $requests",tint=colors.onPrimary)}}
+   if(onRequests!=null)BadgedBox(badge={if(requests>0)Badge{Text(if(requests>99)"99+" else requests.toString())}}){IconButton(onClick=onRequests){Icon(painterResource(R.drawable.nav_bell),"Admin notifications: $requests",tint=colors.onPrimary)}}
    TextButton(onClick=onHelp,colors=ButtonDefaults.textButtonColors(contentColor=colors.onPrimary)){Text("Help")}
   }
  }

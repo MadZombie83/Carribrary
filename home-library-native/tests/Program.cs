@@ -5,6 +5,8 @@ void Check(bool value,string name){if(!value)throw new Exception("FAILED: "+name
 void Throws(Action action,string text){try{action();throw new Exception("Expected failure: "+text);}catch(LibraryError e){Check(e.Message.Contains(text,StringComparison.OrdinalIgnoreCase),text);}}
 JsonElement Input(object value)=>JsonSerializer.SerializeToElement(value,Library.Json);
 try{
+ AdminNotificationTests.Run();
+ if(args.Contains("--notifications-only"))return;
  if(args.Contains("--portable-only")){await PortableBackupTests.Run(Path.Combine(directory,"portable-backups-test"));return;}
  if(args.Contains("--complete-recovery-only")){await CompleteRecoveryTests.Run(Path.Combine(directory,"complete-recovery"));return;}
  if(args.Contains("--backup-verification-only")){await BackupVerificationTests.Run(Path.Combine(directory,"backup-verification"),protection);return;}
