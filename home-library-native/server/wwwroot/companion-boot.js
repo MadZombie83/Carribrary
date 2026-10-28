@@ -7,7 +7,7 @@ window.fetch=(input,options)=>{
 document.addEventListener('DOMContentLoaded',()=>{
  document.body.classList.add('iphone-companion');
  const card=document.createElement('section');card.id='companion-device-tools';card.className='settings-card companion-device-tools';card.hidden=true;
- card.innerHTML='<p class="eyebrow">THIS COMPANION</p><h2>Your iPhone / browser</h2><p>Manage account, borrowing and renewal request notifications and this device’s approved connection. Other paired devices are unaffected.</p><div class="companion-device-actions"><button class="secondary" id="admin-push">Request notifications</button><button class="secondary" id="companion-signout">Sign out / unpair</button></div><p id="push-status" role="status"></p>';
+ card.innerHTML='<p class="eyebrow">THIS COMPANION</p><h2>Your iPhone / browser</h2><p>Manage account, borrowing, renewal and purchase suggestion notifications and this device’s approved connection. Other paired devices are unaffected.</p><div class="companion-device-actions"><button class="secondary" id="admin-push">Request notifications</button><button class="secondary" id="companion-signout">Sign out / unpair</button></div><p id="push-status" role="status"></p>';
  document.body.append(card);
  const mount=()=>{
   const page=document.querySelector('#settings-page'),parts=location.hash.split('/');

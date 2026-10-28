@@ -18,14 +18,15 @@ public static class AdminNotifications {
   Add("push","Notification delivery needs attention","Review device permissions and notification delivery status.",pushFailure?1:0,"push-overview");
   return result;
  }
- public static object Read(Store store,BorrowerAccounts accounts,Settings settings,PortableBackups backups,Reminders reminders,PushNotifications push){
+ public static object Read(Store store,BorrowerAccounts accounts,Settings settings,PortableBackups backups,Reminders reminders,PushNotifications push,PurchaseSuggestions suggestions){
   bool Failed(Func<object> status,Func<JsonElement,bool> check){try{return check(JsonSerializer.SerializeToElement(status(),Library.Json));}catch(LibraryError){return true;}}
   var backup=Failed(backups.Status,s=>s.GetProperty("lastError").GetString() is {Length:>0});
   var email=Failed(reminders.Status,s=>s.GetProperty("enabled").GetBoolean()&&s.GetProperty("history").EnumerateArray().Any(h=>h.GetProperty("status").GetString()!="sent"));
   var notification=Failed(push.Status,s=>s.GetProperty("history").EnumerateArray().Any(h=>(h.GetProperty("lastStatus").GetString()??"").Contains("unconfirmed",StringComparison.OrdinalIgnoreCase)));
   var library=store.Read().State;var people=accounts.List();
   var items=Build(library,people,Library.Today,settings.RecoveryReviewRequired,backup,email,notification);
-  return new{items,count=items.Sum(n=>n.Count),eventIds=RequestEvents(library,people).Concat(items.Where(n=>n.Id is not ("accounts" or "requests" or "renewals")).Select(n=>n.Id+"|"+n.Count)).ToArray()};
+  var pending=suggestions.List().Where(x=>x.Status=="pending").ToArray();if(pending.Length>0)items.Insert(Math.Min(2,items.Count),new("suggestions","Purchase suggestions","Review books and series readers would like the library to acquire.",pending.Length,"books-to-buy"));
+  return new{items,count=items.Sum(n=>n.Count),eventIds=RequestEvents(library,people).Concat(pending.Select(x=>"suggestion|"+x.Id)).Concat(items.Where(n=>n.Id is not ("accounts" or "requests" or "renewals" or "suggestions")).Select(n=>n.Id+"|"+n.Count)).ToArray()};
  }
  // Stable identifiers for optional background alerts, independent of names/contact/private data.
  public static IEnumerable<string> RequestEvents(LibraryState s,IEnumerable<BorrowerAccount> accounts)=>

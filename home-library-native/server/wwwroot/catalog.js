@@ -1,3 +1,4 @@
+import {mountPurchaseSuggestions} from '/account/purchase-suggestions.js';
 import {bookAbout} from './book-about.js';
 import {googleCredit,googleCoverLink} from './cover-credit.js';
 const $=s=>document.querySelector(s);
@@ -51,3 +52,5 @@ $('#request-form').onsubmit=async event=>{
 $("#collection").onchange=()=>{collection=$("#collection").value;const url=new URL(location.href);if(collection)url.searchParams.set("collection",collection);else url.searchParams.delete("collection");history.replaceState(null,"",url);page=1;render();};
 
 const accountLink=document.getElementById('account-link');if(accountLink)accountLink.href='/account/?library='+encodeURIComponent(location.pathname.split('/')[2]||'');
+
+mountPurchaseSuggestions(document.getElementById('suggest-purchase'),new URL('suggestions',location.href).pathname);

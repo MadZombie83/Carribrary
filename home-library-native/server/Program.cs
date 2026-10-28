@@ -41,10 +41,11 @@ builder.Services.AddSingleton(sp=>new BackupVerification(data));
 builder.Services.AddSingleton(sp=>new CompleteBackup(data,settings,sp.GetRequiredService<SnapshotGate>(),sp.GetRequiredService<Microsoft.AspNetCore.DataProtection.KeyManagement.IKeyManager>()));
 builder.Services.AddSingleton(sp=>new PortableBackups(data,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<CompleteBackup>()));if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService<PortableBackupWorker>();
 builder.Services.AddSingleton<IPushTransport,WebPushTransport>();
-builder.Services.AddSingleton(sp=>new PushNotifications(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<IPushTransport>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<BorrowerAccounts>(),sp.GetRequiredService<BrowserAdmins>()));if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService<PushWorker>();
+builder.Services.AddSingleton(sp=>new PushNotifications(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<IPushTransport>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<BorrowerAccounts>(),sp.GetRequiredService<BrowserAdmins>(),sp.GetRequiredService<PurchaseSuggestions>()));if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService<PushWorker>();
 builder.Services.AddHttpClient("registration-verification",client=>client.Timeout=TimeSpan.FromSeconds(8)).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false,UseCookies=false});
 builder.Services.AddSingleton(sp=>new RegistrationProtection(sp.GetRequiredService<IHttpClientFactory>().CreateClient("registration-verification"),builder.Configuration["BorrowerSecurity:TurnstileSiteKey"]??"",builder.Configuration["BorrowerSecurity:TurnstileSecretKey"]??"",settings.PublicCatalogOrigin));
 builder.Services.AddSingleton(sp=>new BorrowerAccounts(data));
+builder.Services.AddSingleton(sp=>new PurchaseSuggestions(data,sp.GetRequiredService<IDataProtectionProvider>()));
 builder.Services.AddSingleton(sp=>new BorrowerVault(data));
 builder.Services.AddSingleton(sp=>new Store(data,sp.GetRequiredService<IDataProtectionProvider>()));
 builder.Services.AddSingleton(sp=>new Identity(data,sp.GetRequiredService<IDataProtectionProvider>(),args.Contains("--prepare-windows-identity")));builder.Services.AddSingleton(settings);
@@ -113,7 +114,7 @@ app.Use(async(context,next)=>{
   }else if(context.Connection.LocalPort==settings.CatalogPort){
    context.Response.Headers["X-Robots-Tag"]="noindex, nofollow, noarchive";
    if(context.Request.Method is not ("GET" or "HEAD")){
-    if(context.Request.Method!="POST"||!System.Text.RegularExpressions.Regex.IsMatch(context.Request.Path.Value??"",@"^(/s/[^/]+/(requests|insights)|/reading/(action|requests|history/preview)|/account/(registration-options|register|login|logout|forgot-password|reset|vault|action|requests|history/preview|deletion-preview|delete|insights|push|push/remove|push/test)|/companion/(enroll|logout|push|push/remove|push/test|api/[a-zA-Z0-9/_-]+))$")){context.Response.StatusCode=405;return;}
+    if(context.Request.Method!="POST"||!System.Text.RegularExpressions.Regex.IsMatch(context.Request.Path.Value??"",@"^(/s/[^/]+/(requests|suggestions|insights)|/reading/(action|requests|history/preview)|/account/(suggestions|registration-options|register|login|logout|forgot-password|reset|vault|action|requests|history/preview|deletion-preview|delete|insights|push|push/remove|push/test)|/companion/(enroll|logout|push|push/remove|push/test|api/[a-zA-Z0-9/_-]+))$")){context.Response.StatusCode=405;return;}
     if(!context.Request.HasJsonContentType()&&!(BackupVerification.IsUpload(context.Request.Path)&&BackupVerification.Binary(context.Request))){context.Response.StatusCode=415;return;}
     if(context.Request.Headers.Origin.ToString()!=settings.PublicCatalogOrigin.TrimEnd('/')){context.Response.StatusCode=403;return;}
     var bodyLimit=context.Features.Get<IHttpMaxRequestBodySizeFeature>();if(bodyLimit!=null&&!bodyLimit.IsReadOnly)bodyLimit.MaxRequestBodySize=BackupVerification.IsUpload(context.Request.Path)?BackupVerification.MaxRequestBytes:context.Request.Path.StartsWithSegments("/companion/api")?10*1024*1024:context.Request.Path=="/account/vault"?6*1024*1024:8192;
@@ -158,7 +159,11 @@ app.MapPost("/api/recovery-review/complete",(RecoveryWizard.RecoveryConfirmation
  if(!settings.RecoveryReviewRequired||input.Confirmation!="RESUME REMOTE ACCESS"||!input.Checked)throw new LibraryError("Review restored borrower accounts and paired devices, confirm the check and type RESUME REMOTE ACCESS exactly.");
  File.Delete(Path.Combine(data,CompleteRecovery.ReviewMarker));return Results.Ok(new{reviewRecorded=true,restartRequired=true});
 });
-foreach(var prefix in new[]{"/api","/mobile"})app.MapGet(prefix+"/notifications",(HttpContext c,BorrowerAccounts accounts,PortableBackups backups,Reminders reminders,PushNotifications push)=>(prefix=="/api"?Admin(c):Mobile(c))?Results.Json(AdminNotifications.Read(store,accounts,settings,backups,reminders,push),Library.Json):Results.NotFound());
+foreach(var prefix in new[]{"/api","/mobile"}){
+ app.MapGet(prefix+"/purchase-suggestions",(HttpContext c,PurchaseSuggestions suggestions)=>(prefix=="/api"?Admin(c):Mobile(c))?Results.Json(new{items=suggestions.List()},Library.Json):Results.NotFound());
+ app.MapPost(prefix+"/purchase-suggestions",(PurchaseSuggestionDecision input,HttpContext c,PurchaseSuggestions suggestions)=>{if(!(prefix=="/api"?Admin(c):Mobile(c)))return Results.NotFound();suggestions.Decide(input);return Results.Ok(new{saved=true});});
+}
+foreach(var prefix in new[]{"/api","/mobile"})app.MapGet(prefix+"/notifications",(HttpContext c,BorrowerAccounts accounts,PortableBackups backups,Reminders reminders,PushNotifications push,PurchaseSuggestions suggestions)=>(prefix=="/api"?Admin(c):Mobile(c))?Results.Json(AdminNotifications.Read(store,accounts,settings,backups,reminders,push,suggestions),Library.Json):Results.NotFound());
 app.MapGet("/api/state",(HttpContext c)=>Admin(c)?Results.Json(store.AdminRead(),Library.Json):Results.NotFound());
 app.MapPost("/api/action",(ActionRequest req,HttpContext c)=>Admin(c)?(req.Action=="requestBook"?Results.BadRequest(new{error="Use the shared catalog to submit requests."}):Results.Json(store.AdminApply(req),Library.Json)):Results.NotFound());
 app.MapGet("/api/receipts/{copyId}",(string copyId,HttpContext c)=>Admin(c)?Results.Json(BorrowingReceipt.Create(store.Read().State,copyId)):Results.NotFound());
@@ -222,6 +227,7 @@ CompanionEndpoints.Map(app,settings,store,Admin,Mobile);
 PushEndpoints.Map(app,settings,Admin);
 app.Use(async(c,next)=>{await next();if(c.Request.Method!="GET"||c.Response.StatusCode!=200||c.Connection.LocalPort!=settings.CatalogPort||c.Request.Headers["DNT"]=="1"||c.Request.Headers["Sec-GPC"]=="1")return;var path=c.Request.Path.Value??"";var insights=c.RequestServices.GetRequiredService<LibraryInsights>();try{var catalog=System.Text.RegularExpressions.Regex.IsMatch(path,@"^/s/[^/]+/$");if(path=="/"||path=="/account/"||catalog)insights.Record("visits");if(catalog)insights.Record("catalogViews");}catch(IOException){}catch(UnauthorizedAccessException){} });
 app.MapGet("/robots.txt",(HttpContext c)=>c.Connection.LocalPort==settings.CatalogPort?Results.Text("User-agent: *\nDisallow: /\n"):Results.NotFound());
+app.MapPost("/s/{token}/suggestions",(string token,PurchaseSuggestionInput input,HttpContext c,Sharing sharing,PurchaseSuggestions suggestions)=>c.Connection.LocalPort==settings.CatalogPort&&sharing.Allowed(token)?Results.Json(suggestions.Submit(input)):Results.NotFound()).RequireRateLimiting("book-requests");
 app.MapPost("/s/{token}/requests",(string token,PublicBookRequest input,HttpContext c,Sharing sharing)=>{
  if(c.Connection.LocalPort!=settings.CatalogPort||!sharing.Allowed(token))return Results.NotFound();
  return Results.Json(store.SubmitRequest(input),Library.Json);

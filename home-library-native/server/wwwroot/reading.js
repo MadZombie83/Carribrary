@@ -1,3 +1,4 @@
+import {mountPurchaseSuggestions} from '/account/purchase-suggestions.js';
 import {progressMarkup,pageFields,statsMarkup,readingDetails,goalDialog} from './reading-features.js';
 import {personalVault} from './private-vault.js';
 import {mountHistoryControls} from './history-controls.js';
@@ -9,6 +10,7 @@ const accountMode=document.body.dataset.account==='true',token=location.hash.sli
 // Catalog controls stay available after sign-in; personal reading remains separate.
 const catalogControls=document.createElement('div');catalogControls.id='account-catalog-controls';catalogControls.className='toolbar';catalogControls.setAttribute('aria-label','Catalog filters');catalogControls.innerHTML='<label>Collection<select id="catalog-collection"><option value="">All collections</option></select></label><label>Sort by<select id="catalog-sort"><option value="title">Title</option><option value="author">Author</option><option value="series">Series</option><option value="id">Catalog number</option></select></label><label>Per page<select id="catalog-size"><option>10</option><option>25</option><option>50</option></select></label>';
 $('#search').closest('.toolbar').after(catalogControls);
+if(accountMode){const suggest=document.createElement('button');suggest.type='button';suggest.id='suggest-purchase';suggest.className='secondary';suggest.textContent='Suggest a book or series to buy';catalogControls.append(suggest);mountPurchaseSuggestions(suggest,'/account/suggestions');}
 const collator=new Intl.Collator(undefined,{numeric:true,sensitivity:'base'});
 for(const select of catalogControls.querySelectorAll('select'))select.onchange=()=>{page=1;render();};
 function syncCatalogControls(){

@@ -6,6 +6,7 @@ void Throws(Action action,string text){try{action();throw new Exception("Expecte
 JsonElement Input(object value)=>JsonSerializer.SerializeToElement(value,Library.Json);
 try{
  AdminNotificationTests.Run();
+ PurchaseSuggestionTests.Run(Path.Combine(directory,"suggestions"),protection);
  if(args.Contains("--notifications-only"))return;
  if(args.Contains("--portable-only")){await PortableBackupTests.Run(Path.Combine(directory,"portable-backups-test"));return;}
  if(args.Contains("--complete-recovery-only")){await CompleteRecoveryTests.Run(Path.Combine(directory,"complete-recovery"));return;}

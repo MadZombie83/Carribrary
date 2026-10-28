@@ -23,7 +23,7 @@ import java.net.URL
  Row{Text("Books to buy",style=MaterialTheme.typography.headlineSmall,modifier=Modifier.weight(1f));TextButton(enabled=!busy,onClick=onClose){Text("Close")}}
  Text("Private household acquisition wishlist. No copy number is assigned until you own the book.")
  Column(Modifier.weight(1f).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){
- if(edit==null){Button(enabled=!busy,onClick={edit=JSONObject();results=null;note=""}){Text("Scan / add a book")};if(items.isEmpty())Text("Your wishlist is empty.")
+ if(edit==null){PurchaseSuggestionReview(api);HorizontalDivider();Button(enabled=!busy,onClick={edit=JSONObject();results=null;note=""}){Text("Scan / add a book")};if(items.isEmpty())Text("Your wishlist is empty.")
  items.sortedBy{it.optString("title").lowercase()}.forEach{x->key(x.optString("id")){Card(Modifier.fillMaxWidth()){Column(Modifier.padding(12.dp)){Row(horizontalArrangement=Arrangement.spacedBy(10.dp)){BookCover(x);Column{Text(x.optString("title"),style=MaterialTheme.typography.titleMedium);Text(x.optString("author"));Text("ISBN "+x.optString("isbn"))}};if(x.optString("notes").isNotBlank())Text(x.optString("notes"));TextButton(enabled=!busy,onClick={edit=JSONObject(x.toString());results=null;note=""}){Text("Edit")};Button(enabled=!busy,onClick={acquire=x;note=""}){Text("Acquired — add to library")};TextButton(enabled=!busy,onClick={remove=x}){Text("Remove from wishlist")}}}}}
  }else{
  OutlinedButton(enabled=!busy,onClick={scan=true}){Text("Scan ISBN barcode")}

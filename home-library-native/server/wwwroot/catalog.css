@@ -9,3 +9,5 @@ header #banner-subtitle{overflow-wrap:anywhere;}
 [hidden]{display:none!important;}
 
 .google-credit{display:flex;align-items:center;gap:.5rem;font-size:.75rem;width:fit-content;padding:.3rem 0;line-height:1.4}.google-credit img{width:62px;height:30px;object-fit:contain;background:white;box-sizing:content-box;padding:4px;border-radius:3px}.google-credit span{text-decoration:underline}
+
+.optional-account-info{border:1px solid var(--line);background:var(--surface,#fff);border-radius:16px;padding:1.25rem;margin:1.25rem 0}.optional-account-info h2{margin-top:0}.optional-account-info p{max-width:70ch;line-height:1.6;}

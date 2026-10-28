@@ -18,7 +18,7 @@ export const settingsTools=[
  ['manage-collections','books-organization','Collections','Organize books without separating household borrowers.','book'],
  ['copy-labels','books-organization','Print copy labels','Optional labels for individual physical copies.','book'],
  ['copy-numbering','books-organization','Copy numbering','Choose gap filling or the next catalog number.','settings'],
- ['books-to-buy','books-organization','Books to buy','Manage the private acquisition wishlist.','book'],
+ ['books-to-buy','books-organization','Books to buy','Manage acquisition plans and review reader purchase suggestions.','book'],
  ['catalog-batch','books-organization','Batch add / CSV import','Queue ISBN scans or map a CSV export, review duplicates and save together.','book'],
  ['renewals','borrowing-reminders','Borrower renewals','Review extension requests and set renewal policies.','clock'],
  ['bulk-edit','books-organization','Bulk catalog editing','Select copies in Catalog, then review changes together.','book'],
