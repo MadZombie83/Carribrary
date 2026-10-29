@@ -25,10 +25,11 @@ var data=Environment.GetEnvironmentVariable("HOME_LIBRARY_DATA")??settings.DataD
 if(string.IsNullOrWhiteSpace(data))data=OperatingSystem.IsWindows()?Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),"HomeLibraryNative","data"):Path.Combine(AppContext.BaseDirectory,"data");
 data=Path.GetFullPath(data);Directory.CreateDirectory(data);
 if(File.Exists(Path.Combine(data,CompleteRecovery.ReviewMarker))){settings.RecoveryReviewRequired=true;settings.EnableDiscovery=false;settings.PublicCatalogOrigin="";}
+PublicConnection.ApplyOrigin(settings,data);
 if(OperatingSystem.IsLinux())File.SetUnixFileMode(data,UnixFileMode.UserRead|UnixFileMode.UserWrite|UnixFileMode.UserExecute);
 if(args.Contains("--stop-desktop")){if(!DesktopSession.IsFlatpak)throw new LibraryError("Desktop shutdown is only available inside the Carribrary Flatpak.");await DesktopSession.Stop(settings.AdminPort);return;}
 using var desktopLock=args.Contains("--desktop")?DesktopSession.Acquire(data):null;
-if(args.Contains("--desktop")&&desktopLock==null){DesktopSession.Open($"http://localhost:{settings.AdminPort}");return;}
+if(args.Contains("--desktop")&&desktopLock==null){DesktopSession.Open($"http://localhost:{settings.AdminPort}/"+(args.Contains("--public-sharing")?"?public-setup=1":""));return;}
 if(new[]{settings.AdminPort,settings.PhonePort,settings.CatalogPort,settings.DiscoveryPort}.Any(p=>p<1||p>65535)||new[]{settings.AdminPort,settings.PhonePort,settings.CatalogPort}.Distinct().Count()!=3)throw new LibraryError("Invalid or overlapping ports.");
 var protection=builder.Services.AddDataProtection().SetApplicationName("HomeLibrary.Native.v1").PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(data,"keyring")));
 if(OperatingSystem.IsWindows())protection.ProtectKeysWithDpapi(true);
@@ -49,6 +50,10 @@ builder.Services.AddSingleton(sp=>new PurchaseSuggestions(data,sp.GetRequiredSer
 builder.Services.AddSingleton(sp=>new BorrowerVault(data));
 builder.Services.AddSingleton(sp=>new Store(data,sp.GetRequiredService<IDataProtectionProvider>()));
 builder.Services.AddSingleton(sp=>new Identity(data,sp.GetRequiredService<IDataProtectionProvider>(),args.Contains("--prepare-windows-identity")));builder.Services.AddSingleton(settings);
+builder.Services.AddHttpClient("public-connection",client=>client.Timeout=TimeSpan.FromMinutes(4)).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=true,UseCookies=false});
+builder.Services.AddHttpClient("public-connection-private",client=>client.Timeout=TimeSpan.FromSeconds(15)).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false,UseCookies=false});
+builder.Services.AddSingleton(sp=>new PublicConnection(data,settings,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<IHttpClientFactory>().CreateClient("public-connection"),sp.GetRequiredService<IHttpClientFactory>().CreateClient("public-connection-private")));
+builder.Services.AddHostedService<PublicConnectionWorker>();
 builder.Services.AddSingleton<IReminderSender,SmtpReminderSender>();
 builder.Services.AddSingleton(sp=>new Reminders(data,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<IReminderSender>()));if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService<ReminderWorker>();builder.Services.AddSingleton<AccountRecovery>();if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService(sp=>sp.GetRequiredService<AccountRecovery>());
 builder.Services.AddSingleton(sp=>new CoverSettings(data,sp.GetRequiredService<IDataProtectionProvider>(),builder.Configuration["GoogleBooks:ApiKey"]??""));
@@ -87,7 +92,8 @@ app.UseWhen(c=>c.Connection.LocalPort==settings.CatalogPort,branch=>{var forward
 app.UseRateLimiter();
 var adminOrigin=$"http://localhost:{settings.AdminPort}";var allowedHosts=new HashSet<string>{"localhost", "127.0.0.1"};
 app.Use(async(context,next)=>{
- context.Response.Headers.CacheControl="no-store";context.Response.Headers["X-Content-Type-Options"]="nosniff";context.Response.Headers["Referrer-Policy"]="no-referrer";
+ context.Response.Headers.CacheControl="no-store";
+ if(context.Connection.LocalPort==settings.CatalogPort){var marker=app.Services.GetRequiredService<PublicConnection>().CheckId;if(marker!="")context.Response.Headers["X-Carribrary-Public-Check"]=marker;}context.Response.Headers["X-Content-Type-Options"]="nosniff";context.Response.Headers["Referrer-Policy"]="no-referrer";
  try{
   if(context.Connection.LocalPort==settings.AdminPort){
    if(!allowedHosts.Contains(context.Request.Host.Host)||context.Request.Host.Port!=settings.AdminPort){context.Response.StatusCode=403;return;}
@@ -108,7 +114,7 @@ app.Use(async(context,next)=>{
    context.Items["Carribrary.AdminAuthorized"]=signedIn||paired;
    if(!authenticationRoute&&!loginAsset&&!signedIn&&!paired){
     if(path.StartsWith("/api/",StringComparison.Ordinal)){context.Response.StatusCode=401;await context.Response.WriteAsJsonAsync(new{error="Sign in as the local administrator."});}
-    else context.Response.Redirect("/login"+(context.Request.Query["stop"]=="1"?"?stop=1":""));
+    else context.Response.Redirect("/login"+(context.Request.Query["stop"]=="1"?"?stop=1":context.Request.Query["public-setup"]=="1"?"?public-setup=1":""));
     return;
    }
   }else if(context.Connection.LocalPort==settings.CatalogPort){
@@ -174,6 +180,10 @@ app.MapGet("/api/devices",(HttpContext c)=>Admin(c)?Results.Json(identityHolder.
 app.MapPost("/api/devices/pair",(JsonElement req,HttpContext c)=>Admin(c)?Results.Json(identityHolder.StartPair(req.GetProperty("serverUrl").GetString()??"")):Results.NotFound());
 app.MapPost("/api/devices/revoke",(JsonElement req,HttpContext c)=>{if(!Admin(c))return Results.NotFound();identityHolder.Revoke(req.GetProperty("deviceId").GetString()??"");return Results.Ok(new{revoked=true});});
 app.MapPost("/api/desktop/stop",(HttpContext c)=>{if(!Admin(c)||!DesktopSession.IsFlatpak)return Results.NotFound();_ = Task.Run(async()=>{await Task.Delay(300);app.Lifetime.StopApplication();});return Results.Ok(new{stopping=true});});
+bool ConnectionAdmin(HttpContext c)=>Admin(c)&&c.Connection.LocalPort==settings.AdminPort&&localAdministrators.Authorized(c.Request.Cookies[LocalAdminEndpoints.Cookie(settings)]);
+app.MapGet("/api/public-connection",(HttpContext c,PublicConnection connection)=>ConnectionAdmin(c)?Results.Json(connection.Status(),Library.Json):Results.NotFound());
+app.MapPost("/api/public-connection",async(PublicConnectionInput input,HttpContext c,PublicConnection connection)=>{if(!ConnectionAdmin(c))return Results.NotFound();await connection.Configure(input,c.RequestAborted);return Results.Json(connection.Status(),Library.Json);});
+app.MapPost("/api/public-connection/check",async(HttpContext c,PublicConnection connection)=>{if(!ConnectionAdmin(c))return Results.NotFound();await connection.CheckHttps(c.RequestAborted);return Results.Json(connection.Status(),Library.Json);});
 app.MapGet("/api/setup",(HttpContext c)=>Admin(c)?Results.Json(SetupStatus.Read(settings,data,store,identityHolder)):Results.NotFound());
 app.MapPost("/api/setup/dns",async(HttpContext c)=>Admin(c)?Results.Json(await SetupStatus.Dns(settings,c.RequestAborted)):Results.NotFound());
 app.MapGet("/mobile/setup",(HttpContext c)=>Mobile(c)?Results.Json(SetupStatus.Read(settings,data,store,identityHolder)):Results.NotFound());
@@ -241,7 +251,7 @@ app.MapMethods("/s/{token}/{**leaf}",new[]{"GET","HEAD"},async(string token,stri
  var filename=leaf switch{null or ""=>"catalog.html","catalog.js"=>"catalog.js","book-about.js"=>"book-about.js","catalog.css"=>"catalog.css","favicon.ico"=>"favicon.ico","powered-by-google.png"=>"powered-by-google.png","cover-credit.js"=>"cover-credit.js",_=>null};
  return filename==null?Results.NotFound():Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",filename),filename.EndsWith(".html")?"text/html":filename.EndsWith(".js")?"text/javascript":filename.EndsWith(".ico")?"image/x-icon":filename.EndsWith(".png")?"image/png":"text/css");
 }).RequireRateLimiting("personal-reading");
-var files=new HashSet<string>{"library-artwork.js","library-artwork.css","library-insights.js","appearance.js","portable-backups.js","backup-verification.js","catalog-import.js","renewals.js","theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-features.js","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
+var files=new HashSet<string>{"library-artwork.js","library-artwork.css","public-connection.js","library-insights.js","appearance.js","portable-backups.js","backup-verification.js","catalog-import.js","renewals.js","theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-features.js","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
 app.MapGet("/{**path}",(string? path,HttpContext c)=>{
  if(c.Connection.LocalPort==settings.CatalogPort&&(string.IsNullOrEmpty(path)||path is "welcome.css" or "welcome.js")){
   c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
@@ -261,7 +271,7 @@ app.MapGet("/{**path}",(string? path,HttpContext c)=>{
  return Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file),file.EndsWith(".html")?"text/html":file.EndsWith(".js")?"text/javascript":file.EndsWith(".css")?"text/css":file.EndsWith(".ico")?"image/x-icon":file.EndsWith(".svg")?"image/svg+xml":file.EndsWith(".png")?"image/png":"application/octet-stream");
 });
 Console.WriteLine($"Admin: {adminOrigin} | Phone HTTPS: {settings.PhonePort} | Data: {data}");
-if(args.Contains("--desktop")&&!args.Contains("--no-browser"))app.Lifetime.ApplicationStarted.Register(()=>{_ = Task.Run(()=>DesktopSession.Open(adminOrigin));});
+if(args.Contains("--desktop")&&!args.Contains("--no-browser"))app.Lifetime.ApplicationStarted.Register(()=>{_ = Task.Run(()=>DesktopSession.Open(adminOrigin+(args.Contains("--public-sharing")?"/?public-setup=1":"")));});
 app.Run();
 public partial class Program{static Identity? identityHolder;}
 public sealed class Settings{public bool RecoveryRehearsal{get;set;}public bool RecoveryReviewRequired{get;set;}

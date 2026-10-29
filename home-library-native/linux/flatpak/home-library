@@ -9,4 +9,7 @@ fi
 if [ "${1:-}" = "--stop" ]; then
     exec /app/lib/home-library/HomeLibrary.Server --stop-desktop
 fi
+if [ "${1:-}" = "--public-sharing" ]; then
+    exec /app/lib/home-library/HomeLibrary.Server --desktop --public-sharing
+fi
 exec /app/lib/home-library/HomeLibrary.Server --desktop

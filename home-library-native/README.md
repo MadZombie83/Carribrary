@@ -1,6 +1,8 @@
-# Carribrary 2.0.51 — shared artwork and landing-page cleanup
+# Carribrary 2.0.52 — guided Linux public sharing
 
-**2.0.51 current source update:** Removes the public root install button and its script; Account → This device installation is retained. Saved theme artwork follows borrower pages, librarian PWA and Android banners, including clearing on plain themes. [Release notes](distribution/RELEASE-2.0.51.md). Formats6/2 unchanged; source only, owner builds packages.
+**2.0.52 current source update:** Local GUI public-sharing setup for Flatpak/Pi, verified optional Caddy download, protected optional DuckDNS updater and explicit router checks. No terminal setup on Linux; single-server scope. Windows keeps its existing Connection setup. [Release notes](distribution/RELEASE-2.0.52.md). Formats6/2; source only, owner builds packages.
+
+**2.0.51 earlier source update:** Removes the public root install button and its script; Account → This device installation is retained. Saved theme artwork follows borrower pages, librarian PWA and Android banners, including clearing on plain themes. [Release notes](distribution/RELEASE-2.0.51.md). Formats6/2 unchanged; source only, owner builds packages.
 
 **2.0.50 earlier source update:** Shared-link guests and approved borrowers can suggest books or series to acquire, without an ISBN requirement. Admins review suggestions in Books to buy and the notification bell across server/PWA/Android. Shared-catalog and account pages explain that sign-up is optional and adds personal TBR/reading tracking. [Release notes](distribution/RELEASE-2.0.50.md). Library/credential formats remain6/2; source only, owner builds packages.
 

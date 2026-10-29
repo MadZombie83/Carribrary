@@ -1,4 +1,13 @@
-# Carribrary for Linux and Raspberry Pi — 2.0.48 preview
+# Carribrary for Linux and Raspberry Pi — 2.0.52 preview
+
+## Current public-sharing setup (one server per home)
+
+Use **Carribrary Public Sharing Setup** in the application menu, or sign in locally and open **Settings & Tools → System & Advanced → Public sharing setup**. Enter your own DuckDNS hostname, optionally save its token, enable managed HTTPS and approve the verified Caddy download. Save, stop/reopen the Flatpak (or restart the Pi service through its desktop service manager). No separately installed Caddy or terminal commands are needed.
+
+Router GUI: reserve this computer’s LAN address, then forward **TCP 80 → 8080** and **TCP 443 → 8443** to that computer. If a Linux firewall is active, allow destination ports8080/8443 through its GUI. The public address remains ordinary HTTPS without a port suffix. Native paired Android remote access stays separate on its configured port (normally7443). Never forward4173/4174/7445. Check HTTPS in the tool, then test using cellular data. Keep Flatpak running and the computer awake; Pi normally runs as a boot service.
+
+This tool does not set up two servers behind an existing proxy or configure arbitrary routers/ISP carrier-grade NAT. It does not change existing external Caddy configurations. The optional Caddy program/certificate directory is excluded from complete backups; repair the download and recheck access after restoration. Restored-library review pauses it. Full current instructions are in synchronized Help. The following older/manual instructions are for advanced externally managed deployments; their 80/443-to-80/443 rules do not apply to the managed GUI setup above.
+
 
 LOCAL ADMINISTRATOR SIGN-IN AND SEPARATE ACCOUNTS
 
@@ -94,7 +103,7 @@ If you use a Linux firewall, allow TCP 7443 for paired phones and local-network 
 Public sharing requires browser-trusted HTTPS, separate from the private native phone endpoint. On Linux/Pi:
 
 1. Install Caddy using its official instructions: https://caddyserver.com/docs/install .
-2. Copy the supplied **Caddyfile.example** to Caddy's configuration, replacing the hostname with your DuckDNS hostname. Its routes proxy only /s/*, /reading/*, /account/* and /robots.txt to loopback port 4174.
+2. Copy the supplied **Caddyfile.example** to Caddy's configuration, replacing the hostname with your DuckDNS hostname. It proxies the public listener on loopback port4174, including the welcome, borrower and companion pages; Carribrary itself limits the allowed public routes.
 3. Set **Library__PublicCatalogOrigin=https://YOUR_NAME.duckdns.org** in the Pi's environment file and restart Carribrary. With Flatpak, configure a persistent Flatpak environment override for this setting:
 
 ```sh

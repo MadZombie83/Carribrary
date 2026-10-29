@@ -24,6 +24,8 @@ if only in ['all','flatpak']:
  recovery=flat/'files/share/applications/com.household.HomeLibrary.Recovery.desktop'
  recovery.parent.mkdir(parents=True,exist_ok=True)
  recovery.write_text('[Desktop Entry]\nType=Application\nName=Carribrary Complete Backup Recovery\nComment=Verify, test or restore a complete backup\nExec=home-library --recovery %u\nIcon=com.household.HomeLibrary\nCategories=Office;Database;\nTerminal=false\nMimeType=x-scheme-handler/carribrary-recovery;\n')
+ public=flat/'files/share/applications/com.household.HomeLibrary.PublicSharing.desktop'
+ public.write_text('[Desktop Entry]\nType=Application\nName=Carribrary Public Sharing Setup\nComment=Guided hostname, HTTPS and router setup\nExec=home-library --public-sharing\nIcon=com.household.HomeLibrary\nCategories=Office;Network;\nTerminal=false\n')
  copy(root/'linux/flatpak/com.household.HomeLibrary.desktop',flat/f'files/share/applications/{app_id}.desktop')
  copy(root/'linux/flatpak/com.household.HomeLibrary.metainfo.xml',flat/f'files/share/metainfo/{app_id}.metainfo.xml')
  icon(flat/f'files/share/icons/hicolor/512x512/apps/{app_id}.png')
@@ -43,6 +45,8 @@ if only in ['all','pi']:
  copy(root/'linux/pi/home-library-recovery',deb/'usr/bin/home-library-recovery');(deb/'usr/bin/home-library-recovery').chmod(0o755)
  recovery=deb/'usr/share/applications/com.household.HomeLibrary.Recovery.desktop';recovery.parent.mkdir(parents=True,exist_ok=True)
  recovery.write_text('[Desktop Entry]\nType=Application\nName=Carribrary Complete Backup Recovery\nComment=Verify, test or restore a complete backup\nExec=home-library-recovery %u\nIcon=com.household.HomeLibrary\nCategories=Office;Database;\nTerminal=true\nMimeType=x-scheme-handler/carribrary-recovery;\n')
+ public=deb/'usr/share/applications/com.household.HomeLibrary.PublicSharing.desktop'
+ public.write_text('[Desktop Entry]\nType=Application\nName=Carribrary Public Sharing Setup\nExec=xdg-open http://localhost:4173/?public-setup=1\nIcon=com.household.HomeLibrary\nCategories=Office;Network;\nTerminal=false\n')
  copy(root/'linux/pi/home-library.service',deb/'usr/lib/systemd/system/home-library.service')
  copy(root/'linux/pi/home-library.env',deb/'etc/home-library/home-library.env')
  (control/'conffiles').write_text('/etc/home-library/home-library.env\n')

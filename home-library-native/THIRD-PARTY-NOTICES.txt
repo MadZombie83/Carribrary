@@ -23,3 +23,5 @@ https://developers.google.com/books/branding
 ZXing Browser 0.2.1 (MIT), bundled barcode decoder; license in server/wwwroot/vendor/ZXING-LICENSE.txt. ZXing Library decoder: Apache-2.0, see vendor/ZXING-LIBRARY-LICENSE.txt. WebPush 1.0.13 (MPL-2.0; unmodified source supplied in licenses/WEBPUSH-SOURCE-1.0.13.zip), Portable.BouncyCastle 1.9.0 (Bouncy Castle/MIT-style license): included server runtime dependencies; license notices in licenses/.
 
 The browser decoder also bundles ts-custom-error (MIT); its license is in server/wwwroot/vendor/TS-CUSTOM-ERROR-LICENSE.txt.
+
+Optional managed public HTTPS: Caddy 2.11.7 (Apache-2.0), https://github.com/caddyserver/caddy. Downloaded directly from the official release only after local administrator consent, verified against the pinned release-asset SHA256. Its LICENSE is retained beside the downloaded program in the private public-https folder. Caddy is not included in this source archive.

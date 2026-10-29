@@ -307,3 +307,11 @@
 @media(max-width:900px){.iphone-companion .admin-mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))}.iphone-companion .admin-mobile-nav .companion-nav-extra{display:flex!important}.iphone-companion .admin-mobile-nav [data-view=borrowers]{display:none!important}}
 
 #catalog-batch .settings-card{display:block;margin:.75rem 0}#catalog-batch label,#csv-mapping label{display:block;margin:.5rem 0}#catalog-batch input[type=checkbox]{width:auto;min-height:auto;margin-right:.5rem}#catalog-batch details input,#csv-mapping select{max-width:100%}#catalog-batch summary{cursor:pointer;font-weight:600}#queue-rows{overflow-wrap:anywhere}
+/* Keep the guided connection steps compact; empty status/error regions reserve no space. */
+#public-connection-form .form-error:empty,#public-connection-form #connection-result:empty{display:none}
+#public-connection-form [data-connection-panel]{display:grid;gap:.8rem}
+#public-connection-form [data-connection-panel]>:is(h3,p){margin:.2rem 0}
+#public-connection-form [data-connection-panel] label{display:grid;gap:.35rem}
+#public-connection-form [data-connection-panel] [type=submit]{justify-self:start}
+#public-connection-form table{width:100%;border-collapse:collapse;text-align:left}
+#public-connection-form :is(th,td){padding:.65rem;border-bottom:1px solid var(--line)}

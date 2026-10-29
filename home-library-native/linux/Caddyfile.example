@@ -1,11 +1,6 @@
-# Replace books.example.duckdns.org with your own public catalog hostname.
+# Advanced externally managed proxy only; the GUI generates its own high-port configuration.
+# Replace this hostname. Forward router 80/443 to this separately managed Caddy host.
 books.example.duckdns.org {
- encode zstd gzip
- @catalog path /s/* /reading/* /account/* /companion/* /robots.txt
- handle @catalog {
-  reverse_proxy 127.0.0.1:4174
- }
- handle {
-  respond "Not found" 404
- }
+    reverse_proxy 127.0.0.1:4174
 }
+# The public listener enforces its route allowlist. Never proxy private admin4173.

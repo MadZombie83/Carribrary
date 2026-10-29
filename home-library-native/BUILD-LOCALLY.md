@@ -141,3 +141,5 @@ Current source 2.0.50: reader purchase suggestions and optional-account guidance
 This source also consolidates Library identity and Theme & artwork, adds portable weekly complete backups retaining four, opt-in library analytics and reading progress/rereads/goals/quotes. Build after Help synchronization; run tests before distributing packages. Portable backups still need an off-device copy.
 
 Current source 2.0.51: build server packages and Android for themed artwork banners. Root welcome install control removed; Account installation remains. Formats6/2, compatible recovery47–51; no installers built here. See distribution/RELEASE-2.0.51.md.
+
+Current source 2.0.52: build Linux packages for the managed public-sharing GUI and Windows/Android packages for synchronized Help/version metadata. Caddy is downloaded only after local GUI consent at runtime; it is not bundled in source. Formats6/2; recovery47–52. No release installers were built.

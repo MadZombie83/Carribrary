@@ -6,7 +6,7 @@ try {
     . (Join-Path $Root 'Repair-DataPermissions.ps1')
     . (Join-Path $Root 'Recovery.Core.ps1')
     $Release=Get-Content -LiteralPath (Join-Path $Root 'release-files.json') -Raw | ConvertFrom-Json
-    if ($Release.version -ne '2.0.51-preview' -or @($Release.files).Count -lt 2 -or !($Release.files.path -contains 'server/HomeLibrary.Server.dll') -or !($Release.files.path -contains 'tray/HomeLibrary.Tray.dll')) { throw 'The installed package release could not be verified.' }
+    if ($Release.version -ne '2.0.52-preview' -or @($Release.files).Count -lt 2 -or !($Release.files.path -contains 'server/HomeLibrary.Server.dll') -or !($Release.files.path -contains 'tray/HomeLibrary.Tray.dll')) { throw 'The installed package release could not be verified.' }
     foreach ($File in $Release.files) {
         $Relative=$File.path.Replace('\','/')
         if ($Relative -notmatch '^(server|tray)/' -or $Relative.Contains('..') -or $Relative.Contains(':') -or (Get-CarribraryHash (Join-Path $Root $Relative)) -ne $File.sha256) { throw 'The program files did not pass package verification. Recovery will be offered.' }

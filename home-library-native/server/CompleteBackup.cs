@@ -57,7 +57,7 @@ public sealed class CompleteBackup(string data,Settings settings,SnapshotGate ga
  public async Task SaveScheduled(string password,string destination,CancellationToken stop){var download=(Download)await Create(password,stop);try{await download.SaveNew(destination,stop);}finally{download.Dispose();}}
  static IEnumerable<string> Files(string root){
   foreach(var path in Directory.EnumerateFileSystemEntries(root)){
-   var name=Path.GetFileName(path);if(name=="backups"||name=="portable-backups"||name=="recovery"||name.StartsWith(".complete-backup-",StringComparison.Ordinal)||name.EndsWith(".lock")||name.EndsWith(".tmp")||name.EndsWith(".sqlite-wal")||name.EndsWith(".sqlite-shm")||name.EndsWith(".carribrary-backup",StringComparison.OrdinalIgnoreCase)||name.EndsWith(".hlbackup",StringComparison.OrdinalIgnoreCase))continue;
+   var name=Path.GetFileName(path);if(name=="public-https"||name=="backups"||name=="portable-backups"||name=="recovery"||name.StartsWith(".complete-backup-",StringComparison.Ordinal)||name.EndsWith(".lock")||name.EndsWith(".tmp")||name.EndsWith(".sqlite-wal")||name.EndsWith(".sqlite-shm")||name.EndsWith(".carribrary-backup",StringComparison.OrdinalIgnoreCase)||name.EndsWith(".hlbackup",StringComparison.OrdinalIgnoreCase))continue;
    RejectLink(path);if(Directory.Exists(path)){foreach(var file in Files(path))yield return file;}else yield return path;
   }
  }

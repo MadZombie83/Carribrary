@@ -5,6 +5,11 @@ void Check(bool value,string name){if(!value)throw new Exception("FAILED: "+name
 void Throws(Action action,string text){try{action();throw new Exception("Expected failure: "+text);}catch(LibraryError e){Check(e.Message.Contains(text,StringComparison.OrdinalIgnoreCase),text);}}
 JsonElement Input(object value)=>JsonSerializer.SerializeToElement(value,Library.Json);
 try{
+ if(args.Contains("--public-install-only")){
+  using var client=new HttpClient{Timeout=TimeSpan.FromMinutes(4)};var temp=Path.Combine(directory,"proxy-install");Directory.CreateDirectory(temp);var connection=new PublicConnection(temp,new Settings(),protection,client);await connection.Configure(new(true,"proxy-check.example.org",AllowDownload:true),default);var config=Path.Combine(temp,"public-https","Caddyfile");File.WriteAllText(config,PublicConnection.Render("proxy-check.example.org",4174));var info=new System.Diagnostics.ProcessStartInfo(Path.Combine(temp,"public-https","caddy")){UseShellExecute=false};info.Environment["XDG_DATA_HOME"]=Path.Combine(temp,"isolated-caddy-data");info.Environment["XDG_CONFIG_HOME"]=Path.Combine(temp,"isolated-caddy-config");foreach(var a in new[]{"validate","--config",config,"--adapter","caddyfile"})info.ArgumentList.Add(a);using var process=System.Diagnostics.Process.Start(info)!;await process.WaitForExitAsync();Check(process.ExitCode==0,"actual pinned Caddy install, archive extraction and generated configuration validation");return;
+ }
+ await PublicConnectionTests.Run(Path.Combine(directory,"public-connection-tests"),protection);
+ if(args.Contains("--public-connection-only"))return;
  AdminNotificationTests.Run();
  PurchaseSuggestionTests.Run(Path.Combine(directory,"suggestions"),protection);
  if(args.Contains("--notifications-only"))return;
