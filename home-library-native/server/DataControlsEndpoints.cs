@@ -11,11 +11,11 @@ public static class DataControlsEndpoints {
    // Do not return guest-request candidates: matching contacts do not prove ownership.
    return Results.Json(new{preview.Username,preview.PreviewToken,preview.ReadingEntries,preview.Requests,preview.ReturnedLoans,preview.ActiveLoans,preview.Holds},Library.Json);
   }).RequireRateLimiting("account-auth");
-  app.MapPost("/account/delete",async(SelfDeletion input,HttpContext c,BorrowerAccounts accounts,ReadingAccess access,Reminders reminders,PushNotifications push,BorrowerVault vault)=>{
+  app.MapPost("/account/delete",async(SelfDeletion input,HttpContext c,BorrowerAccounts accounts,ReadingAccess access,Reminders reminders,PushNotifications push,BorrowerVault vault,PatronCards cards)=>{
    if(!Public(c))return Results.NotFound();var a=AccountEndpoints.Account(c,accounts);accounts.VerifyPassword(a.Id,input.Password);
    using var paused=await reminders.Pause(c.RequestAborted);
    var result=JsonSerializer.SerializeToElement(vault.AfterDeletion(accounts.Delete(new(a.Id,input.DeleteInformation,Confirmation:input.Confirmation,PreviewToken:input.PreviewToken),store,access,reminders),a.Id,accounts),Library.Json);
-   push.RemoveOwner("borrower:"+a.Id);c.Response.Cookies.Delete("__Host-hl-reader",new CookieOptions{Path="/",Secure=true,HttpOnly=true,SameSite=SameSiteMode.Strict});
+   cards.PruneDeleted(store);push.RemoveOwner("borrower:"+a.Id);c.Response.Cookies.Delete("__Host-hl-reader",new CookieOptions{Path="/",Secure=true,HttpOnly=true,SameSite=SameSiteMode.Strict});
    // The admin deletion result includes a private snapshot. Never expose it here.
    return Results.Json(new{deleted=true,informationDeleted=input.DeleteInformation,warnings=result.GetProperty("warnings")},Library.Json);
   }).RequireRateLimiting("account-auth");

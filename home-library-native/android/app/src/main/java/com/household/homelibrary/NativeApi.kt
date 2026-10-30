@@ -46,7 +46,7 @@ class NativeApi(private val context:Context) {
  suspend fun browserAdmins(action:String?=null,input:JSONObject?=null)=withContext(Dispatchers.IO){currentRequest("/mobile/browser-admins"+(action?.let{"/"+it}?:""),input)}
  suspend fun receipt(copyId:String)=withContext(Dispatchers.IO){currentRequest("/mobile/receipts/"+android.net.Uri.encode(copyId))}
  suspend fun insights(range:String,input:JSONObject?=null)=withContext(Dispatchers.IO){require(range in listOf("7","30","90","all"));currentRequest("/mobile/insights"+(if(input==null)"?range=$range"else ""),input)}
- suspend fun tools(path:String,input:JSONObject?=null)=withContext(Dispatchers.IO){require(path in listOf("purchase-suggestions","backup/portable","backup/portable/run","reminders","reminders/test","setup","setup/dns","catalog-batch/csv","catalog-batch/preview"));currentRequest("/mobile/"+path,input)}
+ suspend fun tools(path:String,input:JSONObject?=null)=withContext(Dispatchers.IO){require(path in listOf("patron-cards","kiosks/pair","kiosks/revoke","purchase-suggestions","backup/portable","backup/portable/run","reminders","reminders/test","setup","setup/dns","catalog-batch/csv","catalog-batch/preview"));currentRequest("/mobile/"+path,input)}
  suspend fun accountAdmin(action:String?=null,input:JSONObject?=null)=withContext(Dispatchers.IO){
   if(action=="delete")check(!hasPending()){ "Resolve Retry pending change before deleting an account." }
   val result=currentRequest("/mobile/accounts"+(action?.let{"/"+it}?:""),input)

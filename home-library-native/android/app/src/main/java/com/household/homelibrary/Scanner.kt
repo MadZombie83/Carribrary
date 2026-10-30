@@ -50,7 +50,7 @@ import java.util.concurrent.atomic.AtomicBoolean
     detector.process(InputImage.fromMediaImage(image,proxy.imageInfo.rotationDegrees)).addOnSuccessListener{codes->
      if(kind=="batch-isbn"&&codes.isEmpty()&&System.currentTimeMillis()-batchSeen>900)batchCode=""
      if(!disposed.get())for(code in codes){val raw=code.rawValue?:continue;val normalized=raw.trim().uppercase().replace(" ","")
-      val value=when(kind){"pair"->raw.takeIf{it.startsWith("hl-pair:")};"isbn","batch-isbn"->normalized.takeIf{it.matches(Regex("[0-9]{9}[0-9X]|[0-9]{13}"))};else->normalized.takeIf{validCopyReference(it)||validCirculationISBN(it)||it.matches(Regex("BK-?[0-9]+"))}}
+      val value=when(kind){"pair"->raw.takeIf{it.startsWith("hl-pair:")};"patron"->raw.trim().takeIf{it.matches(Regex("carribrary:card:v1:[A-Za-z0-9_-]{43}"))};"isbn","batch-isbn"->normalized.takeIf{it.matches(Regex("[0-9]{9}[0-9X]|[0-9]{13}"))};else->normalized.takeIf{validCopyReference(it)||validCirculationISBN(it)||it.matches(Regex("BK-?[0-9]+"))}}
       if(value!=null&&kind=="batch-isbn"){batchSeen=System.currentTimeMillis();if(batchCode!=value){batchCode=value;scannedCount++;onRead(value);message="Queued #$scannedCount: $value. Move to the next book, or remove the barcode briefly before scanning another identical copy."};break}
       if(value!=null&&once.compareAndSet(false,true)){onRead(value);break}
      }
@@ -61,7 +61,7 @@ import java.util.concurrent.atomic.AtomicBoolean
   onDispose{preview.setOnTouchListener(null);current?.unbindAll();boundCamera=null}
  }
  Column(Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)){
-  Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text("Scan ${if(kind=="pair")"pairing QR" else if(kind=="isbn")"ISBN" else "ISBN or copy label"}",style=MaterialTheme.typography.titleLarge);TextButton(onClick=onClose){Text("Close")}}
+  Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.SpaceBetween){Text("Scan ${if(kind=="pair")"pairing QR" else if(kind=="patron")"library card" else if(kind=="isbn")"ISBN" else "ISBN or copy label"}",style=MaterialTheme.typography.titleLarge);TextButton(onClick=onClose){Text("Close")}}
   if(!permitted){Text("Camera images are processed on this phone to read barcodes and pairing QR codes. Google ML Kit reports scanner diagnostics. You can close this screen and enter codes manually.");Button(onClick={permission.launch(Manifest.permission.CAMERA)}){Text("Allow camera")}}
   else AndroidView(factory={preview},modifier=Modifier.fillMaxWidth().weight(1f),update={view->view.setOnTouchListener{_,event->if(event.action==MotionEvent.ACTION_UP){val point=view.meteringPointFactory.createPoint(event.x,event.y);boundCamera?.cameraControl?.startFocusAndMetering(FocusMeteringAction.Builder(point).setAutoCancelDuration(5,TimeUnit.SECONDS).build());view.performClick()};true}})
   Text("Tap the preview to focus. Keep the whole barcode sharp and well lit; move the book farther away if needed.")

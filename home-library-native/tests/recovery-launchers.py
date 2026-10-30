@@ -22,7 +22,7 @@ with tempfile.TemporaryDirectory(prefix='carribrary-layout-test-') as temp:
  flat=copy/'release/linux-packages/flatpak';pi=copy/'release/linux-packages/pi'
  for base in [flat/'files/share/applications',pi/'usr/share/applications']:
   p=configparser.ConfigParser(interpolation=None);p.read(base/'com.household.HomeLibrary.Recovery.desktop');assert 'recovery' in p['Desktop Entry']['Exec'];assert 'x-scheme-handler/carribrary-recovery;' in p['Desktop Entry']['MimeType']
- normal=configparser.ConfigParser(interpolation=None);normal.read(flat/'files/share/applications/com.household.HomeLibrary.desktop');assert normal['Desktop Entry']['Actions']=='Stop;Recovery;'
+ normal=configparser.ConfigParser(interpolation=None);normal.read(flat/'files/share/applications/com.household.HomeLibrary.desktop');assert normal['Desktop Entry']['Actions']=='Stop;Recovery;PublicSharing;'
  assert (pi/'usr/bin/home-library-recovery').stat().st_mode&0o111
  assert 'pkexec' in (pi/'DEBIAN/control').read_text()
  assert any('dpkg-deb' in c for c in calls) and any('build-bundle' in c for c in calls)

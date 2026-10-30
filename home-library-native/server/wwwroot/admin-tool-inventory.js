@@ -29,6 +29,8 @@ export const settingsTools=[
  ['lending-limits','borrowing-reminders','Lending limits','Set batch and per-borrower limits; returns stay unrestricted.','settings'],
  ['requests','borrowing-reminders','Book requests','Review requests without starting loans before handover.','requests'],
  ['push-overview','borrowing-reminders','PWA notification status','Review optional borrower reminders and admin request-notification delivery.','requests'],
+ ['self-service','borrowing-reminders','Borrower self-service & kiosks','Independent checkout/return permissions, pending receipt and restricted kiosk authorization.','swap'],
+ ['patron-cards','people-access','Library cards','Issue, print, replace/revoke cards and reset kiosk PINs. No online account required.','people'],
  ['reminders','borrowing-reminders','Automatic email reminders','Configure SMTP and consent-based due-date reminders.','clock'],
  ['accounts-button','people-access','Borrower accounts','Approve, block, relink or remove borrower sign-ins.','people'],
  ['dashboard-accounts','people-access','Dashboard administrators','Individual administrator passwords, recovery and sessions.','people'],

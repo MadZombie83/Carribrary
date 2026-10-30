@@ -1,5 +1,7 @@
 # Carribrary 2.0.52 — guided Linux public sharing
 
+**2.0.53 current source update:** Optional borrower self-checkout, pending physical-return reports, branded library cards/PINs and restricted browser kiosks, with native Android administration. All permissions default OFF. See [release notes](distribution/RELEASE-2.0.53.md) and [implementation report](distribution/SELF-SERVICE-IMPLEMENTATION-REPORT.md). Owner builds installers; physical kiosk/card acceptance remains. Library format 7; older program-only rollback is blocked.
+
 **2.0.52 current source update:** Local GUI public-sharing setup for Flatpak/Pi, verified optional Caddy download, protected optional DuckDNS updater and explicit router checks. No terminal setup on Linux; single-server scope. Windows keeps its existing Connection setup. [Release notes](distribution/RELEASE-2.0.52.md). Formats6/2; source only, owner builds packages.
 
 **2.0.51 earlier source update:** Removes the public root install button and its script; Account → This device installation is retained. Saved theme artwork follows borrower pages, librarian PWA and Android banners, including clearing on plain themes. [Release notes](distribution/RELEASE-2.0.51.md). Formats6/2 unchanged; source only, owner builds packages.

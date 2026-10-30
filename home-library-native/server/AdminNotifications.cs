@@ -9,6 +9,7 @@ public static class AdminNotifications {
   Add("accounts","Account approvals","Review new accounts and confirm their borrower links.",accounts.Count(a=>a.Status=="pending"),"accounts-button");
   Add("requests","Book requests","Review borrowing requests awaiting your decision.",s.Requests.Count(r=>r.Status=="pending"),"requests");
   var loans=s.Loans.Where(l=>l.ReturnedDate==null&&s.Books.Any(b=>b.Id==l.CopyId&&!b.Archived)).ToArray();
+  Add("pending-returns","Books awaiting receipt","Borrowers reported returns; confirm physical receipt before making copies available.",loans.Count(SelfService.Pending),"active-loans");
   Add("renewals","Renewal requests","Review requests for more time before changing due dates.",loans.Sum(l=>l.Renewals.Count(r=>r.Status=="pending")),"renewals");
   Add("holds","Holds awaiting handover","A hold is not a loan. Confirm when the borrower receives the book.",s.Holds.Count(h=>h.Stage!="pending"&&!loans.Any(l=>l.CopyId==h.CopyId)),"holds");
   Add("overdue","Overdue books","Review outstanding loans and contact borrowers if needed.",loans.Count(l=>l.DueDate!=""&&string.CompareOrdinal(l.DueDate,today)<0),"active-loans");

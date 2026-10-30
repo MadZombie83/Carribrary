@@ -12,6 +12,7 @@ public static class AccountRateLimits {
   void Add(string name,int count,TimeSpan window)=>options.AddPolicy(name,context=>RateLimitPartition.GetFixedWindowLimiter(context.Connection.RemoteIpAddress?.ToString()??"unknown",_=>new(){PermitLimit=count,Window=window,QueueLimit=0}));
   // Separate signup/reset budgets prevent those endpoints consuming the login budget.
   Add("local-admin-login",20,TimeSpan.FromMinutes(15));Add("local-admin-enroll",6,TimeSpan.FromMinutes(15));Add("local-admin-recover",6,TimeSpan.FromMinutes(15));
+  Add("kiosk-verify",30,TimeSpan.FromMinutes(1));
   Add("account-forgot",5,TimeSpan.FromMinutes(15));
   Add("account-register",5,TimeSpan.FromMinutes(15));Add("account-login",20,TimeSpan.FromMinutes(15));Add("account-reset",10,TimeSpan.FromMinutes(15));Add("account-reset-issue",6,TimeSpan.FromMinutes(1));
   Add("account-auth",20,TimeSpan.FromMinutes(15)); // Existing authenticated account-deletion routes.

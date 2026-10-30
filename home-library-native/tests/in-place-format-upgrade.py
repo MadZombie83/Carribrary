@@ -54,26 +54,34 @@ with tempfile.TemporaryDirectory(prefix='carribrary-in-place-upgrade-') as tmp:
   assert request(mobile+'/mobile/state',context=ctx)[0]['state']==before['state'];stop();start(new)
   try:local('/api/state');raise AssertionError('Local session must expire across restart')
   except urllib.error.HTTPError as error:assert error.code==401
-  local('/local-auth/login',{'username':'Upgrade Admin','password':password});after=copy.deepcopy(before);after['state']['version']=6;after['state']['renewalPolicy']={'enabled':True,'automatic':False,'days':14,'maximum':2}
+  local('/local-auth/login',{'username':'Upgrade Admin','password':password});after=copy.deepcopy(before);after['state']['version']=7;after['state']['renewalPolicy']={'enabled':True,'automatic':False,'days':14,'maximum':2}
   for book in after['state']['books']:book.setdefault('importNotes','');book.setdefault('genre','')
   for reader in after['state']['readers']:reader.setdefault('annualGoals',{})
   for entry in after['state']['readingEntries']:
    entry.setdefault('currentPage',0);entry.setdefault('totalPages',0);entry.setdefault('sessions',[]);entry.setdefault('annotations',[])
-  for loan in after['state']['loans']:loan['renewals']=[]
+  for loan in after['state']['loans']:
+   loan['renewals']=[]
+   for key,value in {'source':'librarian','kioskId':'','returnSource':'','returnRequestedAt':'','returnRequestedSource':'','returnKioskId':''}.items():loan.setdefault(key,value)
+  after['state']['selfService']={'checkout':False,'return':False,'kiosk':False,'loanDays':14,'idleSeconds':90,'returnInstructions':'Place the book in the library’s designated return area. A librarian will confirm receipt.'}
+  observed=local('/api/state')
+  import uuid
+  for expected,actual in zip(after['state']['borrowers'],observed['state']['borrowers']):
+   uid=actual['borrowerUid'];assert uuid.UUID(hex=uid).hex==uid;expected['borrowerUid']=uid
   for theme in after['state']['savedThemes']:theme.setdefault('sidebarArtwork',None)
   assert local('/api/state')==after
   if before['state']['version']<4:assert list((Path(tmp)/'backups').glob('before-catalog-v4-*.hlbackup'))
-  assert list((Path(tmp)/'backups').glob('before-theme-art-v5-*.hlbackup'))
-  assert list((Path(tmp)/'backups').glob('before-reading-v6-*.hlbackup'))
+  if before['state']['version']<5:assert list((Path(tmp)/'backups').glob('before-theme-art-v5-*.hlbackup'))
+  if before['state']['version']<6:assert list((Path(tmp)/'backups').glob('before-reading-v6-*.hlbackup'))
+  assert list((Path(tmp)/'backups').glob('before-self-service-v7-*.hlbackup'))
   assert local('/api/sharing')['url']==sharing['url'];assert request(public+'/s/'+token+'/books.json',session=False)[0]['books'][0]['title']=='Upgrade fixture book'
   assert request(public+'/companion/api/state',headers={'Cookie':cookie},session=False)[0]['state']==after['state'];assert request(mobile+'/mobile/state',context=ctx)[0]['state']==after['state'];assert ssl.get_server_certificate(('localhost',p))==pem
   welcome=request(public+'/',session=False)[0];assert 'welcome-cards' in welcome and token not in welcome and 'upgrade@example.test' not in welcome and 'Private household fixture note' not in welcome
   stop()
-  try:start(old);raise AssertionError('An older server must reject format 6')
+  try:start(old);raise AssertionError('An older server must reject format 7')
   except RuntimeError:pass
   finally:stop()
   import sqlite3
-  with sqlite3.connect(Path(tmp)/'library.sqlite') as db:assert json.loads(db.execute('SELECT data FROM library WHERE id=1').fetchone()[0])['version']==6
+  with sqlite3.connect(Path(tmp)/'library.sqlite') as db:assert json.loads(db.execute('SELECT data FROM library WHERE id=1').fetchone()[0])['version']==7
   start(new);local('/local-auth/login',{'username':'Upgrade Admin','password':password});assert local('/api/state')==after
-  print('PASS real in-place format-3/4/5→6 server upgrade preserves catalog, contacts, active loan, household reading, local credentials, shared link, native mTLS identity and paired browser; private pre-format backups exist, saved palette/PNG survive, older server rejects format 6 and local session expires safely; branded front door reveals no token/private records.')
+  print('PASS real in-place format-3/4/5/6→7 server upgrade preserves catalog, contacts, active loan, household reading, local credentials, shared link, native mTLS identity and paired browser; private pre-format backups exist, saved palette/PNG survive, older server rejects format 7 and local session expires safely; branded front door reveals no token/private records.')
  finally:stop()

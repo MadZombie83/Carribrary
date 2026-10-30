@@ -14,8 +14,8 @@ import org.json.JSONObject
 internal val phoneToolCategories=listOf(
  "Library & Appearance" to listOf("theme" to "Theme & artwork","settings" to "Library identity"),
  "Books & Organization" to listOf("acquisitions" to "Books to buy","sharing" to "Share library / QR","collections" to "Manage collections","copyTools" to "Copy labels & numbering","bulk" to "Bulk edit books","catalogBatch" to "Batch add / CSV import"),
- "Borrowing & Reminders" to listOf("lending" to "Lending & holds / batch lending","Requests" to "Book requests","renewals" to "Borrower renewals","reminders" to "Email reminders","requestAlerts" to "Request notifications"),
- "People & Access" to listOf("Borrowers" to "Borrowers","accounts" to "Borrower accounts & approvals","devices" to "Paired admin phones","browserAdmins" to "iPhone / browser pairing"),
+ "Borrowing & Reminders" to listOf("selfService" to "Borrower self-service & kiosks","lending" to "Lending & holds / batch lending","Requests" to "Book requests","renewals" to "Borrower renewals","reminders" to "Email reminders","requestAlerts" to "Request notifications"),
+ "People & Access" to listOf("patronCards" to "Library cards / PINs","Borrowers" to "Borrowers","accounts" to "Borrower accounts & approvals","devices" to "Paired admin phones","browserAdmins" to "iPhone / browser pairing"),
  "Data & History" to listOf("libraryInsights" to "Analytics & insights","History" to "Loan history","dataControls" to "Data & privacy / clear history","recycle" to "Recycle Bin","csv" to "Export catalog CSV","backup" to "Complete server data backup","portableBackups" to "Weekly portable backups","backupVerify" to "Verify complete backup","restore" to "Restore library backup"),
  "System & Advanced" to listOf("setup" to "Setup & updates","connection" to "Connection")
 )

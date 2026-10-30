@@ -32,8 +32,8 @@ function Get-CarribraryHash([string]$Path) {
     finally { $Stream.Dispose(); $Sha.Dispose() }
 }
 function Test-CarribraryCompatible([string]$Version) {
-    # Format-6 boundary: older programs discard rereading sessions, goals and annotations.
-    return $Version -match '^2\.0\.(47|48|49|50|51|52)(?:[.+-].*)?$'
+    # Format-7 boundary: older programs discard permanent borrower identities and pending self-returns.
+    return $Version -match '^2\.0\.(53)(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

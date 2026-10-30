@@ -17,6 +17,7 @@ public sealed class LibraryState {
  public List<Acquisition> BooksToBuy {get;set;}=[];
  public List<ReadingEntry> ReadingEntries {get;set;}=[];
  public RenewalPolicy RenewalPolicy {get;set;}=new();
+ public SelfServiceSettings SelfService{get;set;}=new();
  public int CirculationVersion {get;set;}=0;
  public int MaxBatchCheckout {get;set;}=5;
  public int MaxActiveLoans {get;set;}=5;
@@ -27,8 +28,8 @@ public sealed class LibraryState {
 }
 public sealed class LibraryCollection {public string Id{get;set;}="";public string Name{get;set;}="";}
 public sealed class Book {public string Genre{get;set;}="";public string ImportNotes{get;set;}="";public string CopyUid{get;set;}="";public string Room{get;set;}="";public string Bookcase{get;set;}="";public string Shelf{get;set;}="";public string Description{get;set;}="";public string CollectionId{get;set;}="general";public string Id{get;set;}="";public string Isbn{get;set;}="";public string Title{get;set;}="";public string Author{get;set;}="";public string Publisher{get;set;}="";public string CoverUrl{get;set;}="";public string Series{get;set;}="";public bool Archived{get;set;}}
-public sealed class Borrower {public string Id{get;set;}="";public string Name{get;set;}="";public string Contact{get;set;}="";public bool Archived{get;set;}public bool ReminderConsent{get;set;}}
-public sealed class Loan {public List<LoanRenewal> Renewals{get;set;}=[];public string Id{get;set;}="";public string CopyId{get;set;}="";public string BorrowerId{get;set;}="";public string CheckoutDate{get;set;}="";public string DueDate{get;set;}="";public string? ReturnedDate{get;set;}}
+public sealed class Borrower {public string BorrowerUid{get;set;}="";public string Id{get;set;}="";public string Name{get;set;}="";public string Contact{get;set;}="";public bool Archived{get;set;}public bool ReminderConsent{get;set;}}
+public sealed class Loan {public string Source{get;set;}="librarian";public string KioskId{get;set;}="";public string ReturnSource{get;set;}="";public string ReturnRequestedAt{get;set;}="";public string ReturnRequestedSource{get;set;}="";public string ReturnKioskId{get;set;}="";public List<LoanRenewal> Renewals{get;set;}=[];public string Id{get;set;}="";public string CopyId{get;set;}="";public string BorrowerId{get;set;}="";public string CheckoutDate{get;set;}="";public string DueDate{get;set;}="";public string? ReturnedDate{get;set;}}
 public sealed class DeletedRecord {public bool PreservedForHistory{get;set;}public string Id{get;set;}="";public string DeletedAt{get;set;}="";public Book? Book{get;set;}public Borrower? Borrower{get;set;}}
 public sealed record Snapshot(long Revision,LibraryState State);
 public sealed record ActionRequest(string Action,JsonElement Input,long Revision,string? RequestId=null);
@@ -50,7 +51,7 @@ public static class Library {
  public static Loan? Active(LibraryState s,string copy)=>s.Loans.Find(l=>l.CopyId==Copy(copy)&&l.ReturnedDate==null);
  static string Field(JsonElement e,string name)=>e.TryGetProperty(name,out var v)&&v.ValueKind==JsonValueKind.String?v.GetString()??"":"";
  static string Match(string s)=>Regex.Replace(s.Trim().Normalize().ToUpperInvariant(),@"\s+"," ");
- static string Edition(string value){var s=Code(value);if(s.Length!=10)return s;var p="978"+s[..9];var sum=p.Select((c,i)=>(c-'0')*(i%2==0?1:3)).Sum();return p+((10-sum%10)%10);}
+ public static string Edition(string value){var s=Code(value);if(s.Length!=10)return s;var p="978"+s[..9];var sum=p.Select((c,i)=>(c-'0')*(i%2==0?1:3)).Sum();return p+((10-sum%10)%10);}
  static string Cover(string v){if(v=="")return "";if(!Uri.TryCreate(v,UriKind.Absolute,out var u)||u.Scheme is not ("http" or "https"))throw new LibraryError("Cover URL must start with https:// or http://.");return v;}
  static void ValidateSaying(string? value,int max){if(value==null||value.Length>max||value.Any(char.IsControl))throw new LibraryError($"Sayings must be plain text of at most {max} characters.");}
  public static void Validate(LibraryState s){
@@ -60,7 +61,7 @@ public static class Library {
   LibraryAppearance.ValidateIcons(s.LibraryIcon192,s.LibraryIcon512);
   LibraryAppearance.ValidateSidebarArtwork(s.LibrarySidebarArtwork);
   ValidateSaying(s.BannerSubtitle,160);ValidateSaying(s.EncouragingMessage,240);
-  if(s.Version is not (1 or 2 or 3 or 4 or 5 or 6)||s.NextCopy<1||s.NextCopy>(long)int.MaxValue+1||s.Books==null||s.Borrowers==null||s.Loans==null)throw new LibraryError("Invalid library backup.");
+  if(s.Version is not (1 or 2 or 3 or 4 or 5 or 6 or 7)||s.NextCopy<1||s.NextCopy>(long)int.MaxValue+1||s.Books==null||s.Borrowers==null||s.Loans==null)throw new LibraryError("Invalid library backup.");
   if(s.Books.Any(x=>x==null)||s.Borrowers.Any(x=>x==null)||s.Loans.Any(x=>x==null))throw new LibraryError("Invalid records in backup.");
   if(s.Books.Select(x=>x.Id).Distinct().Count()!=s.Books.Count||s.Borrowers.Select(x=>x.Id).Distinct().Count()!=s.Borrowers.Count||s.Loans.Select(x=>x.Id).Distinct().Count()!=s.Loans.Count)throw new LibraryError("Duplicate record IDs in backup.");
   if(s.Collections==null||!s.Collections.Any(x=>x!=null&&x.Id=="general")||s.Collections.Any(x=>x==null||!Regex.IsMatch(x.Id??"",@"^(general|[a-f0-9]{32})$")||string.IsNullOrWhiteSpace(x.Name)||x.Name.Length>80||x.Name.Any(char.IsControl))||s.Collections.Select(x=>x.Id).Distinct().Count()!=s.Collections.Count||s.Collections.Select(x=>Match(x.Name)).Distinct().Count()!=s.Collections.Count)throw new LibraryError("Invalid collections in backup.");
@@ -68,7 +69,8 @@ public static class Library {
   foreach(var b in s.Borrowers)if(b==null||!Regex.IsMatch(b.Id??"",@"^BR-\d{4,}$")||string.IsNullOrWhiteSpace(b.Name)||b.Contact==null)throw new LibraryError("Invalid borrower in backup.");
   if(s.CopyNumberPolicy is not ("fill-gaps" or "next-number"))throw new LibraryError("Choose a supported copy-number policy.");
   CopyIdentity.Validate(s);Acquisitions.Validate(s);Recovery.Validate(s);ReadingTracker.Validate(s);BookRequests.Validate(s);CirculationPolicy.Validate(s);
-  Renewals.Validate(s);
+  Renewals.Validate(s);SelfService.Validate(s);
+  if(s.Version>=7&&(s.Borrowers.Any(b=>!Guid.TryParseExact(b.BorrowerUid,"N",out _))||s.Borrowers.Select(b=>b.BorrowerUid).Distinct().Count()!=s.Borrowers.Count))throw new LibraryError("Invalid permanent borrower identity.");
   var active=new HashSet<string>();
   foreach(var l in s.Loans){var book=s.Books.Find(b=>b.Id==l.CopyId);var person=s.Borrowers.Find(b=>b.Id==l.BorrowerId);
    if(string.IsNullOrEmpty(l.Id)||book==null||person==null||!DateOk(l.CheckoutDate)||string.CompareOrdinal(l.CheckoutDate,Today)>0||l.DueDate==null||(l.DueDate!=""&&(!DateOk(l.DueDate)||string.CompareOrdinal(l.DueDate,l.CheckoutDate)<0))||(l.ReturnedDate!=null&&(!DateOk(l.ReturnedDate)||string.CompareOrdinal(l.ReturnedDate,l.CheckoutDate)<0||string.CompareOrdinal(l.ReturnedDate,Today)>0)))throw new LibraryError("Invalid loan in backup.");
@@ -88,6 +90,7 @@ public static class Library {
   if(action is "setRenewalPolicy" or "requestRenewal" or "approveRenewal" or "declineRenewal")return Renewals.Apply(s,action,e);
   if(action=="clearHistory")return HistoryTools.Apply(s,e);
   if(action is "saveAcquisition" or "removeAcquisition" or "acquireBook")return Acquisitions.Apply(s,action,e);
+  if(action=="setSelfService"){var v=e.Deserialize<SelfServiceSettings>(Json)??throw new LibraryError("Invalid self-service settings.");s.SelfService=v;SelfService.Validate(s);return v;}
   if(action is "createHold" or "releaseHold" or "readyHold" or "handoverHold" or "setLendingLimits" or "batchCheckout" or "batchReturn")return CirculationPolicy.Apply(s,action,e);
   if(action is "restoreBorrower" or "restoreDeleted" or "purgeDeleted" or "bulkEditBooks")return Recovery.Apply(s,action,e);
   if(action is "requestBook" or "approveRequest" or "declineRequest" or "cancelRequest" or "fulfillRequest")return BookRequests.Apply(s,action,e);
@@ -124,7 +127,7 @@ public static class Library {
     if(old!=null){if(!e.TryGetProperty("genre",out _))b.Genre=old.Genre;if(!e.TryGetProperty("importNotes",out _))b.ImportNotes=old.ImportNotes;if(!e.TryGetProperty("room",out _))b.Room=old.Room;if(!e.TryGetProperty("bookcase",out _))b.Bookcase=old.Bookcase;if(!e.TryGetProperty("shelf",out _))b.Shelf=old.Shelf;if(!e.TryGetProperty("description",out _))b.Description=old.Description;b.CopyUid=old.CopyUid;b.Id=old.Id;s.Books[s.Books.IndexOf(old)]=b;}else{var next=AvailableCopy(s);b.CopyUid=Guid.NewGuid().ToString("N");b.Id="BK-"+next.ToString("D4");s.NextCopy=Math.Max(s.NextCopy,(long)next+1);s.Books.Add(b);}return b;
    }
    case "updateBorrower":{var b=s.Borrowers.Find(x=>x.Id==Field(e,"borrowerId")&&!x.Archived)??throw new LibraryError("Borrower not found.");var name=Text(Field(e,"name"));if(name=="")throw new LibraryError("Enter the borrower’s name.");b.Name=name;b.Contact=Text(Field(e,"contact"));b.ReminderConsent=e.TryGetProperty("reminderConsent",out var consent)&&consent.ValueKind==JsonValueKind.True;return b;}
-   case "addBorrower":{var name=Text(Field(e,"name"));if(name=="")throw new LibraryError("Enter the borrower’s name.");var next=s.Borrowers.Select(x=>int.Parse(x.Id[3..])).DefaultIfEmpty(0).Max()+1;var b=new Borrower{Id="BR-"+next.ToString("D4"),Name=name,Contact=Text(Field(e,"contact"))};b.ReminderConsent=e.TryGetProperty("reminderConsent",out var consent)&&consent.ValueKind==JsonValueKind.True;s.Borrowers.Add(b);return b;}
+   case "addBorrower":{var name=Text(Field(e,"name"));if(name=="")throw new LibraryError("Enter the borrower’s name.");var next=s.Borrowers.Select(x=>int.Parse(x.Id[3..])).DefaultIfEmpty(0).Max()+1;var b=new Borrower{BorrowerUid=Guid.NewGuid().ToString("N"),Id="BR-"+next.ToString("D4"),Name=name,Contact=Text(Field(e,"contact"))};b.ReminderConsent=e.TryGetProperty("reminderConsent",out var consent)&&consent.ValueKind==JsonValueKind.True;s.Borrowers.Add(b);return b;}
    case "checkout":{
     if(!s.Books.Any(b=>b.Id==copy&&!b.Archived))throw new LibraryError("Copy ID not found.");if(Active(s,copy)!=null)throw new LibraryError("This copy is already on loan.");
     var borrower=Field(e,"borrowerId");var date=Field(e,"checkoutDate");var due=Field(e,"dueDate");
@@ -134,7 +137,7 @@ public static class Library {
     var hold=CirculationPolicy.CheckCheckout(s,copy,borrower,e);
     var loan=new Loan{Id=Guid.NewGuid().ToString(),CopyId=copy,BorrowerId=borrower,CheckoutDate=date,DueDate=due};s.Loans.Add(loan);CirculationPolicy.Complete(s,hold,loan);return loan;
    }
-   case "returnBook":{var loan=Active(s,copy)??throw new LibraryError("No active loan found for that copy ID.");loan.ReturnedDate=Today;foreach(var renewal in loan.Renewals.Where(r=>r.Status=="pending")){renewal.Status="cancelled";renewal.DecidedAt=DateTimeOffset.UtcNow.ToString("O");}return loan;}
+   case "returnBook":{var loan=Active(s,copy)??throw new LibraryError("No active loan found for that copy ID.");loan.ReturnedDate=Today;loan.ReturnSource="librarian";foreach(var renewal in loan.Renewals.Where(r=>r.Status=="pending")){renewal.Status="cancelled";renewal.DecidedAt=DateTimeOffset.UtcNow.ToString("O");}return loan;}
    case "removeBook":{var b=s.Books.Find(x=>x.Id==copy&&!x.Archived)??throw new LibraryError("Book copy not found.");if(Active(s,copy)!=null)throw new LibraryError("Return this copy before deleting it.");if(CirculationPolicy.Hold(s,copy)!=null)throw new LibraryError("Release this copy’s hold before deleting it.");s.RecycleBin.Add(new(){Id=Guid.NewGuid().ToString("N"),DeletedAt=DateTimeOffset.UtcNow.ToString("O"),PreservedForHistory=s.Loans.Any(x=>x.CopyId==copy)||s.Requests.Any(x=>x.CopyId==copy)||s.ReadingEntries.Any(x=>x.CopyId==copy),Book=JsonSerializer.Deserialize<Book>(JsonSerializer.Serialize(b,Json),Json)});if(s.Loans.Any(x=>x.CopyId==copy)||s.Requests.Any(x=>x.CopyId==copy)||s.ReadingEntries.Any(x=>x.CopyId==copy))b.Archived=true;else s.Books.Remove(b);return new{id=b.Id,name=b.Title,archived=b.Archived};}
    case "removeBorrower":{var id=Field(e,"borrowerId");var b=s.Borrowers.Find(x=>x.Id==id&&!x.Archived)??throw new LibraryError("Borrower not found.");if(s.Holds.Any(h=>h.BorrowerId==id))throw new LibraryError("Release this borrower’s holds before deleting them.");if(s.Loans.Any(x=>x.BorrowerId==id&&x.ReturnedDate==null))throw new LibraryError("Return this borrower’s books before deleting them.");s.RecycleBin.Add(new(){Id=Guid.NewGuid().ToString("N"),DeletedAt=DateTimeOffset.UtcNow.ToString("O"),PreservedForHistory=s.Loans.Any(x=>x.BorrowerId==id)||s.Readers.Any(x=>x.BorrowerId==id),Borrower=JsonSerializer.Deserialize<Borrower>(JsonSerializer.Serialize(b,Json),Json)});if(s.Loans.Any(x=>x.BorrowerId==id)||s.Readers.Any(x=>x.BorrowerId==id))b.Archived=true;else s.Borrowers.Remove(b);return new{id=b.Id,name=b.Name,archived=b.Archived};}
    default:throw new LibraryError("Unknown action.");

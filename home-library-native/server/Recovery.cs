@@ -38,7 +38,7 @@ public static class Recovery {
   }else{
    var originalBorrower=record.Borrower!;previousId=originalBorrower.Id;var archived=s.Borrowers.Find(b=>record.PreservedForHistory&&b.Id==previousId&&b.Archived);
    if(archived!=null){archived.Archived=false;archived.ReminderConsent=false;newId=archived.Id;}
-   else {var borrower=JsonSerializer.Deserialize<Borrower>(JsonSerializer.Serialize(originalBorrower,Library.Json),Library.Json)!;borrower.Archived=false;borrower.ReminderConsent=false;if(s.Borrowers.Any(b=>b.Id==borrower.Id))borrower.Id="BR-"+(s.Borrowers.Select(b=>int.Parse(b.Id[3..])).DefaultIfEmpty(0).Max()+1).ToString("D4");s.Borrowers.Add(borrower);newId=borrower.Id;}
+   else {var borrower=JsonSerializer.Deserialize<Borrower>(JsonSerializer.Serialize(originalBorrower,Library.Json),Library.Json)!;borrower.Archived=false;borrower.ReminderConsent=false;if(borrower.BorrowerUid=="")borrower.BorrowerUid=Guid.NewGuid().ToString("N");if(s.Borrowers.Any(b=>b.Id==borrower.Id))borrower.Id="BR-"+(s.Borrowers.Select(b=>int.Parse(b.Id[3..])).DefaultIfEmpty(0).Max()+1).ToString("D4");s.Borrowers.Add(borrower);newId=borrower.Id;}
   }
   s.RecycleBin.Remove(record);return new{restored=true,previousId,id=newId};
  }
