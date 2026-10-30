@@ -1,4 +1,6 @@
-# Build Carribrary 2.0.53 locally
+# Build Carribrary 2.0.53 locally — developers only
+
+Normal users install a server package from GitHub Releases and obtain the optional Android companion from Google Play when published. They do not need this guide. Invited APK testers use distribution/ANDROID-TESTING.md.
 
 The AI edits source code; your computer runs the compilers. Run the builder after the source handoff, once changes to that source copy are finished; then share only the summary or a relevant error excerpt if help is needed. Compiler execution does not perform model inference. Any AI work reading code/logs or diagnosing failures still uses model usage; no fixed percentage saving is promised.
 

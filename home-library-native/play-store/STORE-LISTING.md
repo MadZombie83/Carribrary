@@ -5,7 +5,7 @@ CURRENT REVIEW TARGET: Carribrary 2.0.53. Draft for owner review, not an approve
 App name: Carribrary
 Short description: Scan books, track household loans, and manage your own library server.
 Suggested category: Books & Reference
-Publisher: [DEVELOPER NAME]
+Publisher: Chezburber Studios
 Support email: chezburbermerch@gmail.com
 Website/server downloads: [PUBLIC DOWNLOADS URL]
 Privacy policy: [PUBLIC HTTPS PRIVACY URL]

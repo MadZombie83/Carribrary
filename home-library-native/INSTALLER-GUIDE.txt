@@ -1,10 +1,15 @@
 CARRIBRARY 2.0.53 — INSTALL, CONNECT AND UPDATE
+Developer: Chezburber Studios. Support: chezburbermerch@gmail.com.
 Documentation reviewed 2026-10-30. No new features are being added.
 
 1. PICK THE RIGHT FILE
-Windows uses the EXE installer. An Intel/AMD Linux desktop uses the x86_64
-Flatpak. A Pi 4/5 with 64-bit Pi OS uses the ARM64 DEB. The APK is the Android
-librarian app. A source ZIP must be built first; see BUILD-LOCALLY.md.
+Download the server installer from the official GitHub Releases page:
+https://github.com/MadZombie83/Carribrary/releases
+Choose the release recommended by Chezburber Studios; previews are for testing.
+The server is free. Windows uses the EXE installer. An Intel/AMD Linux desktop uses the x86_64
+Flatpak. A Pi 4/5 with 64-bit Pi OS uses the ARM64 DEB. The optional Android librarian companion
+is a separate Google Play purchase when the listing is live. Borrowers pay nothing.
+You do not need source code or build tools for normal installation.
 Do not install the Pi DEB on an Intel/AMD Kubuntu laptop.
 
 2. INSTALL ON WINDOWS
@@ -22,14 +27,15 @@ stop it. Keep the computer awake when phones or borrowers need the library.
 The local administrator must sign in even when Windows is already signed in.
 
 3. ADD THE OPTIONAL ANDROID LIBRARIAN APP
-1) Install the matching signed APK, or use the approved Play listing when live.
-2) Only the APK goes on the phone. Do not copy source, signing files or passwords.
+1) Open Google Play and find Carribrary by Chezburber Studios.
+2) Purchase/install the optional companion. Until the public listing is live,
+   invited testers should follow the developer-supplied test instructions.
 3) Put phone and server on the same home network for the first local test.
 4) In server Help, follow Pair the optional Android librarian companion.
 5) Use People & Access > Android phone pairing to make the PRIVATE pairing QR.
 6) Scan it in the Android app, then Refresh and check Connected.
 
-For updates, install over the existing app with its same signing key. Never
+For updates, open Google Play and choose Update when offered. Never
 uninstall/clear app storage just to update. Revoke lost phones on the server.
 Borrowers do not need this librarian app or its QR.
 
@@ -41,7 +47,7 @@ Borrowers do not need this librarian app or its QR.
 5) Enter it, name the device and pair within ten minutes.
 6) Check Refresh. Revoke or pair again after expiry as needed.
 
-This PWA is a browser app hosted by your server. It needs no APK or Mac. The
+This PWA is a browser app hosted by your server. Install it using Safari. The
 separate native Swift project is unverified without Mac/Xcode and is not the
 normal iPhone installation route. Safari and installed apps may use different
 storage, so do not assume pairing in Safari also pairs a Home-screen app.
@@ -82,7 +88,7 @@ borrowers. Advanced existing proxies use ADVANCED-OPERATIONS.md.
    keep its password separately. Library JSON is not a full recovery backup.
 2) Run the new installer over the existing Windows installation. Do not uninstall
    or delete app data. Close a leftover manual server if it occupies the port.
-3) Update Android with the same signer. Refresh browser apps.
+3) Update Android through Google Play. Refresh browser apps.
 4) Check books, borrowers, loans, appearance and paired devices.
 
 2.0.53 uses library format 7 and credential format 2. Older executables cannot

@@ -29,7 +29,8 @@ VIProductVersion "2.0.53.0"
 VIAddVersionKey "ProductName" "Carribrary"
 VIAddVersionKey "FileDescription" "Carribrary Windows installer"
 VIAddVersionKey "FileVersion" "2.0.53-preview"
-VIAddVersionKey "LegalCopyright" "Carribrary household project"
+VIAddVersionKey "LegalCopyright" "Copyright 2026 Chezburber Studios"
+VIAddVersionKey "CompanyName" "Chezburber Studios"
 Var MaintenanceHandle
 Var RecoveryPoint
 Var RecoveryAttempted
@@ -178,11 +179,12 @@ Section "Carribrary" SEC_MAIN
   File "${PROJECT}/ADVANCED-OPERATIONS.md"
   File "${PROJECT}/INSTALLER-GUIDE.txt"
   File "${PROJECT}/THIRD-PARTY-NOTICES.txt"
+  File "${PROJECT}/LICENSE.txt"
   File /oname=START-HERE.txt "${PROJECT}/INSTALLER-GUIDE.txt"
   File /oname=Install-Managed.ps1 "${PROJECT}/installer/Install-Managed.ps1"
   File /oname=Uninstall-Managed.ps1 "${PROJECT}/installer/Uninstall-Managed.ps1"
   SetOutPath "$INSTDIR\licenses"
-  File "${PROJECT}/licenses/*"
+  File /r "${PROJECT}/licenses/*"
   SetOutPath "$INSTDIR"
   DetailPrint "Configuring the service, permissions and firewall; importing the selected backup..."
   ClearErrors
@@ -287,6 +289,7 @@ Section "Uninstall"
   Delete "$INSTDIR\HomeLibrary.ico"
   Delete "$INSTDIR\START-HERE.txt"
   Delete "$INSTDIR\THIRD-PARTY-NOTICES.txt"
+  Delete "$INSTDIR\LICENSE.txt"
   Delete /REBOOTOK "$INSTDIR\Uninstall.exe"
   RMDir "$INSTDIR"
   ; Retain private data-location and recovery manifest seals for a later reinstall.

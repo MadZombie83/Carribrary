@@ -1,0 +1,1491 @@
+{
+  "release": "2.0.53-preview",
+  "developer": "Chezburber Studios",
+  "generatedFrom": "Exact cached release dependency resolution and restored NuGet assets; not a legal opinion",
+  "androidArtifactCount": 100,
+  "components": [
+    {
+      "platform": "server",
+      "component": "Microsoft.Data.Sqlite/10.0.12",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "Microsoft.Data.Sqlite.Core/10.0.12",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "Microsoft.Extensions.Hosting.WindowsServices/10.0.12",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "Portable.BouncyCastle/1.9.0",
+      "declaredLicense": "Bouncy Castle license (MIT-style)",
+      "licenseUrl": "https://www.bouncycastle.org/licence.html",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "SQLite/3.53.4",
+      "declaredLicense": "Public domain",
+      "licenseUrl": "https://sqlite.org/copyright.html",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "SQLitePCLRaw.bundle_e_sqlite3/3.0.5",
+      "declaredLicense": "Apache-2.0",
+      "licenseUrl": "https://licenses.nuget.org/Apache-2.0",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "SQLitePCLRaw.config.e_sqlite3/3.0.5",
+      "declaredLicense": "Apache-2.0",
+      "licenseUrl": "https://licenses.nuget.org/Apache-2.0",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "SQLitePCLRaw.core/3.0.5",
+      "declaredLicense": "Apache-2.0",
+      "licenseUrl": "https://licenses.nuget.org/Apache-2.0",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "SQLitePCLRaw.provider.e_sqlite3/3.0.5",
+      "declaredLicense": "Apache-2.0",
+      "licenseUrl": "https://licenses.nuget.org/Apache-2.0",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "System.ServiceProcess.ServiceController/10.0.12",
+      "declaredLicense": "MIT",
+      "licenseUrl": "https://licenses.nuget.org/MIT",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "server",
+      "component": "WebPush/1.0.13",
+      "declaredLicense": "MPL-2.0",
+      "licenseUrl": "https://github.com/web-push-libs/web-push-csharp/tree/1.0.13",
+      "evidence": "Restored NuGet metadata; WebPush/Bouncy Castle pinned upstream licenses already bundled",
+      "status": "reviewed package metadata"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.activity:activity:1.10.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.activity_activity_1.10.1/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.activity:activity-compose:1.10.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.activity_activity-compose_1.10.1/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.activity:activity-ktx:1.10.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.activity_activity-ktx_1.10.1/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.annotation:annotation-experimental:1.4.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.annotation:annotation-jvm:1.9.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.annotation_annotation-jvm_1.9.1/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.appcompat:appcompat:1.6.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.appcompat:appcompat-resources:1.6.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.arch.core:core-common:2.2.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.arch.core:core-runtime:2.2.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.autofill:autofill:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.camera:camera-camera2:1.4.2",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.camera_camera-camera2_1.4.2/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.camera:camera-core:1.4.2",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        },
+        {
+          "name": "BSD License",
+          "url": "https://chromium.googlesource.com/libyuv/libyuv/+/refs/heads/main/README.chromium"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.camera_camera-core_1.4.2/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.camera:camera-lifecycle:1.4.2",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.camera_camera-lifecycle_1.4.2/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.camera:camera-video:1.4.2",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.camera_camera-video_1.4.2/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.camera:camera-view:1.4.2",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.camera_camera-view_1.4.2/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.collection:collection-jvm:1.5.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.collection_collection-jvm_1.5.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.collection:collection-ktx:1.5.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.collection_collection-ktx_1.5.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.animation:animation-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.animation_animation-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.animation:animation-core-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.animation_animation-core-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.foundation:foundation-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.foundation_foundation-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.foundation:foundation-layout-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.foundation_foundation-layout-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.material3:material3-android:1.3.2",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.material:material-icons-core-android:1.7.8",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.material:material-ripple-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.material_material-ripple-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.runtime:runtime-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.runtime_runtime-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.runtime:runtime-saveable-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.runtime_runtime-saveable-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.ui:ui-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.ui_ui-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.ui:ui-geometry-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.ui_ui-geometry-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.ui:ui-graphics-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.ui_ui-graphics-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.ui:ui-text-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.ui_ui-text-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.ui:ui-tooling-preview-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.ui_ui-tooling-preview-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.ui:ui-unit-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.ui_ui-unit-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.compose.ui:ui-util-android:1.8.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.compose.ui_ui-util-android_1.8.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.concurrent:concurrent-futures:1.1.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.concurrent:concurrent-futures-ktx:1.1.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.core:core:1.13.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.core:core-ktx:1.13.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.core:core-viewtree:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.core_core-viewtree_1.0.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.cursoradapter:cursoradapter:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.customview:customview:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.customview:customview-poolingcontainer:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.drawerlayout:drawerlayout:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.emoji2:emoji2:1.4.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.emoji2:emoji2-views-helper:1.4.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.exifinterface:exifinterface:1.3.2",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.fragment:fragment:1.3.6",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.graphics:graphics-path:1.0.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.interpolator:interpolator:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-common-java8:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-common-java8_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-common-jvm:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-common-jvm_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-livedata:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-livedata_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-livedata-core:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-livedata-core_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-livedata-core-ktx:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-livedata-core-ktx_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-process:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-process_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-runtime-android:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-runtime-android_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-runtime-compose-android:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-runtime-compose-android_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-runtime-ktx-android:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-runtime-ktx-android_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-viewmodel:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-viewmodel_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-viewmodel-android:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-viewmodel-android_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-viewmodel-ktx_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.lifecycle:lifecycle-viewmodel-savedstate-android:2.9.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.lifecycle_lifecycle-viewmodel-savedstate-android_2.9.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.loader:loader:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.profileinstaller:profileinstaller:1.4.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.profileinstaller_profileinstaller_1.4.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.resourceinspection:resourceinspection-annotation:1.0.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.savedstate:savedstate-android:1.3.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.savedstate_savedstate-android_1.3.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.savedstate:savedstate-ktx:1.3.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [
+        "licenses/android-embedded-notices/androidx.savedstate_savedstate-ktx_1.3.0/809fa1ed2145-LICENSE.txt"
+      ],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.startup:startup-runtime:1.1.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.tracing:tracing:1.2.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.tracing:tracing-ktx:1.2.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.vectordrawable:vectordrawable:1.1.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.vectordrawable:vectordrawable-animated:1.1.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.versionedparcelable:versionedparcelable:1.1.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "androidx.viewpager:viewpager:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.android.datatransport:transport-api:2.2.1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.android.datatransport:transport-backend-cct:2.3.3",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.android.datatransport:transport-runtime:2.2.6",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.android.gms:play-services-base:18.5.0",
+      "licenses": [
+        {
+          "name": "Android Software Development Kit License",
+          "url": "https://developer.android.com/studio/terms.html"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.android.gms:play-services-basement:18.4.0",
+      "licenses": [
+        {
+          "name": "Android Software Development Kit License",
+          "url": "https://developer.android.com/studio/terms.html"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.1",
+      "licenses": [
+        {
+          "name": "ML Kit Terms of Service",
+          "url": "https://developers.google.com/ml-kit/terms"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.android.gms:play-services-tasks:18.2.0",
+      "licenses": [
+        {
+          "name": "Android Software Development Kit License",
+          "url": "https://developer.android.com/studio/terms.html"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.android.odml:image:1.0.0-beta1",
+      "licenses": [
+        {
+          "name": "Android Software Development Kit License",
+          "url": "https://developer.android.com/studio/terms.html"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.auto.value:auto-value-annotations:1.6.3",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://repo.maven.apache.org/maven2/com/google/auto/value/auto-value-annotations/1.6.3/auto-value-annotations-1.6.3.pom"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved artifact; cached POM Apache-2.0 copyright/license comment (Google, Inc. 2012)",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.firebase:firebase-annotations:16.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.firebase:firebase-components:16.1.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.firebase:firebase-encoders:16.1.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.firebase:firebase-encoders-json:17.1.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.guava:listenablefuture:1.0",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://repo.maven.apache.org/maven2/com/google/guava/guava-parent/26.0-android/guava-parent-26.0-android.pom"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved artifact; cached guava-parent 26.0-android POM license",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.mlkit:barcode-scanning:17.3.0",
+      "licenses": [
+        {
+          "name": "ML Kit Terms of Service",
+          "url": "https://developers.google.com/ml-kit/terms"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.mlkit:barcode-scanning-common:17.0.0",
+      "licenses": [
+        {
+          "name": "ML Kit Terms of Service",
+          "url": "https://developers.google.com/ml-kit/terms"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.mlkit:common:18.11.0",
+      "licenses": [
+        {
+          "name": "ML Kit Terms of Service",
+          "url": "https://developers.google.com/ml-kit/terms"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.mlkit:vision-common:17.3.0",
+      "licenses": [
+        {
+          "name": "ML Kit Terms of Service",
+          "url": "https://developers.google.com/ml-kit/terms"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.mlkit:vision-interfaces:16.3.0",
+      "licenses": [
+        {
+          "name": "ML Kit Terms of Service",
+          "url": "https://developers.google.com/ml-kit/terms"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "com.google.zxing:core:3.5.3",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://github.com/zxing/zxing/blob/zxing-3.5.3/LICENSE"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved artifact; cached zxing-parent POM and pinned upstream LICENSE (included)",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "javax.inject:javax.inject:1",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "org.jetbrains.kotlin:kotlin-stdlib:2.1.20",
+      "licenses": [
+        {
+          "name": "The Apache License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2",
+      "licenses": [
+        {
+          "name": "Apache-2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.7.3",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "org.jetbrains:annotations:23.0.0",
+      "licenses": [
+        {
+          "name": "The Apache Software License, Version 2.0",
+          "url": "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    },
+    {
+      "platform": "Android",
+      "component": "org.jspecify:jspecify:1.0.0",
+      "licenses": [
+        {
+          "name": "The Apache License, Version 2.0",
+          "url": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ],
+      "embeddedNotices": [],
+      "evidence": "Resolved releaseRuntimeClasspath + cached POM",
+      "status": "reviewed resolved metadata; final APK/AAB contents still need verification"
+    }
+  ],
+  "remainingReleaseChecks": [
+    "Reconcile notices with final signed APK/AAB and every actual server installer",
+    "Verify upstream/provider terms and Google Play disclosures before submission",
+    "Review Carribrary proprietary license with qualified counsel before public distribution",
+    "Do not treat custom license as overriding third-party rights; preserve MPL covered source",
+    "No Apple native release is verified without Xcode"
+  ]
+}

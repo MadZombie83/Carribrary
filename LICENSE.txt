@@ -1,0 +1,72 @@
+Carribrary Source-Available Proprietary License, version 1.0
+Copyright (c) 2026 Chezburber Studios. All rights reserved except as granted below.
+
+1. Scope
+This license covers Carribrary-original code and materials supplied by Chezburber
+Studios, including the server and companion source. It is not an open-source
+license. Third-party components, provider content, cover art, user library content
+and third-party trademarks are excluded and remain under their own terms.
+
+2. Free server use
+You may download, install, run and back up official Carribrary Server releases
+without a software license fee. This includes personal, household, church, school,
+nonprofit and internal organizational or business libraries. You may allow your
+librarians and borrowers to connect to that library, including from outside your
+network. This permission does not require buying a companion application.
+
+3. Optional paid companion
+An official paid companion is licensed to its purchaser through the authorized
+store and its applicable purchase terms. This license does not grant free rights
+to bypass that purchase, redistribute the companion or supply a substitute paid
+companion build to others. Borrower browser access does not require a paid app.
+
+4. Source inspection and private server builds
+You may read and study lawfully obtained Carribrary source and build or modify
+the server for your own use allowed by section 2. You may keep private backups
+and share access with your authorized technical helpers solely for that use.
+You may build companion source for personal evaluation and testing; ordinary
+production use of a paid companion requires the applicable authorized purchase.
+You may perform security research subject to applicable law and responsibly
+report findings. No disclosure restriction applies to third-party license rights.
+
+5. Reserved rights
+Except where separately permitted by Chezburber Studios in writing, you may not
+sell, sublicense, rebrand, publicly distribute or distribute modified versions of
+Carribrary-original code or binaries, or use them to offer a paid hosting/service
+bureau product to unrelated customers. Charging ordinary library membership or
+book-related fees for your own library does not itself make it such a service.
+You may link to official downloads. Platform-provided source viewing and forks
+required by the source host's terms are permitted for inspection; they do not
+independently grant broader distribution or commercialization rights.
+
+6. Ownership and notices
+Ownership is not transferred. Keep applicable copyright and license notices.
+No trademark license is granted beyond identifying unmodified official software.
+Your own library name, artwork and data remain yours. Installing Carribrary does
+not grant Chezburber Studios rights to publish your library data.
+
+7. Third-party rights take precedence for their components
+Nothing in this license limits rights granted by a third-party license, including
+rights to copy, modify, redistribute or obtain the covered component's source.
+See THIRD-PARTY-NOTICES.txt and licenses/. In particular, the MPL-covered WebPush
+component and its source remain under MPL-2.0; Carribrary's restrictions do not
+apply to that covered component. API/service and content-provider terms apply
+separately. No ownership of book covers or metadata is claimed.
+
+8. No warranty; limitation of liability
+To the extent permitted by applicable law, the software is provided "AS IS",
+without warranties of merchantability, fitness for a particular purpose or
+noninfringement. To that extent, Chezburber Studios is not liable for indirect,
+incidental, consequential or special damages, or loss of data or profits arising
+from use of the software. This does not exclude non-waivable consumer rights or
+liability that cannot lawfully be excluded. You are responsible for backups and
+operation of your own server.
+
+9. Termination and retained rights
+Permission ends for a material breach not corrected within 30 days after written
+notice. Stop the unauthorized use or distribution. This does not terminate rights
+under a third-party license or require deletion of your own library data.
+
+10. Questions and separate permissions
+Public contact: chezburbermerch@gmail.com (Chezburber Studios).
+Any broader permission requires a separate written agreement from the rightsholder.

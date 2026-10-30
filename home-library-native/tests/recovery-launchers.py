@@ -11,6 +11,7 @@ with tempfile.TemporaryDirectory(prefix='carribrary-layout-test-') as temp:
  (copy/'server').mkdir();shutil.copy2(root/'server/SetupStatus.cs',copy/'server/SetupStatus.cs')
  shutil.copy2(root/'THIRD-PARTY-NOTICES.txt',copy/'THIRD-PARTY-NOTICES.txt')
  shutil.copy2(root/'ADVANCED-OPERATIONS.md',copy/'ADVANCED-OPERATIONS.md')
+ shutil.copy2(root/'LICENSE.txt',copy/'LICENSE.txt')
  for target in ['linux-x64','linux-arm64']:
   p=copy/'release'/target;p.mkdir(parents=True);(p/'HomeLibrary.Server').write_text('mock payload; not executable')
  calls=[]
@@ -26,6 +27,9 @@ with tempfile.TemporaryDirectory(prefix='carribrary-layout-test-') as temp:
  normal=configparser.ConfigParser(interpolation=None);normal.read(flat/'files/share/applications/com.household.HomeLibrary.desktop');assert normal['Desktop Entry']['Actions']=='Stop;Recovery;PublicSharing;'
  assert (flat/'files/share/doc/home-library/ADVANCED-OPERATIONS.md').is_file()
  assert (pi/'usr/share/doc/home-library-server/ADVANCED-OPERATIONS.md').is_file()
+ for base in [flat/'files/share/doc/home-library',pi/'usr/share/doc/home-library-server']:
+  assert (base/'LICENSE.txt').read_text()==(root/'LICENSE.txt').read_text()
+  assert (base/'licenses/ANDROID-RUNTIME-COMPONENTS.txt').is_file()
  assert (pi/'usr/bin/home-library-recovery').stat().st_mode&0o111
  assert 'pkexec' in (pi/'DEBIAN/control').read_text()
  assert any('dpkg-deb' in c for c in calls) and any('build-bundle' in c for c in calls)

@@ -29,3 +29,7 @@ See SELF-SERVICE-IMPLEMENTATION-REPORT.md for executed checks and remaining limi
 ## Documentation-only revision
 
 Features are frozen. Current Help, installation/recovery guides, screenshots, printed Quick Start and privacy/deletion drafts were audited and synchronized. See DOCUMENTATION-AUDIT-2.0.53.md for coverage and checks. Build affected packages locally to receive the revised bundled Help; no new installer is produced by this revision.
+
+## Publishing metadata and licensing
+
+Developer: Chezburber Studios. Normal distribution is server installers on official GitHub Releases and the optional paid Android librarian companion on Google Play when published. Borrowers pay nothing. APK/source-build instructions are for invited testers/developers. See PUBLISHING-AND-LICENSE-REVIEW.md for the custom proprietary/source-available license, attribution inventory and final binary/legal/store gates. Source code visibility remains an owner-controlled publication step.

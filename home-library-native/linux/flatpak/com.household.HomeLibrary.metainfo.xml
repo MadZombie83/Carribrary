@@ -7,7 +7,7 @@
  <project_license>LicenseRef-proprietary</project_license>
  <description><p>A local household library server with a browser admin interface and a paired Android scanner companion. Catalog physical copies, manage borrowers, track loans, review borrowing requests, and share a book list.</p><p>The app opens your browser and keeps the library server running. The Android companion connects directly using encrypted, certificate-pinned connections.</p></description>
  <launchable type="desktop-id">com.household.HomeLibrary.desktop</launchable>
- <developer id="com.household"><name>Carribrary</name></developer>
+ <developer id="com.household"><name>Chezburber Studios</name></developer>
  <content_rating type="oars-1.1"/>
  <releases><release version="2.0.53-preview" date="2026-10-30"/></releases>
 </component>

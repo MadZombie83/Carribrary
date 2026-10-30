@@ -1,0 +1,4 @@
+
+# Preserve verbatim upstream license/notice whitespace.
+home-library-native/licenses/** -whitespace
+home-library-native/android/app/src/main/assets/legal/** -whitespace

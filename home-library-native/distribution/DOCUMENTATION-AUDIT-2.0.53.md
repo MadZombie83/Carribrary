@@ -4,7 +4,7 @@ Reviewed October 30, 2026. **Feature set frozen.** This revision changes instruc
 
 ## Current guides
 
-The canonical `assets/help.json` now contains 83 task-based topics, replacing 109 overlapping topics and accumulated historical additions. Server, Android, iPhone source and the standalone versioned guide are synchronized from that file. The in-app and full-page Help preserve numbered line breaks. `START-HERE.txt`, `INSTALLER-GUIDE.txt`, platform READMEs and `BUILD-LOCALLY.md` point to the current workflow. Technical commands and uncommon recovery procedures are in `ADVANCED-OPERATIONS.md` rather than the basic getting-started sequence.
+The canonical `assets/help.json` contains 83 task-based topics plus About and third-party legal notices, replacing 109 overlapping topics and accumulated historical additions. Server, Android, iPhone source and the standalone versioned guide are synchronized from that file. The in-app and full-page Help preserve numbered line breaks. `START-HERE.txt`, `INSTALLER-GUIDE.txt`, platform READMEs and `BUILD-LOCALLY.md` point to the current workflow. Technical commands and uncommon recovery procedures are in `ADVANCED-OPERATIONS.md` rather than the basic getting-started sequence.
 
 The nine-step illustrated Quick Start covers installation, connections, optional phones, adding books, borrowers, lending, returns, complete backups and recovery. Its three fictional-library screenshots were regenerated against the current browser interface. The PDF is generated from the HTML text rather than maintaining a second, older set of directions. Its nine rendered pages were visually checked for overflow, broken glyphs, missing screenshots and detached steps. Older release notes are explicitly historical, not current setup instructions.
 
@@ -56,3 +56,7 @@ This is an editorial review for clear, school-age-readable instructions, not a c
 - Printed PDF rendered and visually reviewed; refreshed screenshots use fictional test data.
 
 Build updated packages locally to deliver the bundled changes. Existing installed applications were not modified by editing source. The remaining owner hardware, package-upgrade, scanner/printing and physical Pi checks in the release checklist still apply. This audit does not declare a public release ready.
+
+## Installer-first publishing correction
+
+Normal instructions now lead with GitHub server installers and the planned Google Play companion. Source building/APK sideloading is confined to developer or invited-tester material. Chezburber Studios and the approved support contact are filled in; unpublished store/policy/download URLs remain explicit release gates. The custom source-available proprietary license and dependency attribution review are described in PUBLISHING-AND-LICENSE-REVIEW.md.

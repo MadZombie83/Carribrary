@@ -1,0 +1,69 @@
+Carribrary — third-party notices
+Developer: Chezburber Studios. Support: chezburbermerch@gmail.com.
+
+Carribrary-owned code is source-available proprietary software, LICENSE.txt.
+That license does not replace, restrict or relicense third-party components.
+Each component keeps its original notices, copyrights and license rights.
+
+SERVER AND SELF-CONTAINED RUNTIMES
+Microsoft .NET / ASP.NET Core / Windows Forms 10.0.12 and Microsoft.Data.Sqlite /
+Windows service dependencies: MIT and their included third-party notices.
+Full exact-restored-runtime license/notice files are in licenses/.
+https://github.com/dotnet/runtime   https://github.com/dotnet/aspnetcore
+SQLitePCLRaw 3.0.5: Apache-2.0, licenses/SQLITEPCLRAW-LICENSE.txt.
+https://github.com/ericsink/SQLitePCL.raw
+SQLite 3.53.4: public domain, licenses/SQLITE-PUBLIC-DOMAIN.txt.
+https://sqlite.org/copyright.html
+WebPush 1.0.13: MPL-2.0, unmodified. License and complete covered source are
+included in licenses/WEBPUSH-LICENSE.txt and WEBPUSH-SOURCE-1.0.13.zip.
+Exact upstream commit and instructions: licenses/WEBPUSH-SOURCE.txt.
+You may obtain, modify and redistribute that covered source under MPL-2.0;
+Carribrary's proprietary restrictions do not apply to it.
+Portable.BouncyCastle 1.9.0: Bouncy Castle/MIT-style license, included in
+licenses/BOUNCYCASTLE-LICENSE.html. https://www.bouncycastle.org/
+
+BROWSER
+Nayuki QR generator: MIT, original notice kept in qrcodegen.js and
+licenses/NAYUKI-QR-LICENSE.txt. https://www.nayuki.io/page/qr-code-generator-library
+ZXing Browser 0.2.1: MIT, licenses/ZXING-BROWSER-LICENSE.txt.
+ZXing Library: Apache-2.0 and retained third-party license notices,
+licenses/ZXING-LIBRARY-LICENSE.txt. https://github.com/zxing-js/library
+The decoder includes ts-custom-error: MIT; original notice retained in
+licenses/TS-CUSTOM-ERROR-LICENSE.txt and server/wwwroot/vendor/.
+
+ANDROID
+Exact 100 resolved release artifacts, versions and license URLs are listed in
+licenses/ANDROID-RUNTIME-COMPONENTS.txt and the machine-readable distribution
+inventory. Kotlin, coroutines, AndroidX, Compose, CameraX and ZXing use their
+listed Apache-2.0 terms. CameraX also declares a libyuv BSD component; its
+license is retained in licenses/LIBYUV-LICENSE.txt.
+ZXing Core 3.5.3 upstream full license: licenses/ZXING-CORE-LICENSE.txt.
+Original notices extracted from the cached release JAR/AAR files are preserved
+under licenses/android-embedded-notices/. Common Apache text is also included.
+AutoValue and Guava parent POM notice evidence is preserved separately.
+Google ML Kit and some Google Android dependencies declare Google-specific
+ML Kit / Android SDK terms; they are not blanket-relicensed as Apache or as
+Carribrary source. See the per-component list, SDK notices and official terms:
+https://developers.google.com/ml-kit/terms
+https://developer.android.com/studio/terms
+https://developers.google.com/ml-kit/android-data-disclosure
+
+TOOLS, OPTIONAL DOWNLOADS AND PROVIDER MATERIAL
+Gradle wrapper: Apache-2.0 with original LICENSE and NOTICE in licenses/.
+The Android/JDK/.NET SDK/build caches and private signing files are not source
+release assets. Their tool/runtime terms remain separate; verify final payloads.
+Optional Caddy 2.11.7 is downloaded separately from official upstream with its
+pinned hash after consent. Apache-2.0 LICENSE is retained with the download;
+its upstream third-party notices must be checked against the downloaded binary.
+Caddy is not bundled in this source archive. https://github.com/caddyserver/caddy
+Google Books poweredby.png is bundled unaltered for source attribution. Google
+trademarks remain Google's property; provider terms/branding apply separately.
+https://developers.google.com/books/branding
+Book covers, descriptions and metadata are provider/user material, not owned or
+relicensed by Chezburber Studios. Open Library, Internet Archive and optional
+Google Books terms apply. Preserve existing source credits and links.
+
+The dependency inventory is an engineering attribution review, not a legal
+certification. Reconcile it with each final signed APK/AAB and Windows/Flatpak/DEB
+payload before public distribution; do not omit upstream notices supplied by
+runtime/native dependencies. Apple native releases remain unverified without Xcode.

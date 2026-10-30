@@ -1,38 +1,23 @@
 # Carribrary
 
-Self-hosted household book lending: catalog physical copies, manage borrowers and holds, scan ISBN/EAN or optional copy labels, track lending, and share a library with free borrower access.
+Developed by **Chezburber Studios**. Support: **chezburbermerch@gmail.com**.
 
-## Source status
+A self-hosted library for physical books. Keep the server on a Windows, Linux or Raspberry Pi computer; librarians and borrowers connect to it.
 
-Private development repository. Current source: **2.0.53**, including optional borrower self-service, branded library cards/PINs and restricted browser kiosks; every new permission defaults OFF. Previously built installers are not rebuilt by committing this source. No installer, APK, AAB or signing material is included here.
+## Install
 
-- [What changed in 2.0.53](home-library-native/distribution/RELEASE-2.0.53.md)
-- [Administration tool inventory](home-library-native/distribution/ADMIN-TOOLS-INVENTORY-2.0.53.md)
-- [Package and hardware test checklist](home-library-native/distribution/RELEASE-2.0.53.md)
-- [Current help guide](Carribrary-Help-2.0.53.md)
-- [Build packages locally](home-library-native/BUILD-LOCALLY.md)
-- [Server setup and architecture](home-library-native/README.md)
-- [Windows installer instructions](home-library-native/INSTALLER-GUIDE.txt)
-- [Linux and Raspberry Pi](home-library-native/linux/README.md)
-- [iPhone source limitations](home-library-native/ios/README.md)
-- [Development and verification](home-library-native/DEVELOPMENT.md)
+Download the free server installer from [official Releases](https://github.com/MadZombie83/Carribrary/releases): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. Choose the recommended release; previews are for invited testing. The optional Android librarian companion is planned as a one-time US$5 Google Play purchase. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion. Public downloads and the Play listing must be published before general availability.
 
-The server uses ASP.NET Core/.NET 10 and SQLite. Android is a Kotlin companion; iPhone/browser companions can use the server-hosted PWA. Native iPhone source requires a Mac/Xcode and has not been verified as an iPhone build.
+Most users do not need source code or build tools. Follow [installation instructions](home-library-native/INSTALLER-GUIDE.txt), then Help in the app.
 
-Keep the `home-library-native` folder: the local builder places tool caches and output alongside it. First create a private, complete backup before updating an existing installation. The protected administrator-credential format introduced in 2.0.36 is incompatible with earlier programs. Library/credential formats remain 6/2. Compatible program-only recovery supports 2.0.47–2.0.53. Older programs reject format6 rather than discard reading sessions, goals or annotations. Guided complete recovery continues to accept supported43/44 format4,45/46 format5 and47/48/49/50/51/52 format6 data with machine-bound/portable restrictions as applicable. Keep a complete backup off the server drive.
+## License
 
-## Privacy and credentials
+Carribrary-owned code is **source-available proprietary software**, not open source. The server is free to run for households, churches, schools and organizational libraries. You may inspect source and build the server for your own permitted use. Redistribution, resale, rebranding and offering a paid hosted service to unrelated customers require separate permission. See [LICENSE.txt](LICENSE.txt). Third-party rights remain separate: [notices](home-library-native/THIRD-PARTY-NOTICES.txt).
 
-Configure your own optional services on your own server. No API key is supplied. Never commit library databases, backups, pairing codes, DDNS/SMTP/push secrets, certificates, private signing keys, diagnostics or personal library branding. The repository intentionally omits owner briefs, private branding and local build caches.
+## Current preview
 
-Public support: **chezburbermerch@gmail.com**.
+2.0.53; features frozen. See [current Help](Carribrary-Help-2.0.53.md), [documentation audit](home-library-native/distribution/DOCUMENTATION-AUDIT-2.0.53.md) and [publishing/license review](home-library-native/distribution/PUBLISHING-AND-LICENSE-REVIEW.md). Final signed-artifact, legal and store checks remain before public release. Existing runtime data and pairings are not changed by a source download.
 
-## Licensing and distribution
+## Developers and invited testers
 
-No open-source license has been selected for Carribrary. Keep this repository private until its source licensing and publication terms are decided. Third-party code and notices retain their respective licenses; see [notices](home-library-native/THIRD-PARTY-NOTICES.txt). Android store binaries are kept private; the planned paid companion is separate from the free server and borrower interface.
-
-The supplied Carribrary-2.0.53-source.zip extracts into Carribrary-2.0.53. GitHub Download ZIP still extracts as Carribrary-main; rename its top-level folder to the release version before building. Never merge a fresh source version into an older build folder.
-
-## Documentation revision — October 30, 2026
-
-Features are frozen at 2.0.53. Current Help has been audited and simplified, with refreshed illustrated instructions. See [documentation audit](home-library-native/distribution/DOCUMENTATION-AUDIT-2.0.53.md). Build packages locally to deliver the revised bundled Help. Store/privacy materials remain review drafts.
+[Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.

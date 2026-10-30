@@ -1,10 +1,18 @@
 # Carribrary 2.0.53
 
+Developed by **Chezburber Studios**. Support: **chezburbermerch@gmail.com**.
+
 Carribrary is a self-hosted library for physical books. One Windows, Linux or Raspberry Pi computer keeps the library. Librarians can use its browser dashboard, the Android companion or the iPhone/browser companion. Borrowers can use a shared link without an account. Optional accounts add private reading lists.
 
 [Documentation audit and coverage](distribution/DOCUMENTATION-AUDIT-2.0.53.md).
 
 **Feature freeze:** no new features are being added. Current work is documentation, testing, security, compatibility and bug fixes. See [FEATURE-FREEZE.md](FEATURE-FREEZE.md).
+
+## Install Carribrary
+
+Download the free server installer from [official GitHub Releases](https://github.com/MadZombie83/Carribrary/releases). Choose Windows EXE, Linux Flatpak, or Raspberry Pi ARM64 DEB. The optional Android librarian companion is planned as a one-time US$5 Google Play purchase. Borrowers use the browser free. Public installers and the Play listing must be published before general availability; previews are for testing. Most users do not need source code or build tools.
+
+Carribrary-owned code is [source-available proprietary software](LICENSE.txt). The server is free to run, including for your household, church or organization. Source viewing/private builds do not grant resale or redistribution rights. Third-party licenses remain separate; see [notices](THIRD-PARTY-NOTICES.txt).
 
 ## Choose your next step
 

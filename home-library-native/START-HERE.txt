@@ -1,17 +1,20 @@
 CARRIBRARY 2.0.53 — START HERE
 Documentation reviewed 2026-10-30. Features are frozen; release testing continues.
 
-DO YOU HAVE SOURCE OR AN INSTALLER?
-A source ZIP is for building. Extract it into a NEW empty work folder, then open
-home-library-native/BUILD-LOCALLY.md. Never merge it into old source or installed
-server folders. This documentation update does not generate installers for you.
+GET CARRIBRARY
+Developer: Chezburber Studios. Support: chezburbermerch@gmail.com.
+Download a server installer from the official GitHub Releases page:
+https://github.com/MadZombie83/Carribrary/releases
+Choose the release recommended by Chezburber Studios. Previews are for testing.
+The server is free. You do not need to build anything to install it.
 
 For installation, use the matching package:
 - Windows: Carribrary-Setup-2.0.53-preview.exe
 - Intel/AMD Linux desktop: Carribrary-Linux-x86_64-2.0.53-preview.flatpak
 - Pi 4/5 with 64-bit Pi OS: Carribrary-Pi-ARM64-2.0.53-preview.deb
-- Android librarian: matching signed APK, or the approved Play listing when live
-- iPhone librarian: the server's /companion/ browser app, not an APK
+- Android librarian: optional paid Carribrary companion from Google Play when live
+  (invited testers receive separate test instructions before publication)
+- iPhone librarian: the server's /companion/ browser app
 
 FIRST SETUP
 1. Install the server package on the computer that will keep the library.
@@ -29,8 +32,8 @@ link for ordinary browsing/requests. Accounts add optional private TBR/reading.
 UPDATING
 1. Make a complete backup and keep its password separately.
 2. Install over the old server/app without uninstalling or clearing data.
-3. Update Android with the same signing identity. Only the APK goes on the phone;
-   private signing folders and passwords never do.
+3. Update the Android companion through Google Play. Testers follow their test
+   instructions. Do not uninstall or clear the app just to update.
 4. Refresh browser apps and check the library.
 
 Current data format is 7, credentials 2. Program rollback to older releases is
@@ -43,6 +46,9 @@ WHERE TO FIND HELP
 - INSTALLER-GUIDE.txt: Windows, phones and updates
 - linux/README.md: Flatpak and Pi
 - ADVANCED-OPERATIONS.md: headless/technical procedures
-- distribution/RELEASE-2.0.53.md: owner acceptance checklist
+
+DEVELOPERS AND INVITED TESTERS ONLY
+Source building: BUILD-LOCALLY.md. APK testing: distribution/ANDROID-TESTING.md.
+Most users do not need either document.
 
 Old release notes explain old versions. They are not instructions for this one.
