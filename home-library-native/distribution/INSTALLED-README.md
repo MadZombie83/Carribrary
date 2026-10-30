@@ -11,13 +11,13 @@ Open Carribrary from the application menu or Windows Start menu. It opens your b
 
 Windows **Setup guide** opens the included installation instructions. Linux/Pi installation uses the matching package. A Pi ARM64 DEB is not for an Intel/AMD Linux laptop. Installed packages do not need Node.js or a separate .NET runtime.
 
-For a technical helper, **ADVANCED-OPERATIONS.md** is included beside this document. Most users should use the app's GUI and Help instead of terminal commands. Updates are provided as installers on the official GitHub Releases page: https://github.com/MadZombie83/Carribrary/releases . Previews are for testing.
+For a technical helper, **ADVANCED-OPERATIONS.md** is included beside this document. Most users should use the app's GUI and Help instead of terminal commands. Updates are provided as installers on the official GitHub Releases page: https://github.com/MadZombie83/Carribrary/releases .
 
 Keep the server on and awake when people need it. Borrower links, native Android pairing and iPhone/browser pairing are different. Never share administrator pairing codes with borrowers.
 
 Make a complete password-encrypted backup before updates and store it off this drive. Install updates over the existing version without deleting data. Current library format is 7; older programs cannot open it safely. Use Complete Backup Recovery for historical data, not ordinary library JSON.
 
-The feature set is frozen. Self-checkout, self-return reporting and kiosks start OFF. A self-return report leaves the loan active until a librarian receives the book. This preview still needs physical package/device/scanner/printing acceptance before public release.
+Self-checkout, self-return reporting and kiosks start OFF. A self-return report leaves the loan active until a librarian receives the book.
 
 Support: chezburbermerch@gmail.com. Never send passwords, tokens, keys, private QR/reset links, signing files or backup archives.
 

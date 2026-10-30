@@ -5,3 +5,6 @@
 @media(forced-colors:active){.welcome-artwork{display:none}.welcome-card,.welcome-note{border:1px solid CanvasText}.library-welcome header,.library-welcome footer{background:Canvas;color:CanvasText}}
 
 .welcome-lock{width:36px;height:42px;flex-shrink:0;color:var(--ink)}
+.library-welcome footer.product-footer{background:transparent;color:var(--ui-muted,var(--muted,#52606d));font-size:.8125rem;margin:0}.library-welcome footer.product-footer small{color:inherit;font-size:inherit}
+
+@media(forced-colors:active){.library-welcome footer.product-footer{color:CanvasText}}

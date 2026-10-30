@@ -36,3 +36,9 @@ for name in ['installer/HomeLibrary.nsi','linux/build-packages.py']:
  s=(root/name).read_text();assert 'INSTALLED-README.md' in s and 'ADVANCED-OPERATIONS.md' in s
 assert "server/wwwroot/quick-start.html" in (root/'scripts/build-quick-start-pdf.py').read_text()
 print(f'PASS {len(topics)} unique current Help topics; numbered core tasks, current links, nine illustrated sections and installed guide inclusion')
+
+# Customer-facing About and installed-version footer must not drift into release-planning copy.
+about=next(t for t in topics if t['title'].startswith('About Carribrary'))['body']
+assert '© 2026 Chezburber Studios' in about and re.search(r'Version="([^"]+)"',(root/'server/SetupStatus.cs').read_text())[1] in about
+for phrase in ['must be published','invited testers','planned as','feature set is frozen']:
+ assert phrase not in about

@@ -33,3 +33,5 @@ Features are frozen. Current Help, installation/recovery guides, screenshots, pr
 ## Publishing metadata and licensing
 
 Developer: Chezburber Studios. Normal distribution is server installers on official GitHub Releases and the optional paid Android librarian companion on Google Play when published. Borrowers pay nothing. APK/source-build instructions are for invited testers/developers. See PUBLISHING-AND-LICENSE-REVIEW.md for the custom proprietary/source-available license, attribution inventory and final binary/legal/store gates. Source code visibility remains an owner-controlled publication step.
+
+Customer-facing polish: quiet copyright/version footers and a concise About entry; internal publishing/testing notes moved out of ordinary Help. No circulation, authentication, private-reading or data-format changes.

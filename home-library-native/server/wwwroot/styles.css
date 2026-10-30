@@ -50,3 +50,8 @@ button.danger{color:#9b3225}.delete-book{align-self:flex-end;margin-top:.5rem}bu
 
 /* Keep numbered Help instructions readable in the existing dialog. */
 #help-topics p{white-space:pre-line;line-height:1.65}
+
+/* Quiet product identification remains readable and never covers controls. */
+.product-footer{display:block;position:static;clear:both;margin:1.5rem 0 0;padding:1rem .5rem;color:var(--ui-muted,var(--muted,#52606d));font-size:.8125rem;line-height:1.5;text-align:center;background:transparent;border:0;overflow-wrap:normal}.product-footer small{font-size:inherit}
+/* Long legal source URLs must wrap on phone-sized Help pages. */
+#help-content,#help-index{min-width:0}#help-content p,#help-topics p{overflow-wrap:anywhere}

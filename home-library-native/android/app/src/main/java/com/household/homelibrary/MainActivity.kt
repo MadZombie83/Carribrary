@@ -102,6 +102,7 @@ fun duplicates(books:List<JSONObject>,draft:JSONObject)=books.filter{edition(it.
     }}
     Row(horizontalArrangement=Arrangement.spacedBy(12.dp)){OutlinedButton(enabled=current>1,onClick={page=current-1}){Text("Previous")};OutlinedButton(enabled=current<pages,onClick={page=current+1}){Text("Next")}}
    }
+   PhoneProductFooter()
   }
   if(busy)LinearProgressIndicator(Modifier.fillMaxWidth())
   if(notice.isNotBlank())Text(notice,color=MaterialTheme.colorScheme.primary)

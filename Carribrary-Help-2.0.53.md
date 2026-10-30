@@ -14,17 +14,23 @@ These instructions describe 2.0.53. New self-checkout, self-return and kiosk set
 
 ## About Carribrary: developer, downloads and license
 
-Carribrary is developed by Chezburber Studios. Public support: chezburbermerch@gmail.com.
+Carribrary 2.0.53-preview
+© 2026 Chezburber Studios. All rights reserved.
+Developer: Chezburber Studios
+Support: chezburbermerch@gmail.com
+License: Carribrary Source-Available Proprietary License 1.0
 
-The server is free to use. Download its Windows, Linux or Raspberry Pi installer from the official GitHub Releases page: https://github.com/MadZombie83/Carribrary/releases . A public download/listing must be published before these links can serve new users; previews are for invited testing.
+The server is free to use. The optional Android librarian companion is a separate paid app; see Google Play for availability and local pricing. Borrowers use their library link free in a browser.
 
-The optional Android librarian companion is planned as a one-time US$5 Google Play purchase, with local prices shown by Google Play. Borrowers pay nothing and use their library link in a browser. The server works without the paid companion.
+Official server downloads: https://github.com/MadZombie83/Carribrary/releases
 
-Carribrary-owned code uses the Carribrary Source-Available Proprietary License. Its source can be read and built for your own permitted use; it is not an open-source license or permission to resell/rebrand/distribute Carribrary. Third-party code, licenses and trademarks remain with their owners and are excluded from those restrictions. See LICENSE.txt and THIRD-PARTY-NOTICES.txt in the server installation or source. Developer build and APK-testing instructions are separate from normal setup.
+Carribrary source is available for inspection and permitted private builds. It is not an open-source license or permission to redistribute, rebrand or resell Carribrary. Third-party components retain their own licenses and rights; see Third-party licenses and credits. Full terms are in LICENSE.txt and THIRD-PARTY-NOTICES.txt supplied with the software.
+
+The copyright and installed version also appear in small print at the bottom of library pages and the Android companion. Use this version number when asking for help.
 
 ## Install and open the Windows server
 
-Download the Windows installer from the official Carribrary GitHub Releases page: https://github.com/MadZombie83/Carribrary/releases . Choose the release recommended by Chezburber Studios. Preview releases are for testing.
+Download the Windows installer from the official Carribrary GitHub Releases page: https://github.com/MadZombie83/Carribrary/releases . Choose the release recommended by Chezburber Studios.
 
 1. On the computer that will keep the library, open Carribrary-Setup-2.0.53-preview.exe.
 2. Approve the Windows administrator prompt. Follow the installer and finish.
@@ -46,7 +52,7 @@ If the menu entry is missing, sign out of the desktop and sign in again. Closing
 
 ## Install the Raspberry Pi server
 
-Use a Raspberry Pi 4 or 5 with 64-bit Raspberry Pi OS and the ARM64 DEB. A 32-bit OS is not supported. Physical Pi acceptance testing is still required for this preview.
+Use a Raspberry Pi 4 or 5 with 64-bit Raspberry Pi OS and the ARM64 DEB. A 32-bit OS is not supported.
 
 1. Copy Carribrary-Pi-ARM64-2.0.53-preview.deb to the Pi.
 2. Open it in the Pi's package installer and follow its prompts.
@@ -117,10 +123,10 @@ Stop the server before updating it. Do not start several copies against one libr
 1. Make a complete backup and save it off the server. See Create a complete server backup.
 2. Keep its password separately. Verify the saved backup.
 3. Install the newer server package over the existing installation. Do not uninstall or clear application data first.
-4. On Android open Google Play and update Carribrary when an update is available. Do not clear phone storage. Testers should follow their separate test-update instructions.
+4. On Android open Google Play and update Carribrary when an update is available. Do not clear phone storage. Use official updates; do not uninstall or clear app data just to update.
 5. Reopen or refresh browser apps. Check books, borrowers, loans and paired devices.
 
-2.0.53 uses library format 7 and credential format 2. It saves a private pre-upgrade library snapshot. Earlier programs cannot safely open the new library; program-only rollback currently accepts 2.0.53 only. Complete data recovery is separate. There is no automatic update feed. The present feature set is frozen; release work is testing, fixes and clear instructions.
+2.0.53 uses library format 7 and credential format 2. It saves a private pre-upgrade library snapshot. Earlier programs cannot safely open the new library; program-only rollback currently accepts 2.0.53 only. Complete data recovery is separate. There is no automatic update feed.
 
 ## The three connection addresses
 
@@ -136,7 +142,7 @@ Never forward administrator port 4173, internal browser port 4174 or discovery p
 
 The server works without this app. Borrowers do not need this paid librarian app.
 
-1. Open Google Play and find Carribrary by Chezburber Studios. Purchase/install the optional librarian companion. The public listing is planned; until it is live, only invited testers should use the test instructions supplied by the developer. Do not download an unofficial copy.
+1. Open Google Play and find Carribrary by Chezburber Studios. Check its availability and price, then purchase/install the optional librarian companion. Use the official Carribrary release page to confirm download availability. Do not download an unofficial copy.
 2. For a first local test, connect phone and server to the same home network. Avoid guest Wi-Fi that separates devices.
 3. On the server, open Setup & updates and note its phone address. For use away from home, finish remote setup first.
 4. Open Settings & Tools → People & Access → Android phone pairing. Enter the actual phone address and create the private pairing QR.
@@ -588,7 +594,7 @@ Linux:
 2. Open and authorize the kiosk URL, then use fullscreen.
 3. Have the computer owner configure desktop restrictions before unattended use. Fullscreen alone is not lockdown.
 
-Edge kiosk privacy resets can require a new station code. Current Microsoft setup details: https://learn.microsoft.com/en-us/windows/configuration/assigned-access/quickstart-kiosk . Actual Windows/Linux kiosk and scanner acceptance must be tested on the station.
+Edge kiosk privacy resets can require a new station code. Current Microsoft setup details: https://learn.microsoft.com/en-us/windows/configuration/assigned-access/quickstart-kiosk . Check the scanner, timeout and sign-out on the actual station before offering it to borrowers.
 
 ## Use the kiosk, USB scanner or webcam
 
@@ -994,14 +1000,12 @@ The decoder includes ts-custom-error: MIT; original notice retained in
 licenses/TS-CUSTOM-ERROR-LICENSE.txt and server/wwwroot/vendor/.
 
 ANDROID
-Exact 100 resolved release artifacts, versions and license URLs are listed in
-licenses/ANDROID-RUNTIME-COMPONENTS.txt and the machine-readable distribution
-inventory. Kotlin, coroutines, AndroidX, Compose, CameraX and ZXing use their
+Android components, versions and license URLs are listed below and in
+licenses/ANDROID-RUNTIME-COMPONENTS.txt. Kotlin, coroutines, AndroidX, Compose, CameraX and ZXing use their
 listed Apache-2.0 terms. CameraX also declares a libyuv BSD component; its
 license is retained in licenses/LIBYUV-LICENSE.txt.
 ZXing Core 3.5.3 upstream full license: licenses/ZXING-CORE-LICENSE.txt.
-Original notices extracted from the cached release JAR/AAR files are preserved
-under licenses/android-embedded-notices/. Common Apache text is also included.
+Original component notices are preserved under licenses/android-embedded-notices/. Common Apache text is also included.
 AutoValue and Guava parent POM notice evidence is preserved separately.
 Google ML Kit and some Google Android dependencies declare Google-specific
 ML Kit / Android SDK terms; they are not blanket-relicensed as Apache or as
@@ -1012,8 +1016,7 @@ https://developers.google.com/ml-kit/android-data-disclosure
 
 TOOLS, OPTIONAL DOWNLOADS AND PROVIDER MATERIAL
 Gradle wrapper: Apache-2.0 with original LICENSE and NOTICE in licenses/.
-The Android/JDK/.NET SDK/build caches and private signing files are not source
-release assets. Their tool/runtime terms remain separate; verify final payloads.
+Development tools retain their own licenses.
 Optional Caddy 2.11.7 is downloaded separately from official upstream with its
 pinned hash after consent. Apache-2.0 LICENSE is retained with the download;
 its upstream third-party notices must be checked against the downloaded binary.
@@ -1025,10 +1028,6 @@ Book covers, descriptions and metadata are provider/user material, not owned or
 relicensed by Chezburber Studios. Open Library, Internet Archive and optional
 Google Books terms apply. Preserve existing source credits and links.
 
-The dependency inventory is an engineering attribution review, not a legal
-certification. Reconcile it with each final signed APK/AAB and Windows/Flatpak/DEB
-payload before public distribution; do not omit upstream notices supplied by
-runtime/native dependencies. Apple native releases remain unverified without Xcode.
 
 
 Android runtime components — Carribrary 2.0.53

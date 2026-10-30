@@ -6,7 +6,7 @@ A self-hosted library for physical books. Keep the server on a Windows, Linux or
 
 ## Install
 
-Download the free server installer from [official Releases](https://github.com/MadZombie83/Carribrary/releases): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. Choose the recommended release; previews are for invited testing. The optional Android librarian companion is planned as a one-time US$5 Google Play purchase. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion. Public downloads and the Play listing must be published before general availability.
+Download the free server installer from [official Releases](https://github.com/MadZombie83/Carribrary/releases): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. Choose the recommended release; previews are for invited testing. The optional Android librarian companion is a separate paid app; see Google Play and the official release page for availability and local pricing. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion.
 
 Most users do not need source code or build tools. Follow [installation instructions](home-library-native/INSTALLER-GUIDE.txt), then Help in the app.
 

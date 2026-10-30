@@ -60,3 +60,9 @@ Build updated packages locally to deliver the bundled changes. Existing installe
 ## Installer-first publishing correction
 
 Normal instructions now lead with GitHub server installers and the planned Google Play companion. Source building/APK sideloading is confined to developer or invited-tester material. Chezburber Studios and the approved support contact are filled in; unpublished store/policy/download URLs remain explicit release gates. The custom source-available proprietary license and dependency attribution review are described in PUBLISHING-AND-LICENSE-REVIEW.md.
+
+## Customer-facing copy and product footer
+
+About now groups the actual installed version, copyright, Chezburber Studios, support and license. Removed publishing plans, source-build instructions and internal feature-freeze/acceptance notes from everyday Help, Quick Start and installed guides. Real file names, recovery warnings, setup checks and provider limitations remain. Engineering/legal publication gates stay in developer/release documents.
+
+A small nonfixed, themed copyright/version footer appears on administrator, login, borrower, welcome, kiosk, Help and recovery pages, including the hosted iPhone companion. Android shows its own BuildConfig version with the same copyright below content and in Help. Server footer values are synchronized from SetupStatus rather than copied from older markup. Long legal URLs now wrap in mobile Help. Added product-info browser coverage for desktop/mobile identification, About, public/account/companion/kiosk pages and overflow; Android Kotlin compile, existing Quick Start and ecosystem Help checks passed. Physical phone appearance remains an owner acceptance check.

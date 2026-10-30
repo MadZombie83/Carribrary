@@ -1,6 +1,6 @@
 # Linux and Raspberry Pi — Carribrary 2.0.53
 
-These are current instructions. Features are frozen; preview installation/hardware checks remain. Use [current Help](../../Carribrary-Help-2.0.53.md) for everyday lending and recovery.
+These are current installation instructions. Use [current Help](../../Carribrary-Help-2.0.53.md) for everyday lending and recovery.
 
 ## Choose the package
 
@@ -28,7 +28,7 @@ Data: `~/.var/app/com.household.HomeLibrary/data/home-library`. Updates preserve
 3. Complete local administrator setup and save the recovery code.
 4. Make and verify a complete portable backup.
 
-The `home-library` service normally starts at boot. Program: `/opt/home-library/server`; data: `/var/lib/home-library`; optional service settings: `/etc/home-library/home-library.env`. Removing a package retains data; keep it during updates. Physical Pi acceptance is not inferred from cross-compilation.
+The `home-library` service normally starts at boot. Program: `/opt/home-library/server`; data: `/var/lib/home-library`; optional service settings: `/etc/home-library/home-library.env`. Removing a package retains data; keep it during updates.
 
 A headless Pi has no local browser. Use the SSH instructions in [ADVANCED-OPERATIONS.md](../ADVANCED-OPERATIONS.md); never expose the administrator port publicly.
 

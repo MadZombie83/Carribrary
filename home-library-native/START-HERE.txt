@@ -1,11 +1,11 @@
 CARRIBRARY 2.0.53 — START HERE
-Documentation reviewed 2026-10-30. Features are frozen; release testing continues.
+
 
 GET CARRIBRARY
 Developer: Chezburber Studios. Support: chezburbermerch@gmail.com.
 Download a server installer from the official GitHub Releases page:
 https://github.com/MadZombie83/Carribrary/releases
-Choose the release recommended by Chezburber Studios. Previews are for testing.
+Choose the release recommended by Chezburber Studios.
 The server is free. You do not need to build anything to install it.
 
 For installation, use the matching package:
@@ -13,7 +13,6 @@ For installation, use the matching package:
 - Intel/AMD Linux desktop: Carribrary-Linux-x86_64-2.0.53-preview.flatpak
 - Pi 4/5 with 64-bit Pi OS: Carribrary-Pi-ARM64-2.0.53-preview.deb
 - Android librarian: optional paid Carribrary companion from Google Play when live
-  (invited testers receive separate test instructions before publication)
 - iPhone librarian: the server's /companion/ browser app
 
 FIRST SETUP

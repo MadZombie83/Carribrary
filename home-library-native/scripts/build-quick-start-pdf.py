@@ -10,7 +10,8 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image, Keep
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.colors import HexColor
 root=Path(__file__).resolve().parents[2];project=root/'home-library-native'
-version=re.search(r'Version="([^"]+)"',(project/'server/SetupStatus.cs').read_text())[1].removesuffix('-preview')
+full_version=re.search(r'Version="([^"]+)"',(project/'server/SetupStatus.cs').read_text())[1]
+version=full_version.removesuffix('-preview')
 out=root/'output/pdf'/f'Carribrary-Quick-Start-{version}.pdf';out.parent.mkdir(parents=True,exist_ok=True)
 class Guide(HTMLParser):
  def __init__(self):super().__init__();self.main=False;self.tag=None;self.text=[];self.blocks=[];self.list_count=0;self.in_ol=False
@@ -46,6 +47,6 @@ for kind,value in parser.blocks:
   scale=min(460/w,(260 if section_count==1 else 360)/h);story.append(Image(str(path),width=w*scale,height=h*scale));story.append(Spacer(1,8))
  else:story.append(Paragraph(escape(clean(value)),styles['CTitle' if kind=='h1' else 'CHead' if kind=='h2' else 'CCaption' if kind=='figcaption' else 'CBody']))
 def footer(canvas,doc):
- canvas.saveState();canvas.setStrokeColor(HexColor('#d9d4ec'));canvas.line(44,38,568,38);canvas.setFont('Helvetica',8);canvas.setFillColor(HexColor('#556276'));canvas.drawString(44,25,'Carribrary '+version+' | Documentation reviewed 2026-10-30');canvas.drawRightString(568,25,str(doc.page));canvas.restoreState()
-SimpleDocTemplate(str(out),pagesize=(612,792),leftMargin=44,rightMargin=44,topMargin=38,bottomMargin=54,title='Carribrary '+version+' Quick Start',author='Carribrary').build(story,onFirstPage=footer,onLaterPages=footer)
+ canvas.saveState();canvas.setStrokeColor(HexColor('#d9d4ec'));canvas.line(44,38,568,38);canvas.setFont('Helvetica',8);canvas.setFillColor(HexColor('#556276'));canvas.drawString(44,25,'© 2026 Chezburber Studios | Carribrary '+full_version);canvas.drawRightString(568,25,str(doc.page));canvas.restoreState()
+SimpleDocTemplate(str(out),pagesize=(612,792),leftMargin=44,rightMargin=44,topMargin=38,bottomMargin=54,title='Carribrary '+version+' Quick Start',author='Chezburber Studios').build(story,onFirstPage=footer,onLaterPages=footer)
 print(out)

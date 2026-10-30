@@ -1,11 +1,11 @@
 CARRIBRARY 2.0.53 — INSTALL, CONNECT AND UPDATE
 Developer: Chezburber Studios. Support: chezburbermerch@gmail.com.
-Documentation reviewed 2026-10-30. No new features are being added.
+
 
 1. PICK THE RIGHT FILE
 Download the server installer from the official GitHub Releases page:
 https://github.com/MadZombie83/Carribrary/releases
-Choose the release recommended by Chezburber Studios; previews are for testing.
+Choose the release recommended by Chezburber Studios.
 The server is free. Windows uses the EXE installer. An Intel/AMD Linux desktop uses the x86_64
 Flatpak. A Pi 4/5 with 64-bit Pi OS uses the ARM64 DEB. The optional Android librarian companion
 is a separate Google Play purchase when the listing is live. Borrowers pay nothing.
@@ -28,8 +28,8 @@ The local administrator must sign in even when Windows is already signed in.
 
 3. ADD THE OPTIONAL ANDROID LIBRARIAN APP
 1) Open Google Play and find Carribrary by Chezburber Studios.
-2) Purchase/install the optional companion. Until the public listing is live,
-   invited testers should follow the developer-supplied test instructions.
+2) Check availability and local pricing, then purchase/install the companion.
+   Use the official Carribrary release page to confirm download availability.
 3) Put phone and server on the same home network for the first local test.
 4) In server Help, follow Pair the optional Android librarian companion.
 5) Use People & Access > Android phone pairing to make the PRIVATE pairing QR.
@@ -120,5 +120,4 @@ or backup files to support.
 
 New self-checkout, self-return reports and kiosks start OFF. Follow their Help
 steps if you enable them. A self-return is not final until a librarian confirms
-the physical book. Physical printing/scanner, mobile/PWA, Windows kiosk and Pi
-acceptance remain part of preview testing.
+the physical book.

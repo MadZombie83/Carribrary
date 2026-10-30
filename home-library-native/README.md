@@ -4,13 +4,9 @@ Developed by **Chezburber Studios**. Support: **chezburbermerch@gmail.com**.
 
 Carribrary is a self-hosted library for physical books. One Windows, Linux or Raspberry Pi computer keeps the library. Librarians can use its browser dashboard, the Android companion or the iPhone/browser companion. Borrowers can use a shared link without an account. Optional accounts add private reading lists.
 
-[Documentation audit and coverage](distribution/DOCUMENTATION-AUDIT-2.0.53.md).
-
-**Feature freeze:** no new features are being added. Current work is documentation, testing, security, compatibility and bug fixes. See [FEATURE-FREEZE.md](FEATURE-FREEZE.md).
-
 ## Install Carribrary
 
-Download the free server installer from [official GitHub Releases](https://github.com/MadZombie83/Carribrary/releases). Choose Windows EXE, Linux Flatpak, or Raspberry Pi ARM64 DEB. The optional Android librarian companion is planned as a one-time US$5 Google Play purchase. Borrowers use the browser free. Public installers and the Play listing must be published before general availability; previews are for testing. Most users do not need source code or build tools.
+Download the free server installer from [official GitHub Releases](https://github.com/MadZombie83/Carribrary/releases). Choose Windows EXE, Linux Flatpak, or Raspberry Pi ARM64 DEB. The optional Android librarian companion is a separate paid app. Check Google Play and the official release page for availability and local pricing. Borrowers use the browser free. Most users do not need source code or build tools.
 
 Carribrary-owned code is [source-available proprietary software](LICENSE.txt). The server is free to run, including for your household, church or organization. Source viewing/private builds do not grant resale or redistribution rights. Third-party licenses remain separate; see [notices](THIRD-PARTY-NOTICES.txt).
 
@@ -41,6 +37,10 @@ Library format is **7**; administrator credentials are format **2**. Make a comp
 
 Self-checkout, self-return reports and kiosks default OFF independently. A borrower return report leaves the book on loan until a librarian confirms physical receipt. Physical library cards do not require online accounts. Encrypted borrower personal reading is separate from librarian circulation data.
 
-Server packages and the Android app must be built/updated together. Browser apps receive changes after refresh. Physical Windows/Edge, phone-camera, scanner, card-printing and Pi acceptance checks remain before public release. No public-store readiness is implied by a source compile.
+Update Android through Google Play and refresh browser apps after updating the server.
 
 Older release notes and older versioned Help files are historical records, not current instructions. Use the 2.0.53 guide above.
+
+## Developer records
+
+Developer/tester work follows [FEATURE-FREEZE.md](FEATURE-FREEZE.md), [documentation coverage](distribution/DOCUMENTATION-AUDIT-2.0.53.md) and the release validation/checklist. These records are separate from everyday installation and Help.
