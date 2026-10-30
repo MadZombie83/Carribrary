@@ -1,11 +1,10 @@
-CURRENT REVIEW TARGET: Carribrary 2.0.53. Draft for owner review, not an approved or published store policy/listing. Historical change notes below are not current setup instructions. Public support: chezburbermerch@gmail.com.
+OWNER REVIEW DRAFT: Review this notice and publish/verify the actual privacy and deletion-page URLs before Play submission. This file does not publish a policy or certify legal/store compliance. Customer text below is synchronized with the Android notice.
 
-Carribrary Privacy Policy — internal test draft
-Review target: Carribrary 2.0.53, October 30, 2026. Not yet effective or published.
+Carribrary privacy notice
+Updated October 30, 2026
 
 Publisher: Chezburber Studios
 Privacy contact: chezburbermerch@gmail.com
-Public support: chezburbermerch@gmail.com. Public policy and deletion-page URLs must be published and verified before Google Play submission.
 
 Your library
 Carribrary is a phone companion for a library server you or your household operate. Books, borrower names and optional contact details, loans, due dates and borrowing requests are stored on that server. Paired phones can view and administer that library. The app sends library changes to your server over an encrypted connection and verifies the paired server identity. Device names and cryptographic pairing credentials identify approved phones. The publisher does not operate a hosted library service in this version.
@@ -25,7 +24,7 @@ Retention and deletion
 The household controls the server and its backups. Removing a borrower or book with history may archive it to preserve loan records rather than erase that history. Ask the household administrator about removing retained records and backups. Forgetting the phone connection removes its pairing and encrypted library/pending/share caches; it does not delete the server's library. Clearing Android app storage or uninstalling removes app-local data, but previously exported files remain until you delete them. Revoking a phone on the server stops further access. The publisher cannot delete a library hosted on your computer. Google and other service providers apply their own retention policies.
 
 Support and changes
-Do not send borrower records, private pairing QR codes or backups when requesting support unless you deliberately choose to share them. This policy will be updated if the app's data handling changes. Publisher contact details and a public policy URL must be supplied before this draft becomes a production policy.
+Do not send borrower records, private pairing QR codes or backups when requesting support unless you deliberately choose to share them. This policy will be updated if the app's data handling changes. Contact Chezburber Studios at chezburbermerch@gmail.com for software privacy questions. Contact your librarian for records stored on their server.
 
 Household reading and private borrower reading
 Unlinked household reading profiles are administered by librarians and included in library backups and authorized phone caches. Borrower account personal reading, TBR, notes and wishlists use the separate encrypted private-list system described below. The old personal reading links are not a substitute for a private borrower account. Reading progress never returns a physical book automatically.
@@ -48,7 +47,7 @@ Android native administrator alerts: Settings & Tools → Borrowing & Reminders 
 
 
 Borrower data controls
-Borrowers can sign in and use My data & privacy to clear completed history or delete their own sign-in account and linked information after a preview, password check and typed username confirmation. The librarian has the same administrative deletion tools. Full information deletion requires resolving outstanding physical loans; sign-in deletion alone remains available and retains library records, which is disclosed before confirmation. Ask the library owner to resolve retained records and private backup copies. No automatic remote wipe of disconnected devices is promised. /account/delete-help on the library HTTPS address provides the browser-only path and support instructions. The software publisher does not operate these household databases. The publisher’s public store deletion/help page still needs deployment and a verified URL before Play submission.
+Borrowers can sign in and use My data & privacy to clear completed history or delete their own sign-in account and linked information after a preview, password check and typed username confirmation. The librarian has the same administrative deletion tools. Full information deletion requires resolving outstanding physical loans; sign-in deletion alone remains available and retains library records, which is disclosed before confirmation. Ask the library owner to resolve retained records and private backup copies. No automatic remote wipe of disconnected devices is promised. /account/delete-help on the library HTTPS address provides the browser-only path and support instructions. The software publisher does not operate these household databases.
 Completed-history clearing preserves active loans, holds and unfinished reading, uses a preview and typed confirmation, and does not create a new copy of erased history. It removes matching private idempotency receipt copies; older private backups, exports and messages are separate. Device cache clearing does not erase server data or pairing. This version does not implement whole-catalog borrower offline downloads.
 
 

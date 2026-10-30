@@ -29,4 +29,9 @@ assert 'Google Play' in pair and 'Chezburber Studios' in pair and 'Install the m
 assert any(x['title']=='Third-party licenses and credits' for x in h['topics'])
 assert 'Pricing: US$15.00 one-time paid download' in (r/'play-store/STORE-LISTING.md').read_text()
 assert 'Owner-confirmed Android base price: **US$15.00' in (r/'distribution/PUBLICATION-PLAN.md').read_text()
+notice=(r/'assets/privacy.txt').read_text()
+assert (r/'android/app/src/main/assets/privacy.txt').read_text()==notice
+for stale in ['[DEVELOPER','[PUBLIC SUPPORT','internal test draft','must be published','before Play submission','no automated email verification or recovery provider']:
+ assert stale not in notice
+assert 'Encrypted personal lists' in notice and 'email recovery' in notice and 'Optional borrower self-service' in notice
 print('PASS publishing identity, installer-first Help, 100-component Android inventory, separate third-party rights and packaged legal assets. Final signed artifact/legal review remains required.')

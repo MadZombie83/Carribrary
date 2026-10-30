@@ -1,6 +1,6 @@
 """Synchronize user help for every release; --check validates without writing."""
 from pathlib import Path
-import json,re,sys
+import json,re,sys,subprocess
 root=Path(__file__).resolve().parents[1]
 source=root/'assets/help.json';data=json.loads(source.read_text())
 full_version=re.search(r'Version="([^"]+)"',(root/'server/SetupStatus.cs').read_text())[1]
@@ -30,4 +30,5 @@ for name in footer_pages:
  updated=updated[:at]+footer+updated[at:]
  if '--check' in sys.argv:assert text==updated,'Product footer out of sync: '+name
  else:p.write_text(updated)
+subprocess.run([sys.executable,str(root/'scripts/sync-privacy.py')]+(['--check'] if '--check' in sys.argv else []),check=True)
 print('PASS current release help is identical on server, Android and iPhone; standalone guide matches')

@@ -6,7 +6,7 @@ Carribrary is a self-hosted library for physical books. One Windows, Linux or Ra
 
 ## Install Carribrary
 
-Download the free server installer from [official GitHub Releases](https://github.com/MadZombie83/Carribrary/releases). Choose Windows EXE, Linux Flatpak, or Raspberry Pi ARM64 DEB. The optional Android librarian companion is a separate paid app. Check Google Play and the official release page for availability and local pricing. Borrowers use the browser free. Most users do not need source code or build tools.
+Download the free server installer from [official GitHub Releases](https://github.com/MadZombie83/Carribrary/releases). Choose Windows EXE, Linux Flatpak, or Raspberry Pi ARM64 DEB. The optional Android librarian companion has a one-time US$15 base price. Check Google Play and the official release page for availability and local pricing. Borrowers use the browser free. Most users do not need source code or build tools.
 
 Carribrary-owned code is [source-available proprietary software](LICENSE.txt). The server is free to run, including for your household, church or organization. Source viewing/private builds do not grant resale or redistribution rights. Third-party licenses remain separate; see [notices](THIRD-PARTY-NOTICES.txt).
 
