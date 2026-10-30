@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.45 — guided complete recovery and saved theme artwork
 
 ## Recovery without typing commands

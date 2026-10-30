@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.52 preview
 
 Local administrator GUI: Settings & Tools → System & Advanced → Public sharing setup, plus Flatpak/Pi application-menu entries. For one server at a new home using its own DNS account. No second-server routing changes.

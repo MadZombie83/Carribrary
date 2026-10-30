@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.38 — Android design and saved themes
 
 The Android companion keeps existing pairing and lending behavior while improving the banner, line-icon navigation, library counts and catalog cards. Everyday Add book / Check out / Return actions follow search. Filter & sort contains collection controls and bulk editing. Each book retains its primary lending action and About; Edit, Receipt and Recycle Bin are under Book options. Existing confirmations and permissions remain.

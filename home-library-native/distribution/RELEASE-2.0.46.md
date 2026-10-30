@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.46 — artwork belongs to each saved theme
 
 New theme in Library & Appearance → Custom theme editor clears the draft name and artwork preview instead of copying the last library overlay. The current colors remain a starting point. Select a saved theme to load its colors, name and own saved PNG or explicit no-artwork choice. Use current library artwork deliberately copies the active overlay into a draft. Save & use theme stores both colors and that artwork choice. Editing or cancelling a draft alone does not change the live library or overwrite saved themes.

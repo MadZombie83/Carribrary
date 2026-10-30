@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.50 preview — purchase suggestions and optional accounts
 
 Anyone with the enabled shared library link can suggest a book or series for the library to acquire, without an account. The form asks for a title and optional author, valid ISBN and short reason. Series do not need an ISBN. An approved account can use the same action beside Catalog filters while its encrypted personal list remains locked.

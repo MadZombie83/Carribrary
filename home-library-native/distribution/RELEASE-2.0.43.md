@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.43 — batch acquisition, CSV migration, renewals and email recovery
 
 ## Batch add and CSV

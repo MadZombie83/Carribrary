@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.47 — portable recovery, unified appearance and reading polish
 
 Source only. Build the Windows EXE, Flatpak, Raspberry Pi ARM64 DEB and Android APK using the included builder. No release installers or APKs were created for this iteration.

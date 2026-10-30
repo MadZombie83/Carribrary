@@ -47,3 +47,6 @@ button.danger{color:#9b3225}.delete-book{align-self:flex-end;margin-top:.5rem}bu
 .reading-insights h2{font-family:Georgia,serif}.reading-progress progress::-webkit-progress-value,.reading-insights progress::-webkit-progress-value{background:var(--ink)}.reading-progress progress::-webkit-progress-bar,.reading-insights progress::-webkit-progress-bar{background:var(--soft);border-radius:8px}.reading-progress progress::-moz-progress-bar,.reading-insights progress::-moz-progress-bar{background:var(--ink)}.reading-months meter::-webkit-meter-bar{background:var(--soft);border:1px solid var(--line)}.reading-months meter::-webkit-meter-optimum-value{background:var(--ink)}.reading-months meter::-moz-meter-bar{background:var(--ink)}
 
 .analytics-chart{margin:1rem 0}.analytics-chart svg{width:100%;height:auto;min-height:120px;max-height:260px;color:var(--text,var(--ink))}.analytics-chart figcaption{font-size:.875rem;color:var(--muted)}.reading-insights details{margin:.7rem 0}.reading-insights summary{cursor:pointer;color:var(--ink);font-weight:600}
+
+/* Keep numbered Help instructions readable in the existing dialog. */
+#help-topics p{white-space:pre-line;line-height:1.65}

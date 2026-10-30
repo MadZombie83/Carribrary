@@ -1,61 +1,48 @@
-CARRIBRARY — 2.0.53 PREVIEW
+CARRIBRARY 2.0.53 — START HERE
+Documentation reviewed 2026-10-30. Features are frozen; release testing continues.
 
-This is source. Follow BUILD-LOCALLY.md or run the included local builder to create
-packages. Build into a separate Carribrary-2.0.53 folder; do not merge source with
-an older build directory. No signing keys or library data belong in the source.
+DO YOU HAVE SOURCE OR AN INSTALLER?
+A source ZIP is for building. Extract it into a NEW empty work folder, then open
+home-library-native/BUILD-LOCALLY.md. Never merge it into old source or installed
+server folders. This documentation update does not generate installers for you.
 
-Before updating, create a complete password-encrypted backup and download a copy
-off the server. Library JSON exports are not complete account/key/vault backups.
-Update the server first, then companions, retaining existing application data.
-Library format upgrades to 7, credentials remain 2. Older server programs cannot
-preserve permanent borrower IDs and pending physical returns safely. Program-only rollback supports format-7 programs (2.0.53 only);
-guided complete restoration is a separate operation.
+For installation, use the matching package:
+- Windows: Carribrary-Setup-2.0.53-preview.exe
+- Intel/AMD Linux desktop: Carribrary-Linux-x86_64-2.0.53-preview.flatpak
+- Pi 4/5 with 64-bit Pi OS: Carribrary-Pi-ARM64-2.0.53-preview.deb
+- Android librarian: matching signed APK, or the approved Play listing when live
+- iPhone librarian: the server's /companion/ browser app, not an APK
 
-Windows: run your newly built installer over the existing installation. Do not
-uninstall or delete app data. Open Carribrary from the desktop or Start menu.
-Each administrator signs into the local dashboard with Carribrary credentials.
-Paired remote devices continue using their approved tokens without extra login.
+FIRST SETUP
+1. Install the server package on the computer that will keep the library.
+2. Open Carribrary there. The local page is http://localhost:4173.
+3. Follow administrator setup using the private code at the displayed file path.
+   Windows Start > Carribrary > Administrator access can copy the existing code.
+4. Save your recovery code privately, away from this computer.
+5. Add one book, add a borrower if needed, then test checkout and return.
+6. Make and verify a COMPLETE password-encrypted backup. Copy it off this drive.
 
-Android: install your newly built APK over the existing app, preserving app data
-and signing identity. Only the APK goes on the phone; never copy private signing
-folders there. New phones pair from the server's private administrator-phone QR.
+The server works without public sharing, companions, accounts or Google Books.
+Keep it running and awake when people need it. Borrowers need only the sharing
+link for ordinary browsing/requests. Accounts add optional private TBR/reading.
 
-iPhone: open your server's HTTPS /companion/ address in Safari, pair using the
-private browser-companion code, then Share > Add to Home Screen. This is the
-hosted PWA. Native Swift source still requires a Mac/Xcode for validation.
+UPDATING
+1. Make a complete backup and keep its password separately.
+2. Install over the old server/app without uninstalling or clearing data.
+3. Update Android with the same signing identity. Only the APK goes on the phone;
+   private signing folders and passwords never do.
+4. Refresh browser apps and check the library.
 
-Linux: open your newly built Flatpak bundle in the software manager and update.
-Raspberry Pi 4/5, 64-bit Raspberry Pi OS: install the newly built ARM64 DEB.
-See linux/README.md. Keep existing package identities and data paths.
+Current data format is 7, credentials 2. Program rollback to older releases is
+blocked. Complete Backup Recovery is a different tool: verify, test a separate
+copy, confirm restoration, then review local access before remote use resumes.
+Use a portable complete archive for a replacement computer, not library JSON.
 
-Settings & Tools → Library & Appearance has two pages: Library identity and
-Theme & artwork. Presets clear artwork; saved themes restore their own PNG.
-Settings & Tools → Data & History → Portable replacement backup optionally makes
-a complete backup every seven days, retains four managed verified copies and
-lets you download the latest. Copies on the same drive do not protect drive loss.
-Routine catalog snapshots keep sixteen scheduled and seven daily files; manual
-and migration safety copies remain separate.
+WHERE TO FIND HELP
+- Help in the app's top banner: searchable everyday instructions
+- INSTALLER-GUIDE.txt: Windows, phones and updates
+- linux/README.md: Flatpak and Pi
+- ADVANCED-OPERATIONS.md: headless/technical procedures
+- distribution/RELEASE-2.0.53.md: owner acceptance checklist
 
-On a replacement computer install Carribrary 2.0.53, launch Complete Backup
-Recovery from the server application menu, verify the portable archive, rehearse,
-confirm restoration and complete local access review. Configure the replacement
-computer's router/DuckDNS/Caddy connection separately. Stop the old server before
-bringing its restored identity online. Older Windows machine-bound archives still
-need their original machine. Keep backup passwords and borrower vault recovery
-codes safe: they cannot be reset by the developer.
-
-Reading Tracker adds page progress, earlier rereading sessions, goals/statistics
-and favorite quotes/page notes. Borrower-owned entries stay in the encrypted
-personal vault; household profiles remain administrator-managed. Optional
-anonymous aggregate library analytics is under Settings & Tools → Data & History → Analytics & insights and is
-off until enabled. It never contains private reading data or search phrases.
-
-See current Help, distribution/RELEASE-2.0.53.md and INSTALLER-GUIDE.txt. Device
-installation, scanner, Safari, Flatpak portal and actual Windows machine-recovery
-tests remain necessary before public distribution.
-
-2.0.53: update both server and Android for unified account/book/renewal/operational notifications. Browser PWAs receive the server update after refresh. Use the public trusted HTTPS address to install; borrower installation stays under Account → This device; the root welcome page has no Install button. A shortcut alone is not app installation. Raspberry Pi ARM64 remains experimental pending physical-hardware testing.
-
-Shared-link guests and approved accounts can suggest books or series for the librarian to buy. Review them privately under Books to buy and through the bell. Accounts remain optional; the shared catalog explains personal TBR and reading-tracker benefits. Suggestions are separate from private reading and the acquisition wishlist; complete backups include them, library-only JSON does not.
-
-2.0.53: optional self-checkout, pending self-return, branded library cards and restricted browser kiosks. All three permissions default OFF. See current Help and distribution/SELF-SERVICE-IMPLEMENTATION.md. Back up completely before upgrading: library format 7 blocks program-only rollback to 2.0.52 or earlier.
+Old release notes explain old versions. They are not instructions for this one.

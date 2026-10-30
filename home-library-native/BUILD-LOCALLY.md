@@ -1,12 +1,14 @@
-# Build Carribrary locally
+# Build Carribrary 2.0.53 locally
 
 The AI edits source code; your computer runs the compilers. Run the builder after the source handoff, once changes to that source copy are finished; then share only the summary or a relevant error excerpt if help is needed. Compiler execution does not perform model inference. Any AI work reading code/logs or diagnosing failures still uses model usage; no fixed percentage saving is promised.
 
 The builder never installs the output, starts/stops your live server, changes your library data, publishes to a store, or creates/replaces a signing key. Back up before manually installing any new server package.
 
-## On this existing Linux laptop
+## On a Linux build computer
 
-The workspace already has the build tools cached. From a terminal run:
+1. Extract the source into a new empty folder. Do not merge with an old source or installed library.
+2. Open a terminal in its home-library-native folder.
+3. Run:
 
 ```sh
 python3 Build-Carribrary.py
@@ -87,59 +89,8 @@ Normally PATH, standard Android/JDK locations or the existing workspace cache ar
 
 A successful build is not a physical Windows/Pi/phone/Safari test. Run appropriate tests before distribution. Nothing is uploaded by this script.
 
-## 2.0.34 source update
+## Current release and documentation revision
 
-The iPhone/browser companion Help button now fetches help within `/companion/`; full-help links stay in that paired scope. This fixes a root-path response being parsed as JSON. The local server's Help still works at its normal root. If help temporarily fails, a readable message is displayed. Install the newly built server update and reopen the hosted companion to receive the repair. Local administrator login and existing approved companion credentials remain unchanged.
+This is the frozen 2.0.53 feature set. Documentation-only revisions keep that app version. Use a new empty extraction folder for each downloaded revision; do not overwrite an older work folder. GitHub Download ZIP may still use Carribrary-main, so rename that extracted work folder yourself before building. The versioned source archive includes the matching standalone Help.
 
-## 2.0.35 redesign source iteration
-
-Use this source tree (or extract the entire 2.0.35 source ZIP) before running the builder. The first iteration changes admin web/paired-browser layout; borrower and native Android layouts are unchanged. Server, tray and Android packaging metadata are aligned to 2.0.35; offline help includes the new navigation. The native iPhone source project is 0.1.19/build 20, still unverified without Xcode. No 2.0.35 distributable packages were created here. Existing signing keys remain separate and private.
-
-## 2.0.36 account/artwork source update
-
-Build from the entire 2.0.36 source tree. Server/tray/Android metadata and all help are aligned; native iPhone source is 0.1.20/build 21 (still requires Xcode verification). No distributable 2.0.36 packages were built here. Back up before installing your build. This upgrades the protected local administrator credentials to format 2; the original sign-in/recovery survives, but earlier programs cannot decrypt the new store. Recovery is restricted to 2.0.36; a supervised return to an earlier release requires a complete matching pre-update backup, not old programs over current data. Existing paired-device tokens remain independent.
-
-
-## Earlier 2.0.37 borrower interface source update
-
-Use a fresh complete source download for 2.0.39; do not overwrite a source folder while it is building. The repository root includes Carribrary-Help-2.0.39.md, required by the synchronized-help check. Build locally as before. This source changes the server-hosted borrower account/PWA and help; native Android administrator layout is unchanged. Source package metadata is 2.0.39 (Android code 20039); iPhone source 0.1.21/build 22 still requires Xcode verification. No packages are built here. Library format 3 and local credential format 2 stay; compatible program recovery is 2.0.39, with pre-2.0.36 programs still rejected.
-
-
-## Current 2.0.39: Android design, custom colors and versioned source folders
-
-Use Carribrary-2.0.39-source.zip, which extracts into Carribrary-2.0.39. Inside is home-library-native with the existing Build-Carribrary launcher and matching root Help. GitHub Download ZIP uses Carribrary-main; rename that extracted top folder to Carribrary-2.0.39 yourself if using it. Do not merge source versions or overwrite a running build. Reuse existing private signing material for Android updates.
-
-Android has refreshed cards, navigation and Book options. Colors → Custom theme provides eight color roles, full spectrum/hex controls, named save/edit/select and contrast checks. Save & use activates a custom palette on the server. Android preset/ saved selection remains a phone preference; Settings → Use my colors for shared library applies it library-wide. Browser dashboard, borrower pages, login/help and iPhone PWA follow server branding. Only public branding is available before login; all administrative operations remain authenticated. Refresh/reopen web apps after upgrading; rebuild/install Android to receive native changes.
-
-Saved themes are additive library fields with validated custom IDs. Upgrade preserves existing library data, defaults and tokens, but earlier executables reject custom IDs or discard unknown fields. Program-only recovery accepts 2.0.39 only; complete historical recovery remains a separate supervised operation. Library and credential format numbers stay 3 and 2. Back up before installing. No installer, APK, AAB, Flatpak or DEB was built or installed in this source iteration.
-
-Compiler caches across versioned folders: the builder checks the new folder's .build-tools, then its parent's .build-tools, then the sibling Carribrary-main/.build-tools from the earlier extraction workflow. Existing caches and signing configuration can therefore be reused without merging sources. Set CARRIBRARY_TOOLS to choose a different private tool-cache folder. The builder never moves or replaces old source folders.
-
-
-## Current 2.0.39: Settings & Tools, title fitting and full sidebar overlays
-
-The browser administrator has six navigable settings categories with search, breadcrumbs and in-page editors. Catalog, Borrowers, Lending and Requests follow shared dashboard tokens. Colors and custom themes are under Library & Appearance; book sharing and collection management are under Books & Organization. Daily checkout/return and dashboard shortcuts remain directly accessible. See distribution/ADMIN-TOOLS-INVENTORY-2.0.39.md for every relocated function.
-
-Library names use whole-word fitting on every palette: preferred size, reduction to 1 rem, then logo-above-title layout. Extremely long unbroken names scroll inside the label. Upload a portrait PNG under Library & Appearance → Full sidebar overlay; preferred canvas 512 × 1536, input under 10 MB/8192 pixels per side, resized PNG up to 2 MB. Existing 512 × 256 data is accepted but may crop; re-upload a portrait original for best results. No image or personal library brand is bundled. The overlay cannot intercept navigation clicks.
-
-No authentication, pairing or loan/history migration is introduced. Library/credential format versions stay 3/2. Earlier executables reject full-sidebar PNG dimensions, so program-only recovery now supports 2.0.39 only. Keep complete historical recovery points private and separate. Source archive extracts under Carribrary-2.0.39. Build packages locally; no installers were built or installed in this iteration.
-
-Current source 2.0.40: borrower catalog/account and iPhone PWA polish. Use Carribrary-2.0.40-source.zip in a new versioned folder. Existing data/pairing are preserved. Program-only recovery supports 2.0.39–2.0.40. Build packages locally; no installers supplied with this source iteration.
-
-Current source 2.0.41: branded public welcome, administrator Dashboard landing and Android/reading/detail polish. Extract Carribrary-2.0.41-source.zip into its new versioned folder; do not merge it into another build. Review distribution/RELEASE-TEST-CHECKLIST-2.0.41.md after compiling. Compatible program recovery: 2.0.39–2.0.41. No installer packages built in this source delivery.
-
-Current source 2.0.42: companion summary panels, Home/navigation/search and request bells. Use Carribrary-2.0.42-source.zip in its own folder. See distribution/RELEASE-2.0.42.md for verification and owner device checks. Source only; no installers built. Compatible program recovery: 2.0.39–2.0.42; library/credential formats remain 3/2.
-
-Current source 2.0.43: batch ISBN acquisition/CSV mapping, borrower renewals and opt-in SMTP password recovery. See distribution/RELEASE-2.0.43.md for limits and tests. Use the separately versioned source folder. Export a complete private backup first: library format upgrades to 4; program-only recovery permits 2.0.43 only, not earlier programs. Credential format remains 2. Owner builds installers.
-
-Current source 2.0.44: saved complete-backup verification on server/iPhone PWA/Android, independent offline verification and format-4 Android JSON restore. See distribution/RELEASE-2.0.44.md. Library format remains 4 and credential format remains 2; compatible program recovery supports 2.0.43–2.0.44. Build from the separate numbered source folder and retain a complete private backup before updating. No release packages were compiled by the agent.
-
-Current source 2.0.45: Complete Backup Recovery is an independent application-menu wizard (Windows also tray), with archive verification, isolated rehearsal, confirmed restore, retained current data and local historical-access review. Named custom themes save colors and sidebar PNG together. Library format upgrades to 5; credential format remains 2. Compatible program-only recovery is 2.0.45 only. Guided complete recovery also supports same-OS 2.0.43/2.0.44 format-4 archives. See distribution/RELEASE-2.0.45.md and current Help. Build from the new numbered source folder; do not overwrite previous source, signing files or private backups. No release installers were built in this iteration.
-
-Current source 2.0.50: reader purchase suggestions and optional-account guidance. Build server packages and the updated Android APK for suggestion review. Browser PWAs receive the server update after refresh. Library/credential formats remain6/2; compatible program recovery47–50. Suggestions use a separate protected SQLite database included in complete server backups, not library-only JSON. See distribution/RELEASE-2.0.50.md. Owner builds packages; Pi ARM64 remains experimental.
-
-This source also consolidates Library identity and Theme & artwork, adds portable weekly complete backups retaining four, opt-in library analytics and reading progress/rereads/goals/quotes. Build after Help synchronization; run tests before distributing packages. Portable backups still need an off-device copy.
-
-Current source 2.0.51: build server packages and Android for themed artwork banners. Root welcome install control removed; Account installation remains. Formats6/2, compatible recovery47–51; no installers built here. See distribution/RELEASE-2.0.51.md.
-
-Current source 2.0.52: build Linux packages for the managed public-sharing GUI and Windows/Android packages for synchronized Help/version metadata. Caddy is downloaded only after local GUI consent at runtime; it is not bundled in source. Formats6/2; recovery47–52. No release installers were built.
+Build the updated server packages and native Android to deliver synchronized Help; browser PWAs receive it from the rebuilt server after refresh. Current library/credential formats are 7/2. Existing data and signing keys stay outside source folders. Create and verify a complete backup before installing your output. No source download itself updates an installed server.

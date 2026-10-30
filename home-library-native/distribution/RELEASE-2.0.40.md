@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.40 — borrower pages and iPhone PWA polish
 
 The shared catalog, borrower sign-in/account and librarian iPhone/browser PWA use the dashboard’s library colors, serif headings, rounded surfaces, grouped controls and responsive spacing. No individual library branding is embedded in the source.

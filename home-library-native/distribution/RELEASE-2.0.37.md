@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.37 — borrower account navigation
 
 Approved borrowers start in Catalog. The borrower web/PWA now has Catalog, My reading, My loans and Account navigation, with a bottom bar on phones and navigation above the content on larger screens. Catalog cards group borrowing, TBR and About actions; search remains available and is retained between views.

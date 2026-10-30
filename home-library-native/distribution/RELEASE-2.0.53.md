@@ -25,3 +25,7 @@ Update server and native Android together. Browser companions receive changes af
 - Build/install each platform package over a backed-up test installation. Verify clean complete recovery, local login, existing pairings and old copy labels. Physical Pi ARM64 remains experimental until hardware acceptance.
 
 See SELF-SERVICE-IMPLEMENTATION-REPORT.md for executed checks and remaining limitations. This preview does not declare untested Windows/Pi/mobile hardware acceptance or public-release readiness.
+
+## Documentation-only revision
+
+Features are frozen. Current Help, installation/recovery guides, screenshots, printed Quick Start and privacy/deletion drafts were audited and synchronized. See DOCUMENTATION-AUDIT-2.0.53.md for coverage and checks. Build affected packages locally to receive the revised bundled Help; no new installer is produced by this revision.

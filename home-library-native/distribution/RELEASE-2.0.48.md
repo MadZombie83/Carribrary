@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.48 — Analytics & insights has its own settings page
 
 Analytics no longer appears as an expanding section on Dashboard or a button on Android Home. Open Settings & Tools → Data & History → Analytics & insights instead. Its card opens the dedicated settings route with breadcrumbs and Back navigation on the server and paired iPhone PWA. Period and chart selections stay within that page; the chart metric is retained when changing the period. Android opens analytics from the same settings category.

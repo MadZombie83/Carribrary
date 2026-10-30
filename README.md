@@ -32,3 +32,7 @@ Public support: **chezburbermerch@gmail.com**.
 No open-source license has been selected for Carribrary. Keep this repository private until its source licensing and publication terms are decided. Third-party code and notices retain their respective licenses; see [notices](home-library-native/THIRD-PARTY-NOTICES.txt). Android store binaries are kept private; the planned paid companion is separate from the free server and borrower interface.
 
 The supplied Carribrary-2.0.53-source.zip extracts into Carribrary-2.0.53. GitHub Download ZIP still extracts as Carribrary-main; rename its top-level folder to the release version before building. Never merge a fresh source version into an older build folder.
+
+## Documentation revision — October 30, 2026
+
+Features are frozen at 2.0.53. Current Help has been audited and simplified, with refreshed illustrated instructions. See [documentation audit](home-library-native/distribution/DOCUMENTATION-AUDIT-2.0.53.md). Build packages locally to deliver the revised bundled Help. Store/privacy materials remain review drafts.

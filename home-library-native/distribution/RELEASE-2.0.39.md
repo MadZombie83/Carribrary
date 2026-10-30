@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.39 — dashboard pages and Settings & Tools
 
 The primary sidebar keeps Dashboard, Catalog, Borrowers, Lending, Requests and Reading tracker, followed by one Settings & Tools entry. Its six category pages have their own navigable URLs, search, breadcrumbs, cards, saved-value/status labels and in-page editors. Browser Back/Forward and direct settings links work. Colors and saved themes are under Library & Appearance, not Catalog. Book sharing and collection management move to Books & Organization. Daily catalog filters, lending and dashboard shortcuts remain direct.

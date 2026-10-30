@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.51 preview
 
 The public root welcome page no longer loads the borrower install script or shows its install button/status block. Theme, artwork, navigation and responsive layout remain. Account → This device and shared-catalog installation remain, as do librarian PWA controls and native Android installation options.

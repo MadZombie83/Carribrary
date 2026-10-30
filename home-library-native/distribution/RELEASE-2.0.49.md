@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.49 preview — admin notifications and web-app installation
 
 The server dashboard, paired iPhone/browser companion and native Android now share a notification inbox. The bell counts account approvals, borrowing requests, renewal requests, holds awaiting handover, overdue active loans, restored-access review and reported backup/email/push problems. Review opens the existing tool; opening an item does not dismiss it. Resolved conditions clear after refresh. Count summaries never inspect encrypted borrower reading records or expose contact details.

@@ -1,3 +1,5 @@
+> Historical release record. For current installation, recovery and Help, use the current README and synchronized Help. These older instructions do not override current compatibility or safety requirements.
+
 # Carribrary 2.0.42 — matching companion dashboard panels and navigation
 
 Android Home/Catalog and the iPhone/browser companion Home/Catalog now share the dashboard's four semantic summary panels: Physical copies, Available, On loan and Active requests. Phones use two columns; wider layouts use four. The physical-copy panel follows the active palette, with green availability, orange loans and blue requests. Available excludes loans and holds. Active requests includes pending and approved requests; closed requests are excluded. These are whole-library totals, independent of catalog filtering. Offline Android uses its existing cached snapshot, not live counts.

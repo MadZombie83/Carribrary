@@ -1,3 +1,7 @@
+# Feature freeze — current 2.0.53
+
+No new features. Read FEATURE-FREEZE.md. Older plans below are historical; use current validation/release checklists and the current Help. Documentation and regression/stability/security work remain authorized.
+
 # Release requirements
 
 The maintained product/engineering specification and current repair scope are in
