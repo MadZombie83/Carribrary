@@ -27,4 +27,6 @@ for n in ['LICENSE.txt','THIRD-PARTY-NOTICES.txt']:
 h=json.loads((r/'assets/help.json').read_text());pair=next(x for x in h['topics'] if x['title']=='Pair the optional Android librarian companion')['body']
 assert 'Google Play' in pair and 'Chezburber Studios' in pair and 'Install the matching Carribrary Android APK' not in pair
 assert any(x['title']=='Third-party licenses and credits' for x in h['topics'])
+assert 'Pricing: US$15.00 one-time paid download' in (r/'play-store/STORE-LISTING.md').read_text()
+assert 'Owner-confirmed Android base price: **US$15.00' in (r/'distribution/PUBLICATION-PLAN.md').read_text()
 print('PASS publishing identity, installer-first Help, 100-component Android inventory, separate third-party rights and packaged legal assets. Final signed artifact/legal review remains required.')

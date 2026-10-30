@@ -9,7 +9,7 @@ Publisher: Chezburber Studios
 Support email: chezburbermerch@gmail.com
 Website/server downloads: [PUBLIC DOWNLOADS URL]
 Privacy policy: [PUBLIC HTTPS PRIVACY URL]
-Pricing: US$5.00 one-time paid download on Google Play; review local prices/taxes in Play Console. No subscription.
+Pricing: US$15.00 one-time paid download on Google Play; review local prices/taxes in Play Console. No subscription.
 
 ## Full description
 

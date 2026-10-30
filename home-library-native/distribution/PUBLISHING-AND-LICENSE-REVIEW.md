@@ -6,7 +6,7 @@ Approved public support contact: **chezburbermerch@gmail.com**.
 ## Normal user path
 
 - Free Windows, Linux Flatpak and Pi ARM64 server installers: official `MadZombie83/Carribrary` GitHub Releases, once published for the recommended release.
-- Optional paid Android librarian companion: Google Play, planned one-time US$5 with regional price/tax shown by Google Play. Public listing is not yet live. Invited testers use their supplied test path.
+- Optional paid Android librarian companion: Google Play, planned one-time US$15 with regional price/tax shown by Google Play. Public listing is not yet live. Invited testers use their supplied test path.
 - Borrowers: free shared-link browser/PWA. They do not need the paid companion.
 - iPhone librarians: hosted Safari companion/PWA.
 - Source code: optional inspection/developer/private-build path, separate from normal installation. GitHub's automatic Source code ZIP is not an installer and cannot be removed from a normal tagged release; release descriptions should lead with the three server installer assets, not the source download.

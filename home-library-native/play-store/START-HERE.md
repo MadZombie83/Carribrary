@@ -12,7 +12,7 @@ Owner/publisher checklist, not librarian Help or production approval. Features a
 
 ## Before production review
 
-- Owner's intended model: optional Android librarian companion for a one-time USD5 fee; free self-hosted server and free borrower access. Configure pricing/payment through the owner account. Do not accidentally publish a planned paid app as permanently free.
+- Owner's intended model: optional Android librarian companion for a one-time USD15 fee; free self-hosted server and free borrower access. Configure pricing/payment through the owner account. Do not accidentally publish a planned paid app as permanently free.
 - Use only the dedicated public support email `chezburbermerch@gmail.com`; do not expose a personal email in listings, policies, commits or screenshots. Final publisher/business identity still needs owner confirmation.
 - Finalize STORE-LISTING, privacy and Data safety drafts against actual behavior, ML Kit/Android dependencies, self-hosted data handling and current Play forms. Publish real HTTPS policy, support and account-deletion information. Draft local files are not public URLs.
 - Resolve reviewer access using REVIEW-ACCESS.md. A ten-minute pairing code or personal household library is not reliable standing review access. Do not weaken pairing or add a demo/review feature under the freeze without explicit owner approval.
