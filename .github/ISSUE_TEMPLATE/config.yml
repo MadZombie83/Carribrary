@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Setup questions and feedback
+    url: https://github.com/MadZombie83/Carribrary/discussions
+    about: Ask for help or share testing feedback.
+  - name: Report a security problem privately
+    url: https://github.com/MadZombie83/Carribrary/blob/main/SECURITY.md
+    about: Please do not post vulnerability details or private information publicly.
