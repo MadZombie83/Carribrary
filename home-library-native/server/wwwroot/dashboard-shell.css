@@ -1,0 +1,14 @@
+/* Shared additions to the existing admin-shell layout. All colors come from library tokens. */
+[data-shell-toggle],[data-shell-close]{display:none}
+[data-shell-backdrop]{position:fixed;inset:0;background:#10102088;border:0;border-radius:0;z-index:29}
+[data-shell-backdrop][hidden]{display:none!important}
+.server-update-notice{margin-bottom:1.2rem;border-inline-start:4px solid var(--ink)}
+.server-update-notice p{margin:.6rem 0;color:var(--muted,var(--ui-muted))}.server-update-notice a{display:inline-block;margin:.5rem 1rem .5rem 0;color:var(--ink)}
+.server-update-tools{margin-top:1rem;text-align:left}.server-update-tools summary{cursor:pointer;min-height:44px;padding:.7rem 0}.server-update-tools p{max-width:70ch}
+@media(max-width:900px){
+ .admin-shell [data-shell-toggle],.admin-shell [data-shell-close]{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px}
+ .admin-shell .admin-sidebar{display:flex;inset:0 auto 0 0;width:min(84vw,300px);height:100dvh;border-radius:0;z-index:30;transform:translateX(-105%);visibility:hidden;transition:transform .15s,visibility .15s}
+ .admin-shell.shell-nav-open{overflow:hidden}.admin-shell.shell-nav-open .admin-sidebar{visibility:visible;transform:translateX(0)}
+ .admin-shell [data-shell-close]{align-self:flex-end;position:relative;z-index:2;margin:.7rem .7rem 0;color:white;background:#0006;border-color:#fff8}
+}
+@media(prefers-reduced-motion:reduce){.admin-shell .admin-sidebar{transition:none}}

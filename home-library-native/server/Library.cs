@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 namespace HomeLibrary;
 public sealed class LibraryState {
  public string LibrarySidebarArtwork {get;set;}="";
+ public string LibraryBorrowerArtwork {get;set;}="";
  public string LibraryIcon192 {get;set;}="";
  public string LibraryIcon512 {get;set;}="";
  public List<LibraryPalette> SavedThemes {get;set;}=[];
@@ -59,7 +60,7 @@ public static class Library {
   if(s.LibraryTheme==null||!LibraryAppearance.Valid(s.LibraryTheme))throw new LibraryError("Choose a supported library color scheme.");
   CustomThemes.Validate(s);
   LibraryAppearance.ValidateIcons(s.LibraryIcon192,s.LibraryIcon512);
-  LibraryAppearance.ValidateSidebarArtwork(s.LibrarySidebarArtwork);
+  LibraryAppearance.ValidateSidebarArtwork(s.LibrarySidebarArtwork);LibraryAppearance.ValidateBorrowerArtwork(s.LibraryBorrowerArtwork);
   ValidateSaying(s.BannerSubtitle,160);ValidateSaying(s.EncouragingMessage,240);
   if(s.Version is not (1 or 2 or 3 or 4 or 5 or 6 or 7)||s.NextCopy<1||s.NextCopy>(long)int.MaxValue+1||s.Books==null||s.Borrowers==null||s.Loans==null)throw new LibraryError("Invalid library backup.");
   if(s.Books.Any(x=>x==null)||s.Borrowers.Any(x=>x==null)||s.Loans.Any(x=>x==null))throw new LibraryError("Invalid records in backup.");
@@ -112,10 +113,11 @@ public static class Library {
    case "setCopyNumberPolicy":{var policy=Field(e,"policy");if(policy is not ("fill-gaps" or "next-number"))throw new LibraryError("Choose a supported copy-number policy.");s.CopyNumberPolicy=policy;return new{policy};}
    case "setLibraryIdentity":{var name=Field(e,"libraryName").Trim();if(name.Length==0||name.Length>80||name.Any(char.IsControl))throw new LibraryError("Enter a library name of 1–80 characters.");var subtitle=Field(e,"bannerSubtitle").Trim();var message=Field(e,"encouragingMessage").Trim();ValidateSaying(subtitle,160);ValidateSaying(message,240);var small=Field(e,"icon192");var large=Field(e,"icon512");LibraryAppearance.ValidateIcons(small,large);s.LibraryName=name;s.BannerSubtitle=subtitle;s.EncouragingMessage=message;s.LibraryIcon192=small;s.LibraryIcon512=large;return new{saved=true};}
    case "setLibraryPresentation":{var subtitle=Field(e,"bannerSubtitle").Trim();var message=Field(e,"encouragingMessage").Trim();ValidateSaying(subtitle,160);ValidateSaying(message,240);s.BannerSubtitle=subtitle;s.EncouragingMessage=message;return new{bannerSubtitle=subtitle,encouragingMessage=message};}
+   case "setLibraryBorrowerArtwork":{var artwork=Field(e,"artwork");LibraryAppearance.ValidateBorrowerArtwork(artwork);s.LibraryBorrowerArtwork=artwork;if(CustomThemes.Selected(s) is {} selected)selected.BorrowerArtwork=artwork;return new{saved=artwork!=""};}
    case "setLibrarySidebarArtwork":{var artwork=Field(e,"artwork");LibraryAppearance.ValidateSidebarArtwork(artwork);s.LibrarySidebarArtwork=artwork;if(CustomThemes.Selected(s) is {} selected)selected.SidebarArtwork=artwork;return new{saved=artwork!=""};}
    case "setLibraryIcon":{var small=Field(e,"icon192");var large=Field(e,"icon512");LibraryAppearance.ValidateIcons(small,large);s.LibraryIcon192=small;s.LibraryIcon512=large;return new{saved=large!=""};}
    case "saveCustomTheme":return CustomThemes.Save(s,e);
-   case "setLibraryTheme":{var theme=Field(e,"libraryTheme");if(theme==""||!LibraryAppearance.Valid(theme))throw new LibraryError("Choose a supported library color scheme.");if(CustomThemes.IsCustom(theme)&&!s.SavedThemes.Any(t=>"custom-"+t.Id==theme))throw new LibraryError("Saved theme not found.");s.LibraryTheme=theme;s.LibrarySidebarArtwork=CustomThemes.Selected(s)?.SidebarArtwork??"";return new{libraryTheme=theme};}
+   case "setLibraryTheme":{var theme=Field(e,"libraryTheme");if(theme==""||!LibraryAppearance.Valid(theme))throw new LibraryError("Choose a supported library color scheme.");if(CustomThemes.IsCustom(theme)&&!s.SavedThemes.Any(t=>"custom-"+t.Id==theme))throw new LibraryError("Saved theme not found.");s.LibraryTheme=theme;s.LibrarySidebarArtwork=CustomThemes.Selected(s)?.SidebarArtwork??"";s.LibraryBorrowerArtwork=CustomThemes.Selected(s)?.BorrowerArtwork??"";return new{libraryTheme=theme};}
    case "setLibraryName":{var name=Field(e,"libraryName").Trim();if(name.Length==0||name.Length>80||name.Any(char.IsControl))throw new LibraryError("Enter a library name of 1–80 characters.");s.LibraryName=name;return new{libraryName=name};}
    case "addBook":case "updateBook":{
     var b=Details(e);if((b.Isbn!=""||s.Version<4)&&!ValidCode(b.Isbn)||b.Title=="")throw new LibraryError("Enter a title and a valid ISBN, or leave ISBN blank for an unnumbered book.");

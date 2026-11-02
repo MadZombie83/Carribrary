@@ -4,6 +4,7 @@ export async function openAdminTool(page,id){
  id=settingsAliases[id]||id;
  if(id==='requests'||id==='lending-tools'){
   const primary=page.locator('.sidebar-nav [data-admin-tool="'+id+'"]');
+  if(await page.evaluate(()=>innerWidth<=900)&&await page.locator('[data-shell-toggle]').count()){if(!await page.evaluate(()=>document.body.classList.contains('shell-nav-open')))await page.locator('[data-shell-toggle]').click();await primary.click();return;}
   if(await primary.isVisible()){await primary.click();return;}
   const tool=settingsTools.find(t=>t.id===id);await page.evaluate(hash=>location.hash=hash,'#settings/'+tool.category);await page.locator('[data-settings-action="'+id+'"]').click();return;
  }

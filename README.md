@@ -16,7 +16,7 @@ Carribrary-owned code is **source-available proprietary software**, not open sou
 
 ## Current preview
 
-2.0.53-preview; features frozen. See [current Help](Carribrary-Help-2.0.53.md) and [release instructions](home-library-native/distribution/RELEASE-2.0.53.md). Public preview testing is open; this is not the final stable launch or a Google Play release. Real-device, scanner/card-printing, kiosk and Raspberry Pi acceptance remain in progress. Keep a verified complete backup on another device: older programs cannot safely open the upgraded library format. Source downloads do not change an installed library.
+Development source: **2.0.54-preview**. Current downloadable server installers remain **2.0.53-preview** until the owner builds and publishes the next preview. See [current source Help](Carribrary-Help-2.0.54.md) and [release instructions](home-library-native/distribution/RELEASE-2.0.54.md). Public preview testing is open; this is not the final stable launch or a Google Play release. Real-device, scanner/card-printing, kiosk and Raspberry Pi acceptance remain in progress. Keep a verified complete backup on another device: older programs cannot safely open the upgraded library format. Source downloads do not change an installed library.
 
 ## Questions and bug reports
 
@@ -25,3 +25,5 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 ## Developers and testers
 
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
+
+The 2.0.54 source adds administrator update notices and a shared borrower dashboard layout, including optional mobile borrower artwork saved with themes. Existing 2.0.53 installations need one manual update before they can show the new release notices. No replacement installers are included in this source-only change.

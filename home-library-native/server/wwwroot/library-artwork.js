@@ -2,7 +2,7 @@
 export function artworkSource(encoded){return typeof encoded==='string'&&encoded?'data:image/png;base64,'+encoded:'';}
 export function applyLibraryArtwork(target,source){
  if(!target)return;
- const valid=typeof source==='string'&&(/^\/account\/library-artwork\.png\?v=[a-fA-F0-9]{16}$/.test(source)||/^data:image\/png;base64,[A-Za-z0-9+/=\r\n]+$/.test(source));
+ const valid=typeof source==='string'&&(/^\/account\/(?:library-artwork|borrower-artwork)\.png\?v=[a-fA-F0-9]{16}$/.test(source)||/^data:image\/png;base64,[A-Za-z0-9+/=\r\n]+$/.test(source));
  const old=target.querySelector(':scope > .library-banner-artwork');
  if(!valid){old?.remove();target.classList.remove('library-artwork-banner');return;}
  if(old?.getAttribute('src')===source)return;

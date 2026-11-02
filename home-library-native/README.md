@@ -1,4 +1,4 @@
-# Carribrary 2.0.53
+# Carribrary 2.0.54
 
 Developed by **Chezburber Studios**. Support: **chezburbermerch@gmail.com**.
 
@@ -13,12 +13,12 @@ Carribrary-owned code is [source-available proprietary software](LICENSE.txt). T
 ## Choose your next step
 
 - **Installing a package:** [START-HERE.txt](START-HERE.txt), then [INSTALLER-GUIDE.txt](INSTALLER-GUIDE.txt).
-- **Everyday use:** [current Help](../Carribrary-Help-2.0.53.md). Inside Carribrary, use Help in the top banner.
+- **Everyday use:** [current Help](../Carribrary-Help-2.0.54.md). Inside Carribrary, use Help in the top banner.
 - **Linux or Pi:** [linux/README.md](linux/README.md).
 - **iPhone:** use the hosted browser companion; see [ios/README.md](ios/README.md).
 - **Building source:** [BUILD-LOCALLY.md](BUILD-LOCALLY.md). Source ZIPs do not install the app.
 - **Advanced hosting/recovery:** [ADVANCED-OPERATIONS.md](ADVANCED-OPERATIONS.md).
-- **Testing this preview:** [release checklist](distribution/RELEASE-2.0.53.md), [validation](distribution/VALIDATION-2.0.53.md), and [implementation report](distribution/SELF-SERVICE-IMPLEMENTATION-REPORT.md).
+- **Testing this preview:** [release checklist](distribution/RELEASE-2.0.54.md), [validation](distribution/VALIDATION-2.0.54.md), and [implementation report](distribution/SELF-SERVICE-IMPLEMENTATION-REPORT.md).
 
 ## Start with the basics
 
@@ -33,14 +33,18 @@ The local dashboard is `http://localhost:4173` on the server computer. Localhost
 
 ## Current release boundaries
 
-Library format is **7**; administrator credentials are format **2**. Make a complete portable backup before upgrading. Earlier server programs cannot preserve the new data. Program-only recovery currently accepts 2.0.53; guided complete data recovery is separate.
+Library format is **7**; administrator credentials are format **2**. Make a complete portable backup before upgrading. Earlier server programs cannot preserve the new data. Program-only recovery currently accepts 2.0.54; guided complete data recovery is separate.
 
 Self-checkout, self-return reports and kiosks default OFF independently. A borrower return report leaves the book on loan until a librarian confirms physical receipt. Physical library cards do not require online accounts. Encrypted borrower personal reading is separate from librarian circulation data.
 
 Update Android through Google Play and refresh browser apps after updating the server.
 
-Older release notes and older versioned Help files are historical records, not current instructions. Use the 2.0.53 guide above.
+Older release notes and older versioned Help files are historical records, not current instructions. Use the 2.0.54 guide above.
 
 ## Developer records
 
-Developer/tester work follows [FEATURE-FREEZE.md](FEATURE-FREEZE.md), [documentation coverage](distribution/DOCUMENTATION-AUDIT-2.0.53.md) and the release validation/checklist. These records are separate from everyday installation and Help.
+Developer/tester work follows [FEATURE-FREEZE.md](FEATURE-FREEZE.md), [documentation coverage](distribution/DOCUMENTATION-AUDIT-2.0.54.md) and the release validation/checklist. These records are separate from everyday installation and Help.
+
+## 2.0.54 source changes
+
+Administrator-only server update notices link to official GitHub release notes and installers after a backup reminder. Borrower pages reuse the dashboard shell, with borrower-only navigation, mobile artwork and their own circulation overview. Theme & artwork can save an optional mobile borrower PNG; the main artwork remains the fallback. See Help for step-by-step instructions.
