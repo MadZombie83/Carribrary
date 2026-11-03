@@ -9,7 +9,7 @@ const release=JSON.parse(await readFile('home-library-native/assets/help.json','
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});const errors=[];
 const frame=(archive,key=password)=>{const json=Buffer.from(JSON.stringify({password:key})),size=Buffer.alloc(4);size.writeInt32LE(json.length);return Buffer.concat([size,json,archive]);};
 try{
- const page=await browser.newPage({viewport:{width:1440,height:1000}});page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(admin);await page.waitForSelector('#content',{state:'attached'});await page.waitForFunction(()=>document.querySelector('#app-version')?.textContent.includes('Native server'));
+ const page=await browser.newPage({viewport:{width:1440,height:1000}});page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(admin);await page.waitForSelector('#content',{state:'attached'});await page.waitForFunction(()=>document.querySelector('#app-version')?.textContent.includes('Carribrary'));
  const before=await(await page.request.get(admin+'/api/state')).json();
  const saved=await page.request.post(admin+'/api/backup/complete',{headers:{Origin:admin},data:{password}});assert.equal(saved.status(),200);const archive=await saved.body();assert.equal(archive.subarray(0,8).toString(),'CARRBK01');
  const payload=frame(archive),binary={'Content-Type':'application/octet-stream',Origin:admin};

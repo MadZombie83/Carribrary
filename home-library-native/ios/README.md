@@ -1,4 +1,4 @@
-# iPhone access — Carribrary 2.0.58
+# iPhone access — Carribrary 2.0.59
 
 ## Use the hosted librarian companion
 
@@ -24,4 +24,4 @@ The checked-in project is preparatory native iPhone source (0.1.37, build 38), n
 
 A developer with a Mac must open `HomeLibrary.xcodeproj` in Xcode, choose their own signing team, inspect permissions/privacy settings, build and run on a real device, and complete the listed security/transport/UI tests before distribution. Never include private server credentials or signing material in source. Source validation is not a device acceptance test.
 
-See [current Help](../../Carribrary-Help-2.0.58.md), [implementation report](../distribution/SELF-SERVICE-IMPLEMENTATION-REPORT.md) and [feature freeze](../FEATURE-FREEZE.md). The hosted iPhone PWA receives this documentation after the server is rebuilt and refreshed; native bundled Help needs rebuilding its app.
+See [current Help](../../Carribrary-Help-2.0.59.md), [implementation report](../distribution/SELF-SERVICE-IMPLEMENTATION-REPORT.md) and [feature freeze](../FEATURE-FREEZE.md). The hosted iPhone PWA receives this documentation after the server is rebuilt and refreshed; native bundled Help needs rebuilding its app.

@@ -6,7 +6,7 @@ Carribrary Server is free to use and is currently a public preview. Support is p
 
 1. Download the installer for your computer from the [current preview releases](https://github.com/MadZombie83/Carribrary/releases).
 2. Follow the [installation guide](home-library-native/INSTALLER-GUIDE.txt). Most people do not need to download or build source code.
-3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [current help guide](Carribrary-Help-2.0.57.md) is also available here.
+3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [current help guide](Carribrary-Help-2.0.58.md) is also available here.
 4. Before updating or testing recovery, create and verify a complete backup and keep a copy on another device.
 
 ## Ask a question

@@ -1,4 +1,4 @@
-# Build Carribrary 2.0.58 locally — developers only
+# Build Carribrary 2.0.59 locally — developers only
 
 Normal users install a server package from GitHub Releases and obtain the optional Android companion from Google Play when published. They do not need this guide. Invited APK testers use distribution/ANDROID-TESTING.md.
 
@@ -93,6 +93,6 @@ A successful build is not a physical Windows/Pi/phone/Safari test. Run appropria
 
 ## Current release and documentation revision
 
-This is the frozen 2.0.58 feature set. Documentation-only revisions keep that app version. Use a new empty extraction folder for each downloaded revision; do not overwrite an older work folder. GitHub Download ZIP may still use Carribrary-main, so rename that extracted work folder yourself before building. The versioned source archive includes the matching standalone Help.
+This is the frozen 2.0.59 feature set. Documentation-only revisions keep that app version. Use a new empty extraction folder for each downloaded revision; do not overwrite an older work folder. GitHub Download ZIP may still use Carribrary-main, so rename that extracted work folder yourself before building. The versioned source archive includes the matching standalone Help.
 
 Build the updated server packages and native Android to deliver synchronized Help; browser PWAs receive it from the rebuilt server after refresh. Current library/credential formats are 7/2. Existing data and signing keys stay outside source folders. Create and verify a complete backup before installing your output. No source download itself updates an installed server.

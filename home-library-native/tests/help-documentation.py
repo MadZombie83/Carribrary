@@ -42,3 +42,17 @@ about=next(t for t in topics if t['title'].startswith('About Carribrary'))['body
 assert '© 2026 Chezburber Studios' in about and re.search(r'Version="([^"]+)"',(root/'server/SetupStatus.cs').read_text())[1] in about
 for phrase in ['must be published','invited testers','planned as','feature set is frozen']:
  assert phrase not in about
+
+# Check release labels beyond the Help footer: old guides must fail before packaging.
+version=j['release']
+guide=(root/'server/wwwroot/quick-start.html').read_text()
+assert '<title>Carribrary '+version+' quick start</title>' in guide
+assert 'Illustrated quick start · '+version+'<' in guide
+assert 'current program-only compatibility is <strong>'+version+' only</strong>' in guide
+core=(root/'installer/Recovery.Core.ps1').read_text()
+expected="return $Version -match '^"+re.escape(version)+"(?:[.+-].*)?$'"
+assert expected in core,'Program-recovery allowlist must match the documented current-only cohort'
+assert '7=>patch>=53&&patch<='+version.split('.')[-1]+',' in (root/'server/RecoveryCompatibility.cs').read_text(),'Complete-backup cohort must be reviewed for the current release'
+label=(root/'installer/Recover-Previous.ps1').read_text()
+assert 'Supported program versions: '+version+' only (library format 7)' in label
+print('PASS Quick Start title/header/recovery guidance and Windows recovery allowlist match the current release')

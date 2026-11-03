@@ -1,4 +1,4 @@
-CARRIBRARY 2.0.58 — START HERE
+CARRIBRARY 2.0.59 — START HERE
 
 
 GET CARRIBRARY
@@ -9,9 +9,9 @@ Choose the release recommended by Chezburber Studios.
 The server is free. You do not need to build anything to install it.
 
 For installation, use the matching package:
-- Windows: Carribrary-Setup-2.0.58-preview.exe
-- Intel/AMD Linux desktop: Carribrary-Linux-x86_64-2.0.58-preview.flatpak
-- Pi 4/5 with 64-bit Pi OS: Carribrary-Pi-ARM64-2.0.58-preview.deb
+- Windows: Carribrary-Setup-2.0.59-preview.exe
+- Intel/AMD Linux desktop: Carribrary-Linux-x86_64-2.0.59-preview.flatpak
+- Pi 4/5 with 64-bit Pi OS: Carribrary-Pi-ARM64-2.0.59-preview.deb
 - Android librarian: optional paid Carribrary companion from Google Play when live
 - iPhone librarian: the server's /companion/ browser app
 

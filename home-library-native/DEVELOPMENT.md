@@ -5,7 +5,7 @@ No new features. Read FEATURE-FREEZE.md. Older plans below are historical; use c
 # Release requirements
 
 The maintained product/engineering specification and current repair scope are in
-[CARRIBRARY-MASTER.md](../CARRIBRARY-MASTER.md), including administrator authentication
+the internal historical engineering record (not distributed), including administrator authentication
 amendment 3.1. Record future owner requirements and status changes there.
 
 Every user-visible feature, change of behavior, setting, permission or workflow must

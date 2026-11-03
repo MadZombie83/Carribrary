@@ -23,3 +23,6 @@ Enclosed artwork control headings, compact theme selection groups, server sideba
 
 ## 2.0.58 owner-approved workflow polish
 Setup/update feedback, unsaved-form protection, save/error feedback, contextual Help and empty-state/circulation wording. Existing security, borrowing and recovery behavior must be regression checked. No new cataloging features.
+
+## 2.0.59 release consistency repair
+Synchronize illustrated Quick Start labels with Help; repair the stale Windows program-recovery allowlist to the documented current-only cohort. Check version consistency, unsupported-version rejection, current-data preservation and responsive guide layout. Complete backup recovery remains separate. No new feature additions.
