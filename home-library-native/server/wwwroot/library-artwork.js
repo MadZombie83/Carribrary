@@ -22,3 +22,14 @@ export function applyBorrowerHeaderLayout(target,layout={}){
   for(const [key,value] of Object.entries({fit:p.fit,x:p.x+'%',y:p.y+'%',overlay:p.overlay+'%'}))target.style.setProperty('--art-'+orientation+'-'+key,value);
  }
 }
+
+export function serverArtworkLayout(value={}){
+ const bounded=(n,fallback)=>Number.isFinite(n)?Math.max(40,Math.min(95,n)):fallback;
+ return {sidebarOverlay:bounded(value?.sidebarOverlay,65),headerOverlay:bounded(value?.headerOverlay,85)};
+}
+export function applyServerArtworkLayout(target,value={}){
+ if(!target)return;
+ const p=serverArtworkLayout(value);
+ target.style.setProperty('--server-sidebar-overlay',p.sidebarOverlay+'%');
+ target.style.setProperty('--server-header-overlay',p.headerOverlay+'%');
+}

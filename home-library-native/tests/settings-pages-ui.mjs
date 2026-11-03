@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import {mkdir} from 'node:fs/promises';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--ignore-certificate-errors']});
-const output='output/appearance-portable-2.0.47';await mkdir(output,{recursive:true});
+const output='output/settings-polish-2.0.57';await mkdir(output,{recursive:true});
 try{
  const context=await browser.newContext({ignoreHTTPSErrors:true,viewport:{width:1440,height:1000}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));await authenticateLocalAdmin(page);await page.goto(process.env.LIBRARY_TEST_URL);await page.waitForFunction(()=>document.querySelector('#save-status').textContent==='Shared library on your home server');
  const originalRevision=await page.evaluate(async()=>(await(await fetch('/api/state')).json()).revision);

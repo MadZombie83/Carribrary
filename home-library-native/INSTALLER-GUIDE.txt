@@ -1,4 +1,4 @@
-CARRIBRARY 2.0.56 — INSTALL, CONNECT AND UPDATE
+CARRIBRARY 2.0.57 — INSTALL, CONNECT AND UPDATE
 Developer: Chezburber Studios. Support: chezburbermerch@gmail.com.
 
 
@@ -13,7 +13,7 @@ You do not need source code or build tools for normal installation.
 Do not install the Pi DEB on an Intel/AMD Kubuntu laptop.
 
 2. INSTALL ON WINDOWS
-1) Open Carribrary-Setup-2.0.56-preview.exe on the server computer.
+1) Open Carribrary-Setup-2.0.57-preview.exe on the server computer.
 2) Approve the Windows administrator prompt and follow setup.
 3) Open Carribrary from the desktop or Start menu.
 4) Follow first administrator setup. Use the private setup file path shown on
@@ -91,9 +91,9 @@ borrowers. Advanced existing proxies use ADVANCED-OPERATIONS.md.
 3) Update Android through Google Play. Refresh browser apps.
 4) Check books, borrowers, loans, appearance and paired devices.
 
-2.0.56 uses library format 7 and credential format 2. Older executables cannot
+2.0.57 uses library format 7 and credential format 2. Older executables cannot
 preserve the current data. Windows Update and recovery restores only compatible
-PROGRAM files (currently 2.0.56) while keeping current data. Complete Backup
+PROGRAM files (currently 2.0.57) while keeping current data. Complete Backup
 Recovery restores historical DATA after verification, testing and confirmation.
 Do not confuse the two or force an older program to open upgraded data.
 

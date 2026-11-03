@@ -1,4 +1,4 @@
-import {applyLibraryArtwork,artworkSource} from './library-artwork.js';
+import {applyLibraryArtwork,artworkSource,applyServerArtworkLayout} from './library-artwork.js';
 import {googleCredit} from './cover-credit.js';
 // Presentation only: reuse server state and existing actions; never fetch private reader data.
 const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -36,6 +36,7 @@ export function renderDashboard(state,{today,offline,onAction,onBook}){
  target.querySelectorAll('img').forEach(img=>img.onerror=()=>{const fallback=document.createElement('span');fallback.className='dashboard-cover placeholder';fallback.setAttribute('aria-hidden','true');fallback.innerHTML=icon('book');img.replaceWith(fallback);});
 }
 export function syncAdminShell(state,view){
+ applyServerArtworkLayout(document.body,state.libraryServerArtwork);
  applyLibraryArtwork(document.querySelector('.admin-header'),artworkSource(state.librarySidebarArtwork));
  document.body.dataset.adminView=view;
  document.body.dataset.libraryTheme=state.libraryTheme||'classic';

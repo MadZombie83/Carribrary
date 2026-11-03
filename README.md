@@ -27,3 +27,7 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
 
 The 2.0.56 source and installer preview include a compact artwork editor with inline percentage badges and a live preview beside its controls, or above them on phones. Existing detailed icons, responsive borrower headers and independent orientation settings remain supported. Download the matching installer above, or build from this source. Older Help and release files remain historical records.
+
+## Current source: 2.0.57
+
+The latest source polishes Settings & Tools, encloses artwork control headings, compacts theme choices and adds separate live server sidebar/header readability controls saved with themes. See [2.0.57 changes](home-library-native/distribution/RELEASE-2.0.57.md), [settings inventory](home-library-native/distribution/SETTINGS-POLISH-2.0.57.md) and [current source Help](Carribrary-Help-2.0.57.md). Rebuild to use these changes; published installers remain 2.0.56 until replacement packages are provided.

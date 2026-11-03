@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 namespace HomeLibrary;
 public sealed class LibraryState {
  public string LibrarySidebarArtwork {get;set;}="";
+ public ServerArtworkLayout LibraryServerArtwork {get;set;}=new();
  public BorrowerHeaderLayout LibraryBorrowerHeader {get;set;}=new();
  public string LibraryBorrowerArtwork {get;set;}="";
  public string LibraryIcon192 {get;set;}="";
@@ -61,7 +62,7 @@ public static class Library {
   if(s.LibraryTheme==null||!LibraryAppearance.Valid(s.LibraryTheme))throw new LibraryError("Choose a supported library color scheme.");
   CustomThemes.Validate(s);
   LibraryAppearance.ValidateIcons(s.LibraryIcon192,s.LibraryIcon512);
-  BorrowerHeaderLayout.Validate(s.LibraryBorrowerHeader);LibraryAppearance.ValidateSidebarArtwork(s.LibrarySidebarArtwork);LibraryAppearance.ValidateBorrowerArtwork(s.LibraryBorrowerArtwork);
+  ServerArtworkLayout.Validate(s.LibraryServerArtwork);BorrowerHeaderLayout.Validate(s.LibraryBorrowerHeader);LibraryAppearance.ValidateSidebarArtwork(s.LibrarySidebarArtwork);LibraryAppearance.ValidateBorrowerArtwork(s.LibraryBorrowerArtwork);
   ValidateSaying(s.BannerSubtitle,160);ValidateSaying(s.EncouragingMessage,240);
   if(s.Version is not (1 or 2 or 3 or 4 or 5 or 6 or 7)||s.NextCopy<1||s.NextCopy>(long)int.MaxValue+1||s.Books==null||s.Borrowers==null||s.Loans==null)throw new LibraryError("Invalid library backup.");
   if(s.Books.Any(x=>x==null)||s.Borrowers.Any(x=>x==null)||s.Loans.Any(x=>x==null))throw new LibraryError("Invalid records in backup.");
@@ -118,7 +119,7 @@ public static class Library {
    case "setLibrarySidebarArtwork":{var artwork=Field(e,"artwork");LibraryAppearance.ValidateSidebarArtwork(artwork);s.LibrarySidebarArtwork=artwork;if(CustomThemes.Selected(s) is {} selected)selected.SidebarArtwork=artwork;return new{saved=artwork!=""};}
    case "setLibraryIcon":{var small=Field(e,"icon192");var large=Field(e,"icon512");LibraryAppearance.ValidateIcons(small,large);s.LibraryIcon192=small;s.LibraryIcon512=large;return new{saved=large!=""};}
    case "saveCustomTheme":return CustomThemes.Save(s,e);
-   case "setLibraryTheme":{var theme=Field(e,"libraryTheme");if(theme==""||!LibraryAppearance.Valid(theme))throw new LibraryError("Choose a supported library color scheme.");if(CustomThemes.IsCustom(theme)&&!s.SavedThemes.Any(t=>"custom-"+t.Id==theme))throw new LibraryError("Saved theme not found.");s.LibraryTheme=theme;s.LibraryBorrowerHeader=CustomThemes.Selected(s)?.BorrowerHeader??new BorrowerHeaderLayout();s.LibrarySidebarArtwork=CustomThemes.Selected(s)?.SidebarArtwork??"";s.LibraryBorrowerArtwork=CustomThemes.Selected(s)?.BorrowerArtwork??"";return new{libraryTheme=theme};}
+   case "setLibraryTheme":{var theme=Field(e,"libraryTheme");if(theme==""||!LibraryAppearance.Valid(theme))throw new LibraryError("Choose a supported library color scheme.");if(CustomThemes.IsCustom(theme)&&!s.SavedThemes.Any(t=>"custom-"+t.Id==theme))throw new LibraryError("Saved theme not found.");s.LibraryTheme=theme;s.LibraryServerArtwork=CustomThemes.Selected(s)?.ServerArtwork??new ServerArtworkLayout();s.LibraryBorrowerHeader=CustomThemes.Selected(s)?.BorrowerHeader??new BorrowerHeaderLayout();s.LibrarySidebarArtwork=CustomThemes.Selected(s)?.SidebarArtwork??"";s.LibraryBorrowerArtwork=CustomThemes.Selected(s)?.BorrowerArtwork??"";return new{libraryTheme=theme};}
    case "setLibraryName":{var name=Field(e,"libraryName").Trim();if(name.Length==0||name.Length>80||name.Any(char.IsControl))throw new LibraryError("Enter a library name of 1–80 characters.");s.LibraryName=name;return new{libraryName=name};}
    case "addBook":case "updateBook":{
     var b=Details(e);if((b.Isbn!=""||s.Version<4)&&!ValidCode(b.Isbn)||b.Title=="")throw new LibraryError("Enter a title and a valid ISBN, or leave ISBN blank for an unnumbered book.");

@@ -17,3 +17,6 @@ Detailed transparent icon uploads and actionable upload guidance; independent po
 
 ## 2.0.56 owner-approved appearance repair
 Compact borrower artwork editor with inline percentage badges, independent orientation selection and live preview beside controls (above them on narrow screens). Existing saved artwork and data behavior unchanged.
+
+## 2.0.57 owner-approved settings polish
+Enclosed artwork control headings, compact theme selection groups, server sidebar/header readability saved with themes, and shared Settings & Tools spacing and control sizing. Preserve tool inventory, existing routes and destructive safeguards.
