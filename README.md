@@ -6,7 +6,7 @@ A self-hosted library for physical books. Keep the server on a Windows, Linux or
 
 ## Install
 
-Download the free server installer from the [2.0.55 public preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.55-preview): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. This is a testing release; make a complete backup before updating an existing library. The optional Android librarian companion is planned as a one-time US$15 Google Play purchase and is not yet publicly available. No Android APK or AAB is distributed here. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion.
+Download the free server installer from the [2.0.56 public preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.56-preview): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. This is a testing release; make a complete backup before updating an existing library. The optional Android librarian companion is planned as a one-time US$15 Google Play purchase and is not yet publicly available. No Android APK or AAB is distributed here. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion.
 
 Most users do not need source code or build tools. Follow [installation instructions](home-library-native/INSTALLER-GUIDE.txt), then Help in the app.
 
@@ -16,7 +16,7 @@ Carribrary-owned code is **source-available proprietary software**, not open sou
 
 ## Current preview
 
-Current public preview: **2.0.55-preview**, with owner-built Windows, Flatpak and Raspberry Pi installers on the release page. See [current source Help](Carribrary-Help-2.0.55.md) and [release instructions](home-library-native/distribution/RELEASE-2.0.55.md). Public preview testing is open; this is not the final stable launch or a Google Play release. Real-device, scanner/card-printing, kiosk and Raspberry Pi acceptance remain in progress. Keep a verified complete backup on another device: older programs cannot safely open the upgraded library format. Source downloads do not change an installed library.
+Current public preview: **2.0.56-preview**, with owner-built Windows, Flatpak and Raspberry Pi installers on the release page. See [current source Help](Carribrary-Help-2.0.56.md) and [release instructions](home-library-native/distribution/RELEASE-2.0.56.md). Public preview testing is open; this is not the final stable launch or a Google Play release. Real-device, scanner/card-printing, kiosk and Raspberry Pi acceptance remain in progress. Keep a verified complete backup on another device: older programs cannot safely open the upgraded library format. Source downloads do not change an installed library.
 
 ## Questions and bug reports
 
@@ -26,8 +26,4 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
 
-The 2.0.55 source and installer preview include detailed transparent icon fixes and responsive borrower headers with separate portrait/landscape fitting, positioning and composition previews. Download the matching installer above, or build from this source. Older Help and release files remain historical records.
-
-## Current source: 2.0.56
-
-The latest source compacts the artwork editor, pairs sliders with a live preview and keeps percentages beside their labels. See [2.0.56 changes](home-library-native/distribution/RELEASE-2.0.56.md) and [current source Help](Carribrary-Help-2.0.56.md). Rebuild to use these changes; published installers remain 2.0.55 until replacement packages are provided.
+The 2.0.56 source and installer preview include a compact artwork editor with inline percentage badges and a live preview beside its controls, or above them on phones. Existing detailed icons, responsive borrower headers and independent orientation settings remain supported. Download the matching installer above, or build from this source. Older Help and release files remain historical records.
