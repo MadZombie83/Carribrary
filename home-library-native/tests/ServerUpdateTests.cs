@@ -2,10 +2,10 @@ using HomeLibrary;using System.Text.Json;using System.Net;
 public static class ServerUpdateTests {
  public static async Task Run(){
   void Check(bool ok,string why){if(!ok)throw new Exception(why);Console.WriteLine("PASS "+why);}
-  string releases="""[{"tag_name":"v2.0.56-preview","html_url":"https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.56-preview","draft":false,"prerelease":true},{"tag_name":"v2.0.54","html_url":"https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.54","draft":false,"prerelease":false},{"tag_name":"v99.0.0","html_url":"https://evil.example/release","draft":false,"prerelease":false},{"tag_name":"v100.0.0","html_url":"https://github.com/MadZombie83/Carribrary/releases/tag/v100.0.0","draft":true,"prerelease":false}]""";
+  string releases="""[{"tag_name":"v2.0.57-preview","html_url":"https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.57-preview","draft":false,"prerelease":true},{"tag_name":"v2.0.54","html_url":"https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.54","draft":false,"prerelease":false},{"tag_name":"v99.0.0","html_url":"https://evil.example/release","draft":false,"prerelease":false},{"tag_name":"v100.0.0","html_url":"https://github.com/MadZombie83/Carribrary/releases/tag/v100.0.0","draft":true,"prerelease":false}]""";
   using var list=JsonDocument.Parse(releases);
   Check(ServerUpdates.Select(list.RootElement,"2.0.53")?.Version=="2.0.54","Stable servers exclude previews, drafts and external links");
-  Check(ServerUpdates.Select(list.RootElement,"2.0.54-preview")?.Version=="2.0.56-preview","Preview servers find newer official previews");
+  Check(ServerUpdates.Select(list.RootElement,"2.0.54-preview")?.Version=="2.0.57-preview","Preview servers find newer official previews");
   Check(ServerUpdates.Compare("2.0.100","2.0.99")>0&&ServerUpdates.Compare("2.0.54","2.0.54-preview")>0,"Numeric versions and same-version promotion compare correctly");
   var handler=new Fake(releases);using var http=new HttpClient(handler);var updates=new ServerUpdates(http);
   var first=await updates.Check();await updates.Check();await updates.Check(true);

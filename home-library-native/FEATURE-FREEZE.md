@@ -14,3 +14,6 @@ The owner explicitly authorized an in-app server update notice and borrower dash
 
 ## 2.0.55 owner-approved repair
 Detailed transparent icon uploads and actionable upload guidance; independent portrait/landscape borrower-header fitting, focus and readability previews. Existing artwork and saved themes remain supported. No installer packaging in this source iteration.
+
+## 2.0.56 owner-approved appearance repair
+Compact borrower artwork editor with inline percentage badges, independent orientation selection and live preview beside controls (above them on narrow screens). Existing saved artwork and data behavior unchanged.
