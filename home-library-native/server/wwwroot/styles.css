@@ -55,3 +55,7 @@ button.danger{color:#9b3225}.delete-book{align-self:flex-end;margin-top:.5rem}bu
 .product-footer{display:block;position:static;clear:both;margin:1.5rem 0 0;padding:1rem .5rem;color:var(--ui-muted,var(--muted,#52606d));font-size:.8125rem;line-height:1.5;text-align:center;background:transparent;border:0;overflow-wrap:normal}.product-footer small{font-size:inherit}
 /* Long legal source URLs must wrap on phone-sized Help pages. */
 #help-content,#help-index{min-width:0}#help-content p,#help-topics p{overflow-wrap:anywhere}
+/* Keep pending form values stable without omitting them from the submitted FormData. */
+form[aria-busy=true] :is(input,select,textarea){pointer-events:none;opacity:.7}
+.form-workflow-status{font-size:.85rem;line-height:1.5}.form-workflow-status:empty{display:none}
+.form-workflow-actions{display:flex;align-items:center;justify-content:flex-start;gap:.65rem;flex-wrap:wrap;margin-top:.25rem}.form-workflow-actions>button{min-height:44px}

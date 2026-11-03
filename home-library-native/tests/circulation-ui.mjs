@@ -29,7 +29,7 @@ try{
  await page.locator('[name=copyId]').fill('BK-0002');await page.locator('#confirm-circulation').click();await page.waitForFunction(()=>!document.querySelector('#form-dialog').open);
  let live=await page.evaluate(async()=> (await(await fetch('/api/state')).json()).state);
  assert.ok(live.loans.find(l=>l.copyId==='BK-0002').returnedDate);assert.equal(live.loans.find(l=>l.copyId==='BK-0003').returnedDate,null);
- await page.locator('#return').click();await page.locator('[name=copyId]').fill('0-14-032872-6');assert.equal(await page.locator('#copy-matches input').count(),1);assert.equal(await page.locator('#confirm-circulation').isEnabled(),true);await page.locator('#close-form').click();
+ await page.locator('#return').click();await page.locator('[name=copyId]').fill('0-14-032872-6');assert.equal(await page.locator('#copy-matches input').count(),1);assert.equal(await page.locator('#confirm-circulation').isEnabled(),true);page.once('dialog',async d=>{assert.match(d.message(),/unsaved changes/);await d.accept();});await page.locator('#close-form').click();
  await page.locator('#checkout').click();await page.locator('[name=copyId]').fill('9780140328721');assert.equal(await page.locator('#copy-matches input').count(),2);assert.equal(await page.locator('#confirm-circulation').isDisabled(),true);
  assert.equal(await page.locator('#copy-matches input[value="BK-0003"]').count(),0);
  await page.locator('[name=copyId]').fill('BK-0003');assert.equal(await page.locator('#confirm-circulation').isDisabled(),true);assert.match(await page.locator('#copy-matches').innerText(),/No available copy/);

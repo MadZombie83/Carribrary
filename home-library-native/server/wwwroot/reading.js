@@ -1,3 +1,4 @@
+import {observeDialogFormWorkflow} from './form-workflow.js';
 import {mountSelfService} from './borrower-self-service.js';
 import {mountPurchaseSuggestions} from '/account/purchase-suggestions.js';
 import {progressMarkup,pageFields,statsMarkup,readingDetails,goalDialog} from './reading-features.js';
@@ -7,6 +8,7 @@ import {matchesReadingFilter,finishReading} from './reading-list.js';
 import {bookAbout} from './book-about.js';
 import {googleCredit} from './cover-credit.js';
 const $=s=>document.querySelector(s),escape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+observeDialogFormWorkflow($('#edit'));
 const accountMode=document.body.dataset.account==='true',token=location.hash.slice(1),labels={want:'Want to read',reading:'Currently reading',finished:'Finished'};let snapshot,serverSnapshot,vault,tab='catalog',page=1,busy=false;
 const borrowerDashboard=accountMode?await import('/account/borrower-dashboard.js'):null;
 // Catalog controls stay available after sign-in; personal reading remains separate.

@@ -9,5 +9,5 @@
  <launchable type="desktop-id">com.household.HomeLibrary.desktop</launchable>
  <developer id="com.household"><name>Chezburber Studios</name></developer>
  <content_rating type="oars-1.1"/>
- <releases><release version="2.0.57-preview" date="2026-11-02"/><release version="2.0.56-preview" date="2026-11-02"/><release version="2.0.55-preview" date="2026-11-02"/><release version="2.0.54-preview" date="2026-11-01"/><release version="2.0.53-preview" date="2026-10-30"/></releases>
+ <releases><release version="2.0.58-preview" date="2026-11-02"/><release version="2.0.57-preview" date="2026-11-02"/><release version="2.0.56-preview" date="2026-11-02"/><release version="2.0.55-preview" date="2026-11-02"/><release version="2.0.54-preview" date="2026-11-01"/><release version="2.0.53-preview" date="2026-10-30"/></releases>
 </component>

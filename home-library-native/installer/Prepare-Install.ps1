@@ -2,9 +2,12 @@ param([Parameter(Mandatory=$true)][string]$WorkDirectory,[Parameter(Mandatory=$t
 $ErrorActionPreference = 'Stop'
 try {
     Add-Type -AssemblyName System.Windows.Forms
+    . (Join-Path $WorkDirectory 'Setup-Progress.ps1')
+    Start-CarribrarySetupProgress 'Carribrary - preparing installation'
+    Write-CarribrarySetupStep 'Checking the existing service and stopping it safely...'
     . (Join-Path $WorkDirectory 'Repair-DataPermissions.ps1')
     $Data = Join-Path $env:ProgramData 'HomeLibraryNative\data'
-    $Service = Get-CimInstance Win32_Service -Filter "Name='HomeLibraryNative'"
+    $Service = Get-CimInstance Win32_Service -Filter "Name='HomeLibraryNative'" -OperationTimeoutSec 30
     $Settings = $null
     if ($Service) {
         $Match = [regex]::Match($Service.PathName, '^"([^\"]+HomeLibrary\.Server\.exe)"$|^([^\"]+HomeLibrary\.Server\.exe)$', 'IgnoreCase')
@@ -36,6 +39,7 @@ try {
         $Config = Get-Content (Join-Path $WorkDirectory 'saved-appsettings.json') -Raw | ConvertFrom-Json
         $Ports = @($Config.Library.AdminPort,$Config.Library.CatalogPort,$Config.Library.PhonePort)
     }
+    Write-CarribrarySetupStep 'Checking the local ports and saved configuration...'
     foreach ($Port in $Ports) {
         if (Get-NetTCPConnection -State Listen -LocalPort $Port -ErrorAction SilentlyContinue) {
             throw "Port $Port is already in use. If your previous library server is running, export its backup and close its window (or stop its startup task in Task Scheduler), then run this installer again. Plex can keep running."
@@ -48,6 +52,7 @@ try {
         $Version='unverified'
         try { $Version=Get-CarribraryProgramVersion $Root } catch { }
         $RecoveryHome=Join-Path $env:ProgramData 'HomeLibraryNative\recovery'
+        Write-CarribrarySetupStep 'Creating the private pre-update recovery copy. Large libraries can take several minutes...'
         $Point=New-CarribraryRecoveryPoint -Root $Root -Data $Data -RecoveryHome $RecoveryHome -SourceVersion $Version -Protect {param($Path) Protect-CarribraryRecovery $Path}
         Register-CarribraryRecoveryPoint $Point
         [IO.File]::WriteAllText((Join-Path $WorkDirectory 'recovery-point.txt'),$Point,(New-Object Text.UTF8Encoding($false)))
@@ -55,9 +60,12 @@ try {
         Set-ItemProperty 'HKLM:\Software\HomeLibraryNative' -Name DataDirectory -Value $Data
 
     }
+    Write-CarribrarySetupStep 'Preparation complete. The installer will now copy the new program files.'
     exit 0
 } catch {
     if ($Service) { Start-Service HomeLibraryNative -ErrorAction SilentlyContinue }
-    [System.Windows.Forms.MessageBox]::Show($_.Exception.Message,'Carribrary setup', 'OK', 'Error') | Out-Null
+    if(Get-Command Show-CarribrarySetupFailure -ErrorAction SilentlyContinue){Show-CarribrarySetupFailure $_.Exception.Message}else{[System.Windows.Forms.MessageBox]::Show($_.Exception.Message,'Carribrary setup','OK','Error') | Out-Null}
     exit 1
 }
+
+finally {if(Get-Command Close-CarribrarySetupProgress -ErrorAction SilentlyContinue){Close-CarribrarySetupProgress}}

@@ -1,3 +1,4 @@
+import {markFormSaved} from './form-workflow.js';
 import {fittedPng} from './appearance.js';
 export function libraryIconSettings({mutate,openForm,toast}){
  let icons=null,generation=0,busy=false;
@@ -13,6 +14,6 @@ export function libraryIconSettings({mutate,openForm,toast}){
    if(selected!==generation||!form.isConnected)return;icons={icon192,icon512};preview.src='data:image/png;base64,'+icon192;preview.hidden=false;message.textContent='Ready to save: 192 × 192 and 512 × 512 PNGs.';
   }catch(error){if(selected===generation)message.textContent=error.message;}finally{if(selected===generation)busy=false;}
  };
- form.querySelector('#reset-library-icon').onclick=async()=>{try{generation++;busy=false;icons=null;await mutate('setLibraryIcon',{icon192:'',icon512:''});document.querySelector('#form-dialog').close();toast('Carribrary icon restored');}catch(error){form.querySelector('.form-error').textContent=error.message;}};
+ form.querySelector('#reset-library-icon').onclick=async()=>{try{generation++;busy=false;icons=null;await mutate('setLibraryIcon',{icon192:'',icon512:''});markFormSaved(form);document.querySelector('#form-dialog').close();toast('Carribrary icon restored');}catch(error){form.querySelector('.form-error').textContent=error.message;}};
  document.querySelector('#form-dialog').addEventListener('close',()=>generation++,{once:true});
 }

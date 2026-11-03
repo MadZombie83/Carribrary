@@ -1,4 +1,4 @@
-# Carribrary 2.0.57 — installed server
+# Carribrary 2.0.58 — installed server
 
 Developer: Chezburber Studios. Public support: chezburbermerch@gmail.com. The server is free; the optional Android librarian companion is a separate Google Play purchase when published. Borrowers use their library link free.
 

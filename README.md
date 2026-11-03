@@ -27,3 +27,7 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
 
 The 2.0.57 source and installer preview polish all six Settings & Tools categories, enclose artwork settings headings, group compact theme choices and add independent server sidebar/header readability sliders saved with themes. Existing detailed icons, responsive borrower headers and independent borrower orientation settings remain supported. Download the matching installer above, or build from this source. Older Help and release files remain historical records.
+
+## Current source: 2.0.58
+
+The latest source improves Windows setup progress/logs and bounded helper waits, protects unsaved browser edits, standardizes Save/Cancel feedback, and adds contextual Help and clearer empty/error states. See [2.0.58 changes](home-library-native/distribution/RELEASE-2.0.58.md), [validation](home-library-native/distribution/VALIDATION-2.0.58.md) and [source Help](Carribrary-Help-2.0.58.md). Rebuild to use these changes; published installers remain 2.0.57 until new owner-built packages are provided. Windows GUI acceptance is still required.

@@ -11,7 +11,7 @@ Unicode true
 !define PROJECT ".."
 !endif
 !ifndef OUTPUT
-!define OUTPUT "../../Carribrary-Setup-2.0.57-preview.exe"
+!define OUTPUT "../../Carribrary-Setup-2.0.58-preview.exe"
 !endif
 Icon "${PROJECT}/assets/home-library.ico"
 !define MUI_ICON "${PROJECT}/assets/home-library.ico"
@@ -25,10 +25,10 @@ SetCompressorDictSize 32
 ShowInstDetails show
 ShowUninstDetails show
 BrandingText "Carribrary - household library server"
-VIProductVersion "2.0.57.0"
+VIProductVersion "2.0.58.0"
 VIAddVersionKey "ProductName" "Carribrary"
 VIAddVersionKey "FileDescription" "Carribrary Windows installer"
-VIAddVersionKey "FileVersion" "2.0.57-preview"
+VIAddVersionKey "FileVersion" "2.0.58-preview"
 VIAddVersionKey "LegalCopyright" "Copyright 2026 Chezburber Studios"
 VIAddVersionKey "CompanyName" "Chezburber Studios"
 Var MaintenanceHandle
@@ -130,13 +130,19 @@ Section "Carribrary" SEC_MAIN
   InitPluginsDir
   SetOutPath "$PLUGINSDIR"
   File "${PROJECT}/installer/Prepare-Install.ps1"
+  File "${PROJECT}/installer/Setup-Progress.ps1"
   File "${PROJECT}/Repair-DataPermissions.ps1"
   File "${PROJECT}/installer/Recovery.Core.ps1"
   File "${PROJECT}/installer/Recovery.Windows.ps1"
   File "${PROJECT}/installer/Recover-Previous.ps1"
   DetailPrint "Checking ports and stopping an existing native service..."
   ClearErrors
-  ExecWait '$\"$PowerShell$\" -NoProfile -STA -ExecutionPolicy Bypass -WindowStyle Hidden -File $\"$PLUGINSDIR\Prepare-Install.ps1$\" -WorkDirectory $\"$PLUGINSDIR$\" -Root $\"$INSTDIR$\"' $Result
+  nsExec::ExecToLog '$\"$PowerShell$\" -NoProfile -STA -ExecutionPolicy Bypass -WindowStyle Hidden -File $\"$PLUGINSDIR\Prepare-Install.ps1$\" -WorkDirectory $\"$PLUGINSDIR$\" -Root $\"$INSTDIR$\"'
+  Pop $Result
+  ${If} $Result == "error"
+    MessageBox MB_OK|MB_ICONSTOP "Windows could not start the setup helper. Keep your library data and recovery copy. Contact support with your Windows and installer versions."
+    Abort
+  ${EndIf}
   ${If} ${Errors}
     MessageBox MB_OK|MB_ICONSTOP "Windows could not run the setup helper. Installation stopped."
     Abort
@@ -181,6 +187,7 @@ Section "Carribrary" SEC_MAIN
   File "${PROJECT}/THIRD-PARTY-NOTICES.txt"
   File "${PROJECT}/LICENSE.txt"
   File /oname=START-HERE.txt "${PROJECT}/INSTALLER-GUIDE.txt"
+  File /oname=Setup-Progress.ps1 "${PROJECT}/installer/Setup-Progress.ps1"
   File /oname=Install-Managed.ps1 "${PROJECT}/installer/Install-Managed.ps1"
   File /oname=Uninstall-Managed.ps1 "${PROJECT}/installer/Uninstall-Managed.ps1"
   SetOutPath "$INSTDIR\licenses"
@@ -188,7 +195,12 @@ Section "Carribrary" SEC_MAIN
   SetOutPath "$INSTDIR"
   DetailPrint "Configuring the service, permissions and firewall; importing the selected backup..."
   ClearErrors
-  ExecWait '$\"$PowerShell$\" -NoProfile -STA -ExecutionPolicy Bypass -WindowStyle Hidden -File $\"$INSTDIR\Install-Managed.ps1$\" -Root $\"$INSTDIR$\" -SavedSettings $\"$PLUGINSDIR\saved-appsettings.json$\" -BackupPath $\"$BackupPath$\"' $Result
+  nsExec::ExecToLog '$\"$PowerShell$\" -NoProfile -STA -ExecutionPolicy Bypass -WindowStyle Hidden -File $\"$INSTDIR\Install-Managed.ps1$\" -Root $\"$INSTDIR$\" -SavedSettings $\"$PLUGINSDIR\saved-appsettings.json$\" -BackupPath $\"$BackupPath$\"'
+  Pop $Result
+  ${If} $Result == "error"
+    MessageBox MB_OK|MB_ICONSTOP "Windows could not start the setup helper. Keep your library data and recovery copy. Contact support with your Windows and installer versions."
+    Abort
+  ${EndIf}
   ${If} ${Errors}
     MessageBox MB_OK|MB_ICONSTOP "The Windows setup helper could not start. Your library data was retained."
     Abort
@@ -220,7 +232,7 @@ Section "Carribrary" SEC_MAIN
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   WriteRegStr HKLM "Software\HomeLibraryNative" "InstallDir" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayName" "Carribrary"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayVersion" "2.0.57-preview"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayVersion" "2.0.58-preview"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "UninstallString" '$\"$INSTDIR\Uninstall.exe$\"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayIcon" "$INSTDIR\tray\HomeLibrary.Tray.exe"
@@ -278,6 +290,7 @@ Section "Uninstall"
   Delete "$INSTDIR\Update-DuckDNS.ps1"
   Delete "$INSTDIR\Configure-Remote.ps1"
   Delete "$INSTDIR\Setup-PublicCatalog.ps1"
+  Delete "$INSTDIR\Setup-Progress.ps1"
   Delete "$INSTDIR\Install-Managed.ps1"
   Delete "$INSTDIR\Uninstall-Managed.ps1"
   Delete "$INSTDIR\Open-Library.url"

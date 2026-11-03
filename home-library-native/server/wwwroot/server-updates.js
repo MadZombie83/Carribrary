@@ -7,9 +7,9 @@ export async function mountServerUpdates(){
  const footer=document.querySelector('.product-footer');if(footer)footer.before(tools);else document.querySelector('main')?.append(tools);
  const message=tools.querySelector('[role=status]'),button=tools.querySelector('button');
  async function check(manual=false){
-  button.disabled=true;
+  button.disabled=true;message.textContent='Checking official Carribrary releases…';tools.setAttribute('aria-busy','true');
   try{
-   const response=await fetch('/api/updates',{method:manual?'POST':'GET',...(manual?{headers:{'Content-Type':'application/json'},body:'{}'}:{}),cache:'no-store'});
+   const response=await fetch('/api/updates',{method:manual?'POST':'GET',...(manual?{headers:{'Content-Type':'application/json'},body:'{}'}:{}),cache:'no-store',signal:AbortSignal.timeout(20000)});
    if(!response.ok)throw Error();const s=await response.json();
    const version=/^\d+\.\d+\.\d+(-preview)?$/.test(s.latestVersion)?s.latestVersion:'';
    const url='https://github.com/MadZombie83/Carribrary/releases/tag/v'+version;
@@ -24,7 +24,7 @@ export async function mountServerUpdates(){
     const link=document.createElement('a');link.href=s.releaseUrl;link.target='_blank';link.rel='noopener noreferrer';link.textContent='Release notes and server downloads';
     const dismiss=document.createElement('button');dismiss.type='button';dismiss.className='secondary';dismiss.textContent='Dismiss this version';dismiss.onclick=()=>{try{localStorage.setItem(key,version);}catch{}root.hidden=true;};root.append(heading,text,link,dismiss);
    }
-  }catch{message.textContent='Could not check for updates. Your library still works; try again later.';}finally{button.disabled=false;}
+  }catch{message.textContent='Could not check for updates. Your library still works; try again later.';}finally{button.disabled=false;tools.removeAttribute('aria-busy');}
  }
  button.onclick=()=>check(true);await check();
 }

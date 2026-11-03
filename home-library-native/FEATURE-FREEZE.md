@@ -20,3 +20,6 @@ Compact borrower artwork editor with inline percentage badges, independent orien
 
 ## 2.0.57 owner-approved settings polish
 Enclosed artwork control headings, compact theme selection groups, server sidebar/header readability saved with themes, and shared Settings & Tools spacing and control sizing. Preserve tool inventory, existing routes and destructive safeguards.
+
+## 2.0.58 owner-approved workflow polish
+Setup/update feedback, unsaved-form protection, save/error feedback, contextual Help and empty-state/circulation wording. Existing security, borrowing and recovery behavior must be regression checked. No new cataloging features.

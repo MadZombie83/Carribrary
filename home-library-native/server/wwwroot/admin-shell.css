@@ -330,3 +330,6 @@
 .settings-inline-editor #form-content .form-error:not(:empty){padding:.8rem 1rem;border:1px solid #bf6b61;border-radius:10px;background:var(--surface,#fff)}
 .settings-editor-host{scroll-margin-top:1rem}.settings-breadcrumbs{row-gap:.2rem}.settings-card .settings-current{font-variant-numeric:tabular-nums}
 @media(max-width:600px){.settings-inline-editor #form-content .two-fields{grid-template-columns:minmax(0,1fr)}.settings-inline-editor #form-content form>label{max-width:100%}.settings-inline-editor #form-content form>button{min-height:44px}.settings-editor-host{padding:.85rem}}
+.form-workflow-status{font-size:.85rem;color:var(--ui-muted,var(--muted));margin:.25rem 0;min-height:0}.form-workflow-status:empty{display:none}
+.form-cancel{justify-self:start;min-height:44px}.settings-page-help{display:inline-flex;align-items:center;gap:.4rem;min-height:44px;font-size:.85rem;color:var(--ink)}
+.settings-load-error{border:1px solid var(--line);padding:1rem;border-radius:12px;background:var(--soft);line-height:1.6}
