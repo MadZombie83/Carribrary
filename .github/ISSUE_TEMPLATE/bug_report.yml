@@ -9,7 +9,7 @@ body:
     id: version
     attributes:
       label: Carribrary version
-      placeholder: 2.0.53-preview
+      placeholder: Copy the installed version from Help
     validations:
       required: true
   - type: input
