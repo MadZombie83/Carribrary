@@ -4,6 +4,10 @@ Developed by **Chezburber Studios**. Support: **chezburbermerch@gmail.com**.
 
 A self-hosted library for physical books. Keep the server on a Windows, Linux or Raspberry Pi computer; librarians and borrowers connect to it.
 
+[Full feature list](FEATURES.md) · [Screenshot gallery](SCREENSHOTS.md)
+
+[![Carribrary librarian dashboard — fictional sample library](docs/screenshots/2.0.59/01-librarian-dashboard.png)](SCREENSHOTS.md)
+
 ## Install
 
 Download the free server installer from the [2.0.58 public preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.58-preview): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. This is a testing release; make a complete backup before updating an existing library. The optional Android librarian companion is planned as a one-time US$15 Google Play purchase and is not yet publicly available. No Android APK or AAB is distributed here. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion.
