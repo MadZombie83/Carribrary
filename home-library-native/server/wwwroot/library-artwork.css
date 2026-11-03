@@ -10,3 +10,27 @@
 .admin-shell .admin-header.library-artwork-banner .brand small,.dashboard-heading.library-artwork-banner p{color:var(--ui-muted,var(--muted,#625875))}
 
 .admin-shell .admin-header.library-artwork-banner .mark{color:var(--ink)}
+
+/* A single image retains its proportions; orientation preferences never overwrite each other. */
+.borrower-artwork-responsive{--art-fit:var(--art-portrait-fit,contain);--art-x:var(--art-portrait-x,50%);--art-y:var(--art-portrait-y,38%);--art-overlay:var(--art-portrait-overlay,70%);background-color:var(--ink,#493276)}
+.borrower-artwork-responsive>.library-banner-artwork{object-fit:var(--art-fit);object-position:var(--art-x) var(--art-y)}
+.borrower-artwork-responsive.library-artwork-banner::after,.public-catalog .admin-header.borrower-artwork-responsive.library-artwork-banner::after{background:color-mix(in srgb,var(--ink,#493276) var(--art-overlay),transparent)}
+.admin-shell.borrower-shell .admin-header.borrower-artwork-responsive::after{background:color-mix(in srgb,var(--page,#f2f1fc) var(--art-overlay),transparent)}
+.borrower-artwork-responsive .brand,.borrower-artwork-responsive .catalog-brand{min-width:0;overflow-wrap:break-word;word-break:normal}
+.borrower-artwork-responsive a,.borrower-artwork-responsive button{min-height:44px}
+@media(orientation:landscape){.borrower-artwork-responsive{--art-fit:var(--art-landscape-fit,contain);--art-x:var(--art-landscape-x,50%);--art-y:var(--art-landscape-y,38%);--art-overlay:var(--art-landscape-overlay,70%)}}
+@media(max-width:900px){header.borrower-artwork-responsive{height:auto;min-height:0;display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;padding:1rem}header.borrower-artwork-responsive .catalog-brand{flex:1 1 220px}header.borrower-artwork-responsive .brand{flex:1 1 180px}header.borrower-artwork-responsive #account-link{white-space:normal}}
+@media(orientation:landscape) and (max-height:500px){header.borrower-artwork-responsive{padding:.65rem 1rem;gap:.5rem}header.borrower-artwork-responsive .brand{font-size:1.1rem}header.borrower-artwork-responsive p{margin-block:.25rem}}
+.art-header-previews{display:grid;gap:1rem;overflow:auto;padding:.5rem}
+.art-header-preview{box-sizing:border-box;max-width:100%;padding:1rem;border-radius:14px;color:white;display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;height:auto;min-height:180px}
+.art-header-preview .catalog-brand{flex:1 1 180px;min-width:0}.art-header-preview strong{font-size:1.3rem}.art-header-preview p{margin:.4rem 0}.art-header-preview img.preview-library-icon{width:44px;height:44px;object-fit:contain}.art-header-preview button{background:var(--surface,#fff);color:var(--ink);border:1px solid var(--line);padding:.6rem;border-radius:10px}
+.art-header-controls{border:1px solid var(--line);padding:1rem;border-radius:14px;margin:1rem 0}.art-header-controls input[type=range]{width:100%}
+/* Solid theme-backed text islands keep readability independent of image brightness. */
+.public-catalog header.borrower-artwork-responsive .catalog-brand,.art-header-preview .catalog-brand{background:var(--ink,#493276);color:white;border-radius:10px;padding:.6rem .8rem}
+.admin-shell.borrower-shell header.borrower-artwork-responsive .brand{background:var(--surface,#fff);border-radius:10px;padding:.5rem .7rem}
+header.borrower-artwork-responsive #library-brand-icon{flex-shrink:0}
+@media(forced-colors:active){.borrower-artwork-responsive.library-artwork-banner::after{display:none}.art-header-preview,.art-header-preview .catalog-brand,.public-catalog header.borrower-artwork-responsive .catalog-brand{background:Canvas;color:CanvasText}}
+@media(prefers-reduced-transparency:reduce){.borrower-artwork-responsive.library-artwork-banner::after{background:var(--ink)}.admin-shell.borrower-shell header.borrower-artwork-responsive.library-artwork-banner::after{background:var(--page)}}
+:root[data-custom-palette] .admin-shell.public-catalog .admin-header.borrower-artwork-responsive{background:var(--ink)}
+.public-catalog header.borrower-artwork-responsive .catalog-header-actions :is(a,button){background:var(--surface,#fff);color:var(--ink,#493276);border-color:var(--line,#d9d4ec);white-space:normal}
+@media(forced-colors:active){:root[data-custom-palette] .admin-shell.public-catalog .admin-header.borrower-artwork-responsive,.public-catalog header.borrower-artwork-responsive .catalog-header-actions :is(a,button){background:Canvas;color:CanvasText}}

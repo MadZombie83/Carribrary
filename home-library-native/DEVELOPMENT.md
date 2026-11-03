@@ -39,7 +39,7 @@ Health checks use `/local-auth/health` (readiness/version only), not anonymous
 administrative API reads. Windows automatic program recovery is restricted to
 2.0.33 because older binaries would remove local login. The older cohort notes
 below are historical. Library format stays 3. Source repair and focused tests are
-recorded in `the internal historical engineering record (not distributed)`; 2.0.33 preview packages have been built and checked in the internal historical engineering record (not distributed).
+recorded in `the internal historical engineering record (not distributed)`; 2.0.33 preview packages have been built and checked in VALIDATION-2.0.33.md.
 Physical Windows service/ACL and installation checks remain required before production release.
 
 ## Recovery compatibility gate (2.0.28)

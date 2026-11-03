@@ -11,3 +11,6 @@ A passing build is not public-release approval. Outstanding hardware, printed-ca
 ## Approved 2.0.54 scope — 2026-11-01
 
 The owner explicitly authorized an in-app server update notice and borrower dashboard visual parity using the existing administrator layout, theme/artwork and responsive components. Preserve borrower permissions, catalog-first entry, encrypted reading and return-report/final-check-in separation. Other feature additions remain frozen. Source changes and regression evidence only; the owner builds installers.
+
+## 2.0.55 owner-approved repair
+Detailed transparent icon uploads and actionable upload guidance; independent portrait/landscape borrower-header fitting, focus and readability previews. Existing artwork and saved themes remain supported. No installer packaging in this source iteration.

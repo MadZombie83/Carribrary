@@ -27,3 +27,7 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
 
 The 2.0.54 source adds administrator update notices and a shared borrower dashboard layout, including optional mobile borrower artwork saved with themes. Existing 2.0.53 installations need one manual update before they can show the new release notices. Choose the matching server installer from the public preview release; source downloads remain available for people who prefer to build.
+
+## Next source iteration: 2.0.55
+
+This source adds detailed-icon upload repairs and responsive borrower headers with independent portrait/landscape fitting and composition previews. See [2.0.55 source Help](Carribrary-Help-2.0.55.md), [changes](home-library-native/distribution/RELEASE-2.0.55.md) and [validation](home-library-native/distribution/VALIDATION-2.0.55.md). Rebuild packages to use these fixes. The published installer preview remains 2.0.54 until new owner-built packages are supplied.
