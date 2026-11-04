@@ -8,3 +8,7 @@
 - Release-sensitive tests were repaired: update fixture always uses a version newer than the current server; backup verification waits for the current Carribrary footer wording.
 
 Evidence: output/release-guide-2.0.59, output/backup-safety-2.0.59, .build-tools/259-native.log and targeted browser logs. No release installers/APKs generated or installed. Real Windows GUI/service/firewall/installation acceptance remains owner testing.
+
+## Wider release regression checkpoint — November 3, 2026
+
+All 39 current browser suites passed after updating five older tests for the current navigation/footer/theme/icon feedback. Android compileReleaseKotlin passed. Application code and published installers were unchanged. See [release readiness](RELEASE-READINESS-2.0.59.md) and [device checklist](DEVICE-CHECKLIST-2.0.59.md). Physical acceptance remains open.

@@ -28,6 +28,8 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 
 ## Developers and testers
 
+[Current release readiness](home-library-native/distribution/RELEASE-READINESS-2.0.59.md) records completed checks and the [remaining device tests](home-library-native/distribution/DEVICE-CHECKLIST-2.0.59.md).
+
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
 
 The 2.0.59 preview includes the earlier setup/workflow improvements and repairs stale Quick Start and recovery version checks. Keep verified backups and use the supported recovery tools; do not bypass recovery guards.
