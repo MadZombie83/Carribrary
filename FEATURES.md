@@ -2,7 +2,7 @@
 
 **A shelf worth sharing.** Carribrary helps a household, church, reading group or small community organize physical books, lend them to people and keep reading together.
 
-Developed by **Chezburber Studios**. This inventory describes **2.0.59-preview source**, checked November 3, 2026. The published server installers are currently **2.0.58-preview**; 2.0.59 must be built to receive its recovery repairs. Preview testing and real-device acceptance are ongoing. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md) and [current source Help](Carribrary-Help-2.0.59.md).
+Developed by **Chezburber Studios**. This inventory describes **2.0.59-preview source**, checked November 3, 2026. Matching **2.0.59-preview** Windows, Linux Flatpak and Raspberry Pi installers are published on GitHub Releases. Preview testing and real-device acceptance are ongoing. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md) and [current source Help](Carribrary-Help-2.0.59.md).
 
 ## 1. One library, several ways to use it
 
@@ -153,7 +153,7 @@ Developed by **Chezburber Studios**. This inventory describes **2.0.59-preview s
 - Confirmed completed-history clearing keeps active loans, holds and unfinished reading protected.
 - Backups should be copied off the server; same-drive backups cannot protect against losing that drive.
 - Borrower-private reading still requires the borrower's private passphrase/recovery code after a server restore.
-- **Version note:** 2.0.59 source repairs stale recovery version checks in 2.0.58 installers. Use the release notes and compatible current software; do not bypass recovery checks or use an old installer to downgrade data.
+- **Version note:** 2.0.59 repairs stale recovery version checks in earlier installers. Use the release notes and compatible current software; do not bypass recovery checks or use an old installer to downgrade data.
 
 ## 13. Administration, privacy and security
 

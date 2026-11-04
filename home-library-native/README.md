@@ -47,4 +47,4 @@ Developer/tester work follows [FEATURE-FREEZE.md](FEATURE-FREEZE.md), [documenta
 
 ## 2.0.59 source changes
 
-The illustrated Quick Start release labels now stay synchronized with Help. Windows program-only recovery accepts the documented current 2.0.59 cohort instead of the stale 2.0.53 rule. Regression checks cover version consistency, recovery safeguards and responsive guide layout. Rebuild to receive these changes; published installers remain 2.0.58.
+The illustrated Quick Start release labels now stay synchronized with Help. Windows program-only recovery accepts the documented current 2.0.59 cohort instead of the stale 2.0.53 rule. Regression checks cover version consistency, recovery safeguards and responsive guide layout. Matching 2.0.59 preview installers are published on the official GitHub Releases page.
