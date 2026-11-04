@@ -62,6 +62,6 @@ For limited terminal procedures and exact commands, use [the advanced guide](../
 
 ## Flatpak version labels and restarting after an update
 
-The browser footer reports the running server; Discover reports package metadata. The original 2.0.60 Flatpak contains the 2.0.60 server but mistakenly lists 2.0.59 in its software-manager metadata. The builder now generates that metadata from the server release automatically and checks it before Linux packaging. Rebuild only the Flatpak to correct its Discover label.
+The browser footer reports the running server; Discover reports package metadata. The original 2.0.60 Flatpak contains the 2.0.60 server but mistakenly lists 2.0.59 in its software-manager metadata. The builder now generates that metadata from the server release automatically and checks it before Linux packaging. The corrected Flatpak is now published on the 2.0.60 GitHub release. Download a fresh copy if you have an earlier bundle. Source builders should use the updated main/2.0.60 branch; the original release tag retains its historical packaging script.
 
 If the browser itself shows an older version, use Carribrary’s Stop library server action, sign in and confirm, then relaunch the updated app. Closing a tab does not stop the server. Refresh with Ctrl+Shift+R if needed. Do not erase library data or uninstall to fix the label.
