@@ -1,10 +1,10 @@
 namespace HomeLibrary;
 public static class LocalAdminEndpoints {
- public static string Cookie(Settings settings)=>LocalAdministrators.Cookie+(settings.RecoveryRehearsal?"-rehearsal":"");
+ public static string Cookie(Settings settings)=>LocalAdministrators.Cookie+(settings.InstanceId==""?"":"-"+settings.InstanceId)+(settings.RecoveryRehearsal?"-rehearsal":"");
  public static void Map(WebApplication app,Settings settings,Func<HttpContext,bool> admin,Func<HttpContext,bool> mobile){
   bool Local(HttpContext c)=>c.Connection.LocalPort==settings.AdminPort;
   void SetCookie(HttpContext c,string token)=>c.Response.Cookies.Append(Cookie(settings),token,new CookieOptions{HttpOnly=true,Secure=false,SameSite=SameSiteMode.Strict,Path="/",MaxAge=TimeSpan.FromHours(8),IsEssential=true});
-  app.MapGet("/local-auth/health",(HttpContext c)=>Local(c)?Results.Json(new{ready=true,version=SetupStatus.Version,recoveryRehearsal=settings.RecoveryRehearsal}):Results.NotFound());
+  app.MapGet("/local-auth/health",(HttpContext c)=>Local(c)?Results.Json(new{ready=true,instanceId=settings.InstanceId,version=SetupStatus.Version,recoveryRehearsal=settings.RecoveryRehearsal}):Results.NotFound());
   app.MapGet("/local-auth/status",(HttpContext c,LocalAdministrators accounts)=>Local(c)?Results.Json(new{configured=accounts.Configured,authenticated=accounts.Authorized(c.Request.Cookies[Cookie(settings)]),setupFile=accounts.Configured?null:accounts.SetupFile}):Results.NotFound());
   app.MapPost("/local-auth/login",(LocalAdminInput input,HttpContext c,LocalAdministrators accounts)=>{if(!Local(c))return Results.NotFound();SetCookie(c,accounts.Login(input));return Results.Ok(new{signedIn=true});}).RequireRateLimiting("local-admin-login");
   app.MapPost("/local-auth/enroll",(LocalAdminInput input,HttpContext c,LocalAdministrators accounts)=>{if(!Local(c))return Results.NotFound();var result=accounts.Enroll(input);SetCookie(c,result.Token);return Results.Ok(new{recoveryCode=result.RecoveryCode});}).RequireRateLimiting("local-admin-enroll");

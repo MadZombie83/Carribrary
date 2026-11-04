@@ -20,7 +20,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/var/lib/home-library
+ReadWritePaths=/var/lib/home-library /var/lib/home-library-libraries
 
 [Install]
 WantedBy=multi-user.target

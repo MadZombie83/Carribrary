@@ -15,7 +15,7 @@ public static class RecoveryCompatibility {
    4=>patch is 43 or 44,
    5=>patch is 45 or 46,
    6=>patch>=47&&patch<=52,
-   7=>patch>=53&&patch<=59,
+   7=>patch>=53&&patch<=60,
    _=>false
   };
  }

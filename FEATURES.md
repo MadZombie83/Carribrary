@@ -2,7 +2,7 @@
 
 **A shelf worth sharing.** Carribrary helps a household, church, reading group or small community organize physical books, lend them to people and keep reading together.
 
-Developed by **Chezburber Studios**. This inventory describes **2.0.59-preview source**, checked November 3, 2026. Matching **2.0.59-preview** Windows, Linux Flatpak and Raspberry Pi installers are published on GitHub Releases. Preview testing and real-device acceptance are ongoing. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md) and [current source Help](Carribrary-Help-2.0.59.md).
+Developed by **Chezburber Studios**. This inventory describes **2.0.60-preview source**, checked November 4, 2026. The previous **2.0.59-preview** Windows, Linux Flatpak and Raspberry Pi installers are published on GitHub Releases. Preview testing and real-device acceptance are ongoing. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md) and [current source Help](Carribrary-Help-2.0.60.md).
 
 ## 1. One library, several ways to use it
 
@@ -185,3 +185,11 @@ Developed by **Chezburber Studios**. This inventory describes **2.0.59-preview s
 Carribrary manages **physical books and real lending**. It is not a hosted ebook store, an ebook-content service or an enterprise integrated library system. MARC support is not currently included. A library's own always-on server and any optional email/remote-access services remain the owner's responsibility.
 
 The server is **free and source-available proprietary software**, not open source. See [LICENSE.txt](LICENSE.txt); third-party licenses remain separate. Screenshots use fictional records and original sample artwork. Features marked optional require setup/permission, and some browser/device capabilities vary.
+
+## Additional libraries and household reader installation
+
+- Guided creation of independent libraries on one computer, each with separate ports, data, administrator credentials, pairings, appearance and backups.
+- Local-administrator-only private connection wizard for sharing a library on another computer through one managed public HTTPS entry; certificate pinning and public-listener authorization stay enforced.
+- Per-hostname optional protected DuckDNS updater and explicit router/Android phone-port tables. Windows hosting assistant has review, scoped firewall/key preparation and legacy proxy undo.
+- Household personal-link PWA with separate manifest/scope, explicit device remembrance and Forget; no private offline cache.
+- Preview limits: physical Windows/Pi/iPhone tests remain open; in-place full recovery of a managed additional-library slot needs assistance. Each library requires its own backup. See RELEASE-2.0.60.md.

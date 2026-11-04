@@ -1,4 +1,4 @@
-# Carribrary 2.0.59
+# Carribrary 2.0.60
 
 Developed by **Chezburber Studios**. Support: **chezburbermerch@gmail.com**.
 
@@ -13,12 +13,12 @@ Carribrary-owned code is [source-available proprietary software](LICENSE.txt). T
 ## Choose your next step
 
 - **Installing a package:** [START-HERE.txt](START-HERE.txt), then [INSTALLER-GUIDE.txt](INSTALLER-GUIDE.txt).
-- **Everyday use:** [current Help](../Carribrary-Help-2.0.59.md). Inside Carribrary, use Help in the top banner.
+- **Everyday use:** [current Help](../Carribrary-Help-2.0.60.md). Inside Carribrary, use Help in the top banner.
 - **Linux or Pi:** [linux/README.md](linux/README.md).
 - **iPhone:** use the hosted browser companion; see [ios/README.md](ios/README.md).
 - **Building source:** [BUILD-LOCALLY.md](BUILD-LOCALLY.md). Source ZIPs do not install the app.
 - **Advanced hosting/recovery:** [ADVANCED-OPERATIONS.md](ADVANCED-OPERATIONS.md).
-- **Testing this preview:** [release checklist](distribution/RELEASE-2.0.59.md), [validation](distribution/VALIDATION-2.0.59.md), and [implementation report](distribution/SELF-SERVICE-IMPLEMENTATION-REPORT.md).
+- **Testing this preview:** [release checklist](distribution/RELEASE-2.0.60.md), [validation](distribution/VALIDATION-2.0.60.md), and [implementation report](distribution/SELF-SERVICE-IMPLEMENTATION-REPORT.md).
 
 ## Start with the basics
 
@@ -33,18 +33,22 @@ The local dashboard is `http://localhost:4173` on the server computer. Localhost
 
 ## Current release boundaries
 
-Library format is **7**; administrator credentials are format **2**. Make a complete portable backup before upgrading. Earlier server programs cannot preserve the new data. Program-only recovery currently accepts 2.0.59; guided complete data recovery is separate.
+Library format is **7**; administrator credentials are format **2**. Make a complete portable backup before upgrading. Earlier server programs cannot preserve the new data. Program-only recovery currently accepts 2.0.60; guided complete data recovery is separate.
 
 Self-checkout, self-return reports and kiosks default OFF independently. A borrower return report leaves the book on loan until a librarian confirms physical receipt. Physical library cards do not require online accounts. Encrypted borrower personal reading is separate from librarian circulation data.
 
 Update Android through Google Play and refresh browser apps after updating the server.
 
-Older release notes and older versioned Help files are historical records, not current instructions. Use the 2.0.59 guide above.
+Older release notes and older versioned Help files are historical records, not current instructions. Use the 2.0.60 guide above.
 
 ## Developer records
 
 Developer/tester work follows [FEATURE-FREEZE.md](FEATURE-FREEZE.md), [documentation coverage](distribution/DOCUMENTATION-AUDIT-2.0.53.md) and the release validation/checklist. These records are separate from everyday installation and Help.
 
-## 2.0.59 source changes
+## 2.0.60 source changes
 
-The illustrated Quick Start release labels now stay synchronized with Help. Windows program-only recovery accepts the documented current 2.0.59 cohort instead of the stale 2.0.53 rule. Regression checks cover version consistency, recovery safeguards and responsive guide layout. Matching 2.0.59 preview installers are published on the official GitHub Releases page.
+The illustrated Quick Start release labels now stay synchronized with Help. Windows program-only recovery accepts the documented current 2.0.60 cohort instead of the stale 2.0.53 rule. Regression checks cover version consistency, recovery safeguards and responsive guide layout. Matching 2.0.60 preview installers are published on the official GitHub Releases page.
+
+## 2.0.60 source update
+
+Libraries & network guides separate libraries on one computer or another computer through one public entry. Household readers can install their personal-link PWA. See [release notes](distribution/RELEASE-2.0.60.md) and [validation](distribution/VALIDATION-2.0.60.md), including device acceptance and additional-library recovery limits. No new installers are included in a source download.

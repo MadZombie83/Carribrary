@@ -47,7 +47,8 @@ export const settingsTools=[
  ['recycle-bin','data-history','Recycle Bin','Review recoverable books and borrowers; permanent removal is confirmed.','backup'],
  ['import','data-history','Restore library export','Replace library records only after the existing restore confirmation.','backup',true],
  ['history-controls','data-history','Clear completed history','Preview protected records and type the existing confirmation.','alert',true],
- ['public-connection','system-advanced','Public sharing setup','Guided Linux HTTPS, optional DuckDNS updates and router checklist. Open locally on the server.','settings'],
+ ['network-hosting','system-advanced','Libraries & network','Create separate libraries here or connect another computer through one public entry.','devices'],
+ ['public-connection','system-advanced','Public sharing setup','Guided Windows/Linux HTTPS, optional DuckDNS updates and router checklist. Open locally on the server.','settings'],
  ['setup','system-advanced','Setup & updates','Server details, DNS / DuckDNS checks, remote access, pairing and updates.','settings'],
  ['google-cover-settings','books-organization','Google Books integration','Optional user-provided API key; never included in library exports.','book'],
  ['help-button','system-advanced','Help & instructions','Search the synchronized guide and illustrated quick start.','reading']

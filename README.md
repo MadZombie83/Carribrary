@@ -20,7 +20,7 @@ Carribrary-owned code is **source-available proprietary software**, not open sou
 
 ## Current preview
 
-Current public preview: **2.0.59-preview**, with owner-built Windows, Flatpak and Raspberry Pi installers on the release page. See [current source Help](Carribrary-Help-2.0.59.md) and [release instructions](home-library-native/distribution/RELEASE-2.0.59.md). Public preview testing is open; this is not the final stable launch or a Google Play release. Real-device, scanner/card-printing, kiosk and Raspberry Pi acceptance remain in progress. Keep a verified complete backup on another device: older programs cannot safely open the upgraded library format. Source downloads do not change an installed library.
+Current public preview: **2.0.59-preview**, with owner-built Windows, Flatpak and Raspberry Pi installers on the release page. See [2.0.59 installer Help](Carribrary-Help-2.0.59.md) and [release instructions](home-library-native/distribution/RELEASE-2.0.59.md). Public preview testing is open; this is not the final stable launch or a Google Play release. Real-device, scanner/card-printing, kiosk and Raspberry Pi acceptance remain in progress. Keep a verified complete backup on another device: older programs cannot safely open the upgraded library format. Source downloads do not change an installed library.
 
 ## Questions and bug reports
 
@@ -37,3 +37,7 @@ The 2.0.59 preview includes the earlier setup/workflow improvements and repairs 
 ## Current source: 2.0.59
 
 The latest source synchronizes the illustrated Quick Start labels and repairs stale program-only and complete-data recovery version checks. It accepts supported format-7 complete archives through 2.0.59 while keeping future/mismatched archives blocked. Program-only recovery remains current-version only. See [2.0.59 changes](home-library-native/distribution/RELEASE-2.0.59.md), [validation](home-library-native/distribution/VALIDATION-2.0.59.md) and [source Help](Carribrary-Help-2.0.59.md). Matching owner-built 2.0.59 installers are available from the preview release above. Real Windows GUI and physical-device acceptance remain ongoing.
+
+## Current source — 2.0.60
+
+The 2.0.60 source adds guided Libraries & network setup and household reader PWA installation. [Help](Carribrary-Help-2.0.60.md) · [Source changes and limits](home-library-native/distribution/RELEASE-2.0.60.md) · [Validation](home-library-native/distribution/VALIDATION-2.0.60.md). Published installers remain 2.0.59 until owner-built 2.0.60 packages are verified. Physical Windows/Pi/iPhone hosting acceptance remains open. Source downloads do not update an installed library.

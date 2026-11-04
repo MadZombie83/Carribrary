@@ -26,3 +26,6 @@ Setup/update feedback, unsaved-form protection, save/error feedback, contextual 
 
 ## 2.0.59 release consistency repair
 Synchronize illustrated Quick Start labels with Help; repair the stale Windows program-recovery allowlist to the documented current-only cohort. Check version consistency, unsupported-version rejection, current-data preservation and responsive guide layout. Complete backup recovery remains separate. No new feature additions.
+
+## 2.0.60 explicit owner scope exception
+Owner requested GUI hosting for both additional computers and independent libraries on one computer, then installation of household readers' personal-link PWA. Limit this iteration to those workflows and their safety, documentation and regression requirements. Do not modify a live router, installed library or phone pairing in the development workspace. Installer builds remain owner-operated.

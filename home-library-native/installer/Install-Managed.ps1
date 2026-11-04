@@ -9,7 +9,7 @@ try {
     . (Join-Path $Root 'Repair-DataPermissions.ps1')
     . (Join-Path $Root 'Recovery.Core.ps1')
     $Release=Get-Content -LiteralPath (Join-Path $Root 'release-files.json') -Raw | ConvertFrom-Json
-    if ($Release.version -ne '2.0.59-preview' -or @($Release.files).Count -lt 2 -or !($Release.files.path -contains 'server/HomeLibrary.Server.dll') -or !($Release.files.path -contains 'tray/HomeLibrary.Tray.dll')) { throw 'The installed package release could not be verified.' }
+    if ($Release.version -ne '2.0.60-preview' -or @($Release.files).Count -lt 2 -or !($Release.files.path -contains 'server/HomeLibrary.Server.dll') -or !($Release.files.path -contains 'tray/HomeLibrary.Tray.dll')) { throw 'The installed package release could not be verified.' }
     foreach ($File in $Release.files) {
         Update-CarribrarySetupProgress
         $Relative=$File.path.Replace('\','/')
@@ -31,6 +31,7 @@ try {
     & icacls.exe $Root /grant '*S-1-5-19:(OI)(CI)RX' /T | Out-Null
     if ($LASTEXITCODE -ne 0) { throw 'Unable to grant the service access to the program files.' }
     Repair-LibraryDataPermissions $Data
+    Repair-LibraryDataPermissions (Join-Path (Split-Path $Data -Parent) ((Split-Path $Data -Leaf)+'-libraries'))
     Save-LibraryInstallationSettings $Settings $Data
     if (!(Test-Path 'HKLM:\Software\HomeLibraryNative')) { New-Item 'HKLM:\Software\HomeLibraryNative' -Force | Out-Null }
     Set-ItemProperty 'HKLM:\Software\HomeLibraryNative' -Name DataDirectory -Value $Data

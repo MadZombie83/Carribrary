@@ -9,8 +9,8 @@ public static class CompleteRecoveryTests {
  public static async Task Run(string root){
   var platform=OperatingSystem.IsWindows()?"Windows":"Linux";
   BackupVerificationReport Report(int patch,int format=7,bool portable=false,string? host=null)=>new(true,1,1,$"2.0.{patch}-preview",format,"fixture",host??platform,false,true,portable);
-  foreach(var patch in Enumerable.Range(53,7))Check(RecoveryCompatibility.CanRestore(Report(patch)),"format-7 complete backup accepts supported 2.0."+patch);
-  foreach(var patch in new[]{52,60,99})Check(!RecoveryCompatibility.CanRestore(Report(patch)),"complete backup rejects unsupported format/version combination 2.0."+patch);
+  foreach(var patch in Enumerable.Range(53,8))Check(RecoveryCompatibility.CanRestore(Report(patch)),"format-7 complete backup accepts supported 2.0."+patch);
+  foreach(var patch in new[]{52,61,99})Check(!RecoveryCompatibility.CanRestore(Report(patch)),"complete backup rejects unsupported format/version combination 2.0."+patch);
   Check(RecoveryCompatibility.CanRestore(Report(43,4))&&RecoveryCompatibility.CanRestore(Report(45,5))&&RecoveryCompatibility.CanRestore(Report(47,6)),"previous supported complete archive cohorts remain available");
   Check(!RecoveryCompatibility.CanRestore(Report(59,host:"other-platform"))&&RecoveryCompatibility.CanRestore(Report(59,portable:true,host:"other-platform")),"cross-platform complete recovery requires portable archive");
   Check(!RecoveryCompatibility.CanRestore(Report(59) with{Verified=false})&&!RecoveryCompatibility.CanRestore(Report(59) with{SupportedLibraryFormat=false})&&!RecoveryCompatibility.CanRestore(Report(59) with{Version="2.0.59.1"}),"unverified, unsupported and unknown revision backups remain blocked");

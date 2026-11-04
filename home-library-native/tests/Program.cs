@@ -5,6 +5,7 @@ void Check(bool value,string name){if(!value)throw new Exception("FAILED: "+name
 void Throws(Action action,string text){try{action();throw new Exception("Expected failure: "+text);}catch(LibraryError e){Check(e.Message.Contains(text,StringComparison.OrdinalIgnoreCase),text);}}
 JsonElement Input(object value)=>JsonSerializer.SerializeToElement(value,Library.Json);
 try{
+ if(args.Contains("--network-hosting-only")){await NetworkHostingTests.Run(Path.Combine(directory,"hosting"),protection);return;}
  MobileArtworkTests.Run();
  if(args.Contains("--borrower-dashboard-only")){BorrowerDashboardTests.Run(Path.Combine(directory,"borrower-dashboard"),protection);return;}
  BorrowerDashboardTests.Run(Path.Combine(directory,"borrower-dashboard"),protection);

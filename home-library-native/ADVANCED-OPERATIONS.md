@@ -1,10 +1,10 @@
-# Advanced operations — Carribrary 2.0.59
+# Advanced operations — Carribrary 2.0.60
 
 For a server owner or technical helper. Ordinary librarian tasks use Help in the running app and its GUI. Features are frozen. Commands here are not invitations to delete or merge databases.
 
 ## Data and compatibility
 
-Current library format is **7** and administrator credential format **2**. Program-only rollback currently permits 2.0.59; older programs reject or discard new fields. Guided Complete Backup Recovery accepts supported format-4 sources 2.0.43/44, format-5 2.0.45/46, format-6 2.0.47–52, and format-7 2.0.59, subject to platform/key protection. Prefer a verified portable complete archive made by the current version.
+Current library format is **7** and administrator credential format **2**. Program-only rollback currently permits 2.0.60; older programs reject or discard new fields. Guided Complete Backup Recovery accepts supported format-4 sources 2.0.43/44, format-5 2.0.45/46, format-6 2.0.47–52, and format-7 2.0.60, subject to platform/key protection. Prefer a verified portable complete archive made by the current version.
 
 New complete archives are portable format 2. Legacy format-1 Windows archives remain tied to the original Windows machine. Borrower vaults require their own private passphrase/recovery code even inside a complete backup. A private archive contains server identity/key material; do not share it or send it to support. Protect the password separately.
 
@@ -35,7 +35,7 @@ Custom paths/service accounts require checking the actual installation configura
 Only for Pi ARM64, not an Intel/AMD laptop:
 
 ```sh
-sudo apt install ./Carribrary-Pi-ARM64-2.0.59-preview.deb
+sudo apt install ./Carribrary-Pi-ARM64-2.0.60-preview.deb
 sudo systemctl status home-library
 sudo systemctl restart home-library
 ```
@@ -111,3 +111,7 @@ Email uses STARTTLS (commonly587), not implicit465/OAuth-only transport. Permiss
 Personal vault size is capped at4MB; reading entries support1000 previous sessions and1000 annotations per book. Page numbers max100000; reading goals0–10000 for years1900–2200. Complete data backups cap2GB/10000files; JSON/CSV uploads cap10MB; CSV/batch review caps1000rows and printing/bulk edits500items. Analytics stores730 daily buckets, with bounded distinct-book popularity counts (1000/day,10000all-time). These safeguards are not arbitrary subscription tiers.
 
 Account information deletion removes current owned data and obsolete card/PIN registrations. Revocation tombstones can remain anonymous. Older backups, exported files, sent messages, recovery points and other devices may retain historical records. A vault protects stored personal contents from normal admin access; a malicious server owner could change browser code to capture future secrets. Do not promise forensic erasure, remote wiping, independently audited security or guaranteed message delivery.
+
+## Additional libraries (2.0.60)
+
+Use the locally authenticated Libraries & network wizard before editing proxy files. It creates isolated sibling data folders, not collections in the same database. The main process supervises additional instances; each library must be backed up separately. Only the first computer accepts router 80/443. Other computers use an explicitly exported credential file, pinned TLS and their existing public listener; native Android keeps its independent phone port. See the current Help and RELEASE-2.0.60.md. Existing manually managed Caddy configurations are not rewritten.

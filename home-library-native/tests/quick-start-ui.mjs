@@ -17,11 +17,11 @@ try{
  const fullHelp=await (await page.request.get(process.env.LIBRARY_TEST_URL+'/help.json')).json();const version=fullHelp.release;
  assert.equal(await page.title(),'Carribrary '+version+' quick start');assert.match(await page.locator('header .brand').innerText(),new RegExp(version.replaceAll('.','\\.')));
  assert((await page.locator('#recovery').innerText()).includes('current program-only compatibility is '+version+' only'));
- await mkdir('output/release-guide-2.0.59',{recursive:true});
+ await mkdir('output/release-guide-2.0.60',{recursive:true});
  for(const [width,height] of [[360,800],[390,844],[430,932],[667,375],[844,390],[768,1024],[1024,768],[1440,1000]]){
   await page.setViewportSize({width,height});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1),false,`Guide overflows ${width}x${height}`);
  }
- await page.setViewportSize({width:390,height:844});await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:'output/release-guide-2.0.59/quick-start-phone.png'});
+ await page.setViewportSize({width:390,height:844});await page.evaluate(()=>scrollTo(0,0));await page.screenshot({path:'output/release-guide-2.0.60/quick-start-phone.png'});
  assert.deepEqual(errors,[]);
  assert.equal((await page.request.get(process.env.PUBLIC_TEST_URL+'/quick-start.html')).status(),404);
  console.log('PASS illustrated guide routes, mobile layout, print control and current fictional-library screenshots');

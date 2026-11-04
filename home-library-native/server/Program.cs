@@ -23,9 +23,11 @@ var settings=builder.Configuration.GetSection("Library").Get<Settings>()??new();
 if(settings.RecoveryRehearsal){settings.EnableDiscovery=false;settings.PublicCatalogOrigin="";settings.RemoteAddress="";}
 var data=Environment.GetEnvironmentVariable("HOME_LIBRARY_DATA")??settings.DataDirectory;
 if(string.IsNullOrWhiteSpace(data))data=OperatingSystem.IsWindows()?Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),"HomeLibraryNative","data"):Path.Combine(AppContext.BaseDirectory,"data");
-data=Path.GetFullPath(data);Directory.CreateDirectory(data);
+data=Path.GetFullPath(data);Directory.CreateDirectory(data);var newLibrary=!File.Exists(Path.Combine(data,"library.sqlite"));
 if(File.Exists(Path.Combine(data,CompleteRecovery.ReviewMarker))){settings.RecoveryReviewRequired=true;settings.EnableDiscovery=false;settings.PublicCatalogOrigin="";}
 PublicConnection.ApplyOrigin(settings,data);
+NetworkGateway.ApplySettings(settings,data);
+if(settings.InstanceId!=""&&!Guid.TryParseExact(settings.InstanceId,"N",out _))throw new LibraryError("Invalid hosted library identity.");
 if(OperatingSystem.IsLinux())File.SetUnixFileMode(data,UnixFileMode.UserRead|UnixFileMode.UserWrite|UnixFileMode.UserExecute);
 if(args.Contains("--stop-desktop")){if(!DesktopSession.IsFlatpak)throw new LibraryError("Desktop shutdown is only available inside the Carribrary Flatpak.");await DesktopSession.Stop(settings.AdminPort);return;}
 using var desktopLock=args.Contains("--desktop")?DesktopSession.Acquire(data):null;
@@ -34,6 +36,9 @@ if(new[]{settings.AdminPort,settings.PhonePort,settings.CatalogPort,settings.Dis
 var protection=builder.Services.AddDataProtection().SetApplicationName("HomeLibrary.Native.v1").PersistKeysToFileSystem(new DirectoryInfo(Path.Combine(data,"keyring")));
 if(OperatingSystem.IsWindows())protection.ProtectKeysWithDpapi(true);
 builder.Services.AddSingleton(sp=>new LocalAdministrators(data,sp.GetRequiredService<IDataProtectionProvider>()));
+builder.Services.AddSingleton(sp=>new NetworkHosting(data,settings,sp.GetRequiredService<IDataProtectionProvider>()));
+builder.Services.AddSingleton(sp=>new NetworkGateway(data,settings,sp.GetRequiredService<NetworkHosting>(),sp.GetRequiredService<IDataProtectionProvider>(),args.Contains("--prepare-network-gateway")));
+builder.Services.AddHostedService<NetworkHostingWorker>();
 builder.Services.AddSingleton(sp=>new BrowserAdmins(data,settings.PublicCatalogOrigin,sp.GetRequiredService<IDataProtectionProvider>()));
 builder.Services.AddHttpClient("backup-verification-proxy",client=>client.Timeout=TimeSpan.FromMinutes(10)).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false,UseCookies=false,UseProxy=false});
 builder.Services.AddHttpClient("companion-proxy",client=>client.Timeout=TimeSpan.FromMinutes(3)).ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false,UseCookies=false,UseProxy=false});
@@ -55,7 +60,7 @@ builder.Services.AddSingleton(sp=>new Store(data,sp.GetRequiredService<IDataProt
 builder.Services.AddSingleton(sp=>new Identity(data,sp.GetRequiredService<IDataProtectionProvider>(),args.Contains("--prepare-windows-identity")));builder.Services.AddSingleton(settings);
 builder.Services.AddHttpClient("public-connection",client=>client.Timeout=TimeSpan.FromMinutes(4)).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=true,UseCookies=false});
 builder.Services.AddHttpClient("public-connection-private",client=>client.Timeout=TimeSpan.FromSeconds(15)).RemoveAllLoggers().ConfigurePrimaryHttpMessageHandler(()=>new HttpClientHandler{AllowAutoRedirect=false,UseCookies=false});
-builder.Services.AddSingleton(sp=>new PublicConnection(data,settings,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<IHttpClientFactory>().CreateClient("public-connection"),sp.GetRequiredService<IHttpClientFactory>().CreateClient("public-connection-private")));
+builder.Services.AddSingleton(sp=>new PublicConnection(data,settings,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<IHttpClientFactory>().CreateClient("public-connection"),sp.GetRequiredService<IHttpClientFactory>().CreateClient("public-connection-private"),()=>sp.GetRequiredService<NetworkHosting>().Routes()));
 builder.Services.AddHostedService<PublicConnectionWorker>();
 builder.Services.AddSingleton<IReminderSender,SmtpReminderSender>();
 builder.Services.AddSingleton(sp=>new Reminders(data,sp.GetRequiredService<IDataProtectionProvider>(),sp.GetRequiredService<Store>(),sp.GetRequiredService<IReminderSender>()));if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService<ReminderWorker>();builder.Services.AddSingleton<AccountRecovery>();if(!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)builder.Services.AddHostedService(sp=>sp.GetRequiredService<AccountRecovery>());
@@ -79,6 +84,7 @@ builder.WebHost.ConfigureKestrel((context,kestrel)=>{
   https.SslProtocols=SslProtocols.Tls12|SslProtocols.Tls13;
  }));
  kestrel.Listen(IPAddress.Loopback,settings.CatalogPort);
+ if(settings.GatewayPort>0&&!settings.RecoveryRehearsal&&!settings.RecoveryReviewRequired)kestrel.Listen(IPAddress.Any,settings.GatewayPort,listen=>listen.UseHttps(https=>https.ServerCertificateSelector=(_,_)=>appGateway!.Certificate));
 });
 var app=builder.Build();
 // Apply restored card/station review before any administrator can resume access.
@@ -89,12 +95,24 @@ if(args.Length==1&&args[0]=="--prepare-local-admin-recovery"){
  return;
 }
 var localAdministrators=app.Services.GetRequiredService<LocalAdministrators>();
-identityHolder=app.Services.GetRequiredService<Identity>();var store=app.Services.GetRequiredService<Store>();store.Changed+=app.Services.GetRequiredService<LibraryInsights>().Observe;foreach(var deleted in app.Services.GetRequiredService<BorrowerAccounts>().PendingVaultDeletes())try{app.Services.GetRequiredService<BorrowerVault>().Delete(deleted);app.Services.GetRequiredService<BorrowerAccounts>().CompleteVaultDelete(deleted);}catch(Microsoft.Data.Sqlite.SqliteException){app.Logger.LogWarning("Encrypted-vault cleanup is pending. Check storage permissions and restart the server.");}
-if(args.Length==1&&args[0]=="--prepare-windows-identity"){Console.WriteLine("Windows HTTPS identity prepared for the Carribrary service.");return;}
+identityHolder=app.Services.GetRequiredService<Identity>();appGateway=app.Services.GetRequiredService<NetworkGateway>();var store=app.Services.GetRequiredService<Store>();
+if(settings.GatewayPort>0)_ = appGateway.Certificate;
+if(newLibrary&&settings.InitialLibraryName!="")store.Apply(new("setLibraryName",JsonSerializer.SerializeToElement(new{libraryName=NetworkHosting.Name(settings.InitialLibraryName)},Library.Json),store.Read().Revision));
+store.Changed+=app.Services.GetRequiredService<LibraryInsights>().Observe;foreach(var deleted in app.Services.GetRequiredService<BorrowerAccounts>().PendingVaultDeletes())try{app.Services.GetRequiredService<BorrowerVault>().Delete(deleted);app.Services.GetRequiredService<BorrowerAccounts>().CompleteVaultDelete(deleted);}catch(Microsoft.Data.Sqlite.SqliteException){app.Logger.LogWarning("Encrypted-vault cleanup is pending. Check storage permissions and restart the server.");}
+if(args.Contains("--prepare-network-gateway")){_ = appGateway.Certificate;WindowsHostingReadiness.Mark(Path.Combine(data,"network-gateway-ready-"+app.Services.GetRequiredService<NetworkHosting>().Join.Id));Console.WriteLine("Private library connection certificate prepared.");return;}
+if(args.Contains("--prepare-windows-identity")){Console.WriteLine("Windows HTTPS identity prepared for the Carribrary service.");return;}
 if(args.Length>=2&&args[0] is "--import" or "--import-db"){store.Import(args[1],args[0]=="--import-db");Console.WriteLine($"Imported {store.Read().State.Books.Count} copies into {data}");return;}
 if(args.Length>=2&&args[0]=="--restore-encrypted"){var state=store.RestoreEncrypted(File.ReadAllBytes(args[1]));store.Apply(new("restore",JsonSerializer.SerializeToElement(state,Library.Json),store.Read().Revision));Console.WriteLine("Encrypted backup restored.");return;}
 app.UseWhen(c=>c.Connection.LocalPort==settings.CatalogPort,branch=>{var forwarded=new ForwardedHeadersOptions{ForwardedHeaders=ForwardedHeaders.XForwardedFor,ForwardLimit=1};forwarded.KnownProxies.Add(IPAddress.Loopback);forwarded.KnownProxies.Add(IPAddress.IPv6Loopback);branch.UseForwardedHeaders(forwarded);});
 app.UseRateLimiter();
+app.Use(async(context,next)=>{
+ if(context.Request.Path=="/internal-managed-stop"&&settings.ManagedInstance&&!settings.RecoveryRehearsal&&context.Connection.LocalPort==settings.AdminPort&&context.Connection.RemoteIpAddress is {} remote&&IPAddress.IsLoopback(remote)){
+  var expected=Environment.GetEnvironmentVariable("CARRIBRARY_MANAGED_STOP_TOKEN")??"";var given=context.Request.Headers["X-Carribrary-Managed-Stop"].ToString();
+  if(context.Request.Method!="POST"||expected.Length!=64||given.Length!=64||!System.Security.Cryptography.CryptographicOperations.FixedTimeEquals(System.Text.Encoding.UTF8.GetBytes(expected),System.Text.Encoding.UTF8.GetBytes(given))){context.Response.StatusCode=401;return;}
+  await context.Response.WriteAsJsonAsync(new{stopping=true});_ = Task.Run(async()=>{await Task.Delay(250);app.Lifetime.StopApplication();});return;
+ }
+ if(await appGateway.Handle(context))return;await next();
+});
 var adminOrigin=$"http://localhost:{settings.AdminPort}";var allowedHosts=new HashSet<string>{"localhost", "127.0.0.1"};
 app.Use(async(context,next)=>{
  context.Response.Headers.CacheControl="no-store";
@@ -189,6 +207,7 @@ bool ConnectionAdmin(HttpContext c)=>Admin(c)&&c.Connection.LocalPort==settings.
 app.MapGet("/api/public-connection",(HttpContext c,PublicConnection connection)=>ConnectionAdmin(c)?Results.Json(connection.Status(),Library.Json):Results.NotFound());
 app.MapPost("/api/public-connection",async(PublicConnectionInput input,HttpContext c,PublicConnection connection)=>{if(!ConnectionAdmin(c))return Results.NotFound();await connection.Configure(input,c.RequestAborted);return Results.Json(connection.Status(),Library.Json);});
 app.MapPost("/api/public-connection/check",async(HttpContext c,PublicConnection connection)=>{if(!ConnectionAdmin(c))return Results.NotFound();await connection.CheckHttps(c.RequestAborted);return Results.Json(connection.Status(),Library.Json);});
+NetworkHostingEndpoints.Map(app,settings,ConnectionAdmin);
 SelfServiceEndpoints.Map(app,settings,store,Admin,Mobile);
 foreach(var prefix in new[]{"/api","/mobile"}){
  app.MapGet(prefix+"/updates",async(HttpContext c,ServerUpdates updates)=>(prefix=="/api"?Admin(c):Mobile(c))?Results.Json(await updates.Check(stop:c.RequestAborted),Library.Json):Results.NotFound());
@@ -234,7 +253,7 @@ app.MapPost("/reading/history/preview",(HistorySelection input,HttpContext c,Rea
 app.MapPost("/reading/action",(ActionRequest req,HttpContext c,ReadingAccess access)=>Results.Json(store.PersonalAction(PersonalReader(c,access),req),Library.Json)).RequireRateLimiting("personal-reading");
 app.MapPost("/reading/requests",(PublicBookRequest req,HttpContext c,ReadingAccess access)=>Results.Json(store.PersonalRequest(PersonalReader(c,access),req),Library.Json)).RequireRateLimiting("book-requests");
 app.MapGet("/reading/{**leaf}",(string? leaf,HttpContext c)=>{
- if(c.Connection.LocalPort!=settings.CatalogPort)return Results.NotFound();var file=leaf switch{null or ""=>"reading.html","reading.js"=>"reading.js","form-workflow.js"=>"form-workflow.js","borrower-self-service.js"=>"borrower-self-service.js","scanner-ui.js"=>"scanner-ui.js","camera.js"=>"camera.js","qr.js"=>"qr.js","qrcodegen.js"=>"qrcodegen.js","reading-features.js"=>"reading-features.js","reading-list.js"=>"reading-list.js","history-controls.js"=>"history-controls.js","private-vault.js"=>"private-vault.js","vault-crypto.js"=>"vault-crypto.js","book-about.js"=>"book-about.js","styles.css"=>"styles.css","cover-credit.js"=>"cover-credit.js","powered-by-google.png"=>"powered-by-google.png",_=>null};if(file==null)return Results.NotFound();
+ if(c.Connection.LocalPort!=settings.CatalogPort)return Results.NotFound();if(string.IsNullOrEmpty(leaf)&&c.Request.Path=="/reading")return Results.Redirect("/reading/"+c.Request.QueryString);if(leaf=="manifest.webmanifest")return BorrowerApp.Manifest(store,reader:true);var file=leaf switch{null or ""=>"reading.html","launch"=>"reader-launch.html","reader-install.js"=>"reader-install.js","reader-sw.js"=>"reader-sw.js","reading.js"=>"reading.js","form-workflow.js"=>"form-workflow.js","borrower-self-service.js"=>"borrower-self-service.js","scanner-ui.js"=>"scanner-ui.js","camera.js"=>"camera.js","qr.js"=>"qr.js","qrcodegen.js"=>"qrcodegen.js","reading-features.js"=>"reading-features.js","reading-list.js"=>"reading-list.js","history-controls.js"=>"history-controls.js","private-vault.js"=>"private-vault.js","vault-crypto.js"=>"vault-crypto.js","book-about.js"=>"book-about.js","styles.css"=>"styles.css","cover-credit.js"=>"cover-credit.js","powered-by-google.png"=>"powered-by-google.png",_=>null};if(file==null)return Results.NotFound();
  c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' https:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'";
  return Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",file),file.EndsWith(".html")?"text/html":file.EndsWith(".js")?"text/javascript":file.EndsWith(".png")?"image/png":"text/css");
 });
@@ -261,7 +280,7 @@ app.MapMethods("/s/{token}/{**leaf}",new[]{"GET","HEAD"},async(string token,stri
  var filename=leaf switch{null or ""=>"catalog.html","catalog.js"=>"catalog.js","book-about.js"=>"book-about.js","catalog.css"=>"catalog.css","favicon.ico"=>"favicon.ico","powered-by-google.png"=>"powered-by-google.png","cover-credit.js"=>"cover-credit.js",_=>null};
  return filename==null?Results.NotFound():Results.File(Path.Combine(app.Environment.ContentRootPath,"wwwroot",filename),filename.EndsWith(".html")?"text/html":filename.EndsWith(".js")?"text/javascript":filename.EndsWith(".ico")?"image/x-icon":filename.EndsWith(".png")?"image/png":"text/css");
 }).RequireRateLimiting("personal-reading");
-var files=new HashSet<string>{"server-updates.js","dashboard-shell.js","dashboard-shell.css","ui-icons.js","form-workflow.js","library-artwork.js","library-artwork.css","public-connection.js","patron-cards.js","self-service-admin.js","scanner-ui.js","library-insights.js","appearance.js","portable-backups.js","backup-verification.js","catalog-import.js","renewals.js","theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-features.js","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
+var files=new HashSet<string>{"server-updates.js","dashboard-shell.js","dashboard-shell.css","ui-icons.js","form-workflow.js","library-artwork.js","library-artwork.css","public-connection.js","network-hosting.js","patron-cards.js","self-service-admin.js","scanner-ui.js","library-insights.js","appearance.js","portable-backups.js","backup-verification.js","catalog-import.js","renewals.js","theme-branding.js","theme-palette.js","theme-editor.js","sidebar-artwork.js","dashboard-accounts.js","admin-dashboard.js","admin-pages.js","admin-tool-inventory.js","settings-navigation.js","title-fit.js","admin-shell.css","reading-features.js","reading-list.js","library-branding.js","book-about.js","vendor/zxing-browser-0.2.1.min.js","quick-start.html","quick-start.css","quick-start.js","guide/catalog.png","guide/add-book.png","guide/checkout.png","help.html","help.js","help.json","index.html","local-dashboard.js","app.js","styles.css","library.js","copy-labels.js","camera.js","qr.js","qrcodegen.js","favicon.svg","favicon.ico","sw.js","devices.js","history.js","cover-credit.js","powered-by-google.png"};
 app.MapGet("/{**path}",(string? path,HttpContext c)=>{
  if(c.Connection.LocalPort==settings.CatalogPort&&(string.IsNullOrEmpty(path)||path is "welcome.css" or "welcome.js")){
   c.Response.Headers["Content-Security-Policy"]="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'";
@@ -283,8 +302,9 @@ app.MapGet("/{**path}",(string? path,HttpContext c)=>{
 Console.WriteLine($"Admin: {adminOrigin} | Phone HTTPS: {settings.PhonePort} | Data: {data}");
 if(args.Contains("--desktop")&&!args.Contains("--no-browser"))app.Lifetime.ApplicationStarted.Register(()=>{_ = Task.Run(()=>DesktopSession.Open(adminOrigin+(args.Contains("--public-sharing")?"/?public-setup=1":"")));});
 app.Run();
-public partial class Program{static Identity? identityHolder;}
+public partial class Program{static Identity? identityHolder;static NetworkGateway? appGateway;}
 public sealed class Settings{public bool RecoveryRehearsal{get;set;}public bool RecoveryReviewRequired{get;set;}
+public bool ManagedInstance{get;set;}public string InstanceId{get;set;}="";public string InitialLibraryName{get;set;}="";public int GatewayPort{get;set;}
 public string DataDirectory{get;set;}="";public int AdminPort{get;set;}=4173;public int PhonePort{get;set;}=7443;public int CatalogPort{get;set;}=4174;public int DiscoveryPort{get;set;}=7445;public bool EnableDiscovery{get;set;}=true;public string RemoteAddress{get;set;}="";public string PublicCatalogOrigin{get;set;}="";}
 
 public sealed record GoogleKeyInput(string? ApiKey);

@@ -37,6 +37,8 @@ $PortInfo.Text="On your router, forward TCP $($Config.Library.PhonePort) to this
 $Save=New-Object System.Windows.Forms.Button;$Save.Text='Save remote connection';$Save.Location=New-Object System.Drawing.Point(20,310);$Save.Size=New-Object System.Drawing.Size(250,35);$Form.Controls.Add($Save)
 $Open=New-Object System.Windows.Forms.Button;$Open.Text='Open library / pair phone';$Open.Location=New-Object System.Drawing.Point(280,310);$Open.Size=New-Object System.Drawing.Size(250,35);$Form.Controls.Add($Open)
 $Public=New-Object System.Windows.Forms.Button;$Public.Text='Set up public book-list sharing...';$Public.Location=New-Object System.Drawing.Point(20,365);$Public.Size=New-Object System.Drawing.Size(300,35);$Form.Controls.Add($Public)
+$Hosting=New-Object System.Windows.Forms.Button;$Hosting.Text='Libraries and network...';$Hosting.Location=New-Object System.Drawing.Point(330,365);$Hosting.Size=New-Object System.Drawing.Size(285,35);$Form.Controls.Add($Hosting)
+$Hosting.Add_Click({Start-Process ('http://localhost:'+ [int]$Config.Library.AdminPort +'/#settings/system-advanced/network-hosting')})
 Label 'Public sharing is optional. It downloads Caddy and needs router ports 80/443. Only book-list links are public; phone pairing remains private.' 410 45
 $Status=New-Object System.Windows.Forms.Label;$Status.Location=New-Object System.Drawing.Point(20,565);$Status.Size=New-Object System.Drawing.Size(610,35);$Form.Controls.Add($Status)
 $Open.Add_Click({Start-Process "http://localhost:$($Config.Library.AdminPort)/"})

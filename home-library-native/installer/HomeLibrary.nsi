@@ -11,7 +11,7 @@ Unicode true
 !define PROJECT ".."
 !endif
 !ifndef OUTPUT
-!define OUTPUT "../../Carribrary-Setup-2.0.59-preview.exe"
+!define OUTPUT "../../Carribrary-Setup-2.0.60-preview.exe"
 !endif
 Icon "${PROJECT}/assets/home-library.ico"
 !define MUI_ICON "${PROJECT}/assets/home-library.ico"
@@ -25,10 +25,10 @@ SetCompressorDictSize 32
 ShowInstDetails show
 ShowUninstDetails show
 BrandingText "Carribrary - household library server"
-VIProductVersion "2.0.59.0"
+VIProductVersion "2.0.60.0"
 VIAddVersionKey "ProductName" "Carribrary"
 VIAddVersionKey "FileDescription" "Carribrary Windows installer"
-VIAddVersionKey "FileVersion" "2.0.59-preview"
+VIAddVersionKey "FileVersion" "2.0.60-preview"
 VIAddVersionKey "LegalCopyright" "Copyright 2026 Chezburber Studios"
 VIAddVersionKey "CompanyName" "Chezburber Studios"
 Var MaintenanceHandle
@@ -161,6 +161,9 @@ Section "Carribrary" SEC_MAIN
   File "${PROJECT}/installer/Complete-Backup-Recovery.ps1"
   File "${PAYLOAD}/release-files.json"
   CreateDirectory "$SMPROGRAMS\Carribrary"
+  WriteRegStr HKCR "carribrary-network" "" "URL:Carribrary Libraries and Network"
+  WriteRegStr HKCR "carribrary-network" "URL Protocol" ""
+  WriteRegStr HKCR "carribrary-network\shell\open\command" "" '$\"$WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe$\" -NoProfile -STA -ExecutionPolicy Bypass -File $\"$INSTDIR\Network-Hosting.ps1$\"'
   WriteRegStr HKCR "carribrary-recovery" "" "URL:Carribrary Complete Backup Recovery"
   WriteRegStr HKCR "carribrary-recovery" "URL Protocol" ""
   WriteRegStr HKCR "carribrary-recovery\shell\open\command" "" '$\"$WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe$\" -NoProfile -STA -ExecutionPolicy Bypass -File $\"$INSTDIR\Complete-Backup-Recovery.ps1$\" -Root $\"$INSTDIR$\"'
@@ -171,6 +174,7 @@ Section "Carribrary" SEC_MAIN
   SetOutPath "$INSTDIR\tray"
   File /r "${PAYLOAD}/tray/*"
   SetOutPath "$INSTDIR"
+  File "${PROJECT}/Network-Hosting.ps1"
   File "${PROJECT}/Connection-Setup.ps1"
   File "${PROJECT}/Administrator-Access.ps1"
   File "${PROJECT}/Repair-DataPermissions.ps1"
@@ -222,6 +226,7 @@ Section "Carribrary" SEC_MAIN
   CreateShortCut "$DESKTOP\Carribrary.lnk" "$INSTDIR\Open-Library.url" "" "$INSTDIR\Carribrary.ico" 0
   CreateShortCut "$SMPROGRAMS\Carribrary\Setup and updates.lnk" "$INSTDIR\Setup-and-Updates.url" "" "$INSTDIR\Carribrary.ico" 0
   CreateShortCut "$SMPROGRAMS\Carribrary\Tray icon.lnk" "$INSTDIR\tray\HomeLibrary.Tray.exe"
+  CreateShortCut "$SMPROGRAMS\Carribrary\Libraries and network.lnk" "$WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe" '-NoProfile -STA -ExecutionPolicy Bypass -File $\"$INSTDIR\Network-Hosting.ps1$\"'
   CreateShortCut "$SMPROGRAMS\Carribrary\Connection setup.lnk" "$WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe" '-NoProfile -STA -ExecutionPolicy Bypass -WindowStyle Hidden -File $\"$INSTDIR\Connection-Setup.ps1$\"'
   CreateShortCut "$SMPROGRAMS\Carribrary\Administrator access.lnk" "$WINDIR\System32\WindowsPowerShell\v1.0\powershell.exe" '-NoProfile -STA -ExecutionPolicy Bypass -WindowStyle Hidden -File $\"$INSTDIR\Administrator-Access.ps1$\"'
   CreateShortCut "$SMPROGRAMS\Carribrary\Setup guide.lnk" "$INSTDIR\INSTALLER-GUIDE.txt"
@@ -232,7 +237,7 @@ Section "Carribrary" SEC_MAIN
   WriteUninstaller "$INSTDIR\Uninstall.exe"
   WriteRegStr HKLM "Software\HomeLibraryNative" "InstallDir" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayName" "Carribrary"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayVersion" "2.0.59-preview"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayVersion" "2.0.60-preview"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "InstallLocation" "$INSTDIR"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "UninstallString" '$\"$INSTDIR\Uninstall.exe$\"'
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\HomeLibraryNative" "DisplayIcon" "$INSTDIR\tray\HomeLibrary.Tray.exe"
@@ -275,6 +280,7 @@ Section "Uninstall"
   RMDir /r /REBOOTOK "$INSTDIR\tray"
   RMDir /r /REBOOTOK "$INSTDIR\public-proxy"
   RMDir /r "$INSTDIR\licenses"
+  Delete "$INSTDIR\Network-Hosting.ps1"
   Delete "$INSTDIR\Connection-Setup.ps1"
   Delete "$INSTDIR\Administrator-Access.ps1"
   Delete "$INSTDIR\Setup-and-Updates.url"
@@ -284,6 +290,7 @@ Section "Uninstall"
   Delete "$INSTDIR\Recovery.Windows.ps1"
   Delete "$INSTDIR\Recover-Previous.ps1"
   Delete "$INSTDIR\Complete-Backup-Recovery.ps1"
+  DeleteRegKey HKCR "carribrary-network"
   DeleteRegKey HKCR "carribrary-recovery"
   Delete "$INSTDIR\release-files.json"
   Delete "$INSTDIR\Configure-DuckDNS.ps1"

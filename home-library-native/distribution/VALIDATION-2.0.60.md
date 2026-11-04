@@ -1,0 +1,17 @@
+# 2.0.60 source validation — November 4, 2026
+
+Source compilation passed with zero warnings and errors. The full native server regression suite passed. All 40 browser suites passed, including the new hosting/household reader suite. After final changes, targeted hosting, actual Chrome PWA diagnostics, complete recovery guidance, public connection and product-info suites passed again. Android `compileReleaseKotlin --offline` passed; no APK/AAB was produced.
+
+New disposable integration checks start two real independent server processes, enroll both administrators in a shared cookie jar, retain separate cookies and databases, preserve the first server while pausing/restarting the second, retain administrator credentials across restarts, save the initial child name, and apply its own hostname. Local administrator sessions intentionally expire at process restart, as before; credentials and other libraries' sessions are preserved.
+
+A real HTTPS bridge verifies its exact certificate and identity; incorrect tokens, mismatched certificate pins and disconnected bridges are rejected. The bridge forwards the public welcome page while administrator routes remain inaccessible and private reading still requires its own capability. A checksum-pinned official Caddy 2.11.7 binary validates the generated first-library plus remote TLS route without starting a public proxy or obtaining public certificates.
+
+Browser checks cover authenticated-local-only hosting access, real child creation/pause/start, responsive settings pages, private-file wizard controls, opt-in household link storage and Forget, separate token-free reader manifest and launch fallback. Non-incognito Chrome reports no household-reader installability errors, decodes both icons and verifies its separate service-worker scope. Existing borrower and librarian PWA diagnostics continue passing. These are browser tests, not physical iPhone installation acceptance.
+
+Canonical Help now has 97 topics, including step-by-step same-computer and separate-computer setup, private file handling, Windows review/undo, per-library backups and household reader installation. Server, Android, iPhone and standalone Help synchronize; privacy text synchronizes. All PowerShell parses, current-cohort recovery tests pass, and NSIS preprocessing includes the hosting helper, Start menu entry and fixed protocol handler. No installer was compiled.
+
+Physical acceptance still required: Windows UAC/machine keys/service/firewall and legacy proxy undo; Pi service writable sibling path and reboot; actual two-computer router/DNS/public certificate checks; Android external phone-port pairing; physical iPhone Home-screen storage/installation. Existing live libraries, routers, firewalls and phone pairings were not changed in this workspace.
+
+Known boundary: the installed complete-recovery launcher targets the main installation. Additional-library in-place complete restoration into its managed slot needs assisted recovery; its dashboard prevents accidentally using the main recovery shortcut. Portable recovery into a fresh independent installation remains available. Back up each library separately.
+
+Developer evidence (local, not distributed): output/network-hosting-2.0.60; .build-tools/260-hosting-build.log; 260-hosting-test.log; 260-native.log; 260-browser.log; 260-final-browser.log; 260-recovery-test.log; 260-android.log. The old .build-tools native/compiler sandbox attempt failures were environmental and rerun with the required local-socket permissions; final checks above passed.
