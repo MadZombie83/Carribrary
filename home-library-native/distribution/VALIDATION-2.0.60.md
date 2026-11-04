@@ -15,3 +15,7 @@ Physical acceptance still required: Windows UAC/machine keys/service/firewall an
 Known boundary: the installed complete-recovery launcher targets the main installation. Additional-library in-place complete restoration into its managed slot needs assisted recovery; its dashboard prevents accidentally using the main recovery shortcut. Portable recovery into a fresh independent installation remains available. Back up each library separately.
 
 Developer evidence (local, not distributed): output/network-hosting-2.0.60; .build-tools/260-hosting-build.log; 260-hosting-test.log; 260-native.log; 260-browser.log; 260-final-browser.log; 260-recovery-test.log; 260-android.log. The old .build-tools native/compiler sandbox attempt failures were environmental and rerun with the required local-socket permissions; final checks above passed.
+
+## Owner-built installer publication — November 4, 2026
+
+All three supplied server packages passed extraction/version/Help/license/critical-web-asset inspection and the known private-email/credential/runtime-file scan. Windows also contains the matching hosting assistant and recovery helper. The GitHub release is v2.0.60-preview, release ID 433829574, tagged at f9b36d63236fe472a7ffb61e9531c41cbd637e41. Published file names, sizes and GitHub SHA256 digests match the originals and the three-file checksum manifest. No APK/AAB uploaded; packages were not installed or executed during inspection. Publication does not mark the physical acceptance items above as complete.

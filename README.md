@@ -10,7 +10,7 @@ A self-hosted library for physical books. Keep the server on a Windows, Linux or
 
 ## Install
 
-Download the free server installer from the [2.0.59 public preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.59-preview): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. This is a testing release; make a complete backup before updating an existing library. The optional Android librarian companion is planned as a one-time US$15 Google Play purchase and is not yet publicly available. No Android APK or AAB is distributed here. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion.
+Download the free server installer from the [2.0.60 public preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.60-preview): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. This is a testing release; make a complete backup before updating an existing library. The optional Android librarian companion is planned as a one-time US$15 Google Play purchase and is not yet publicly available. No Android APK or AAB is distributed here. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion.
 
 Most users do not need source code or build tools. Follow [installation instructions](home-library-native/INSTALLER-GUIDE.txt), then Help in the app.
 
@@ -20,7 +20,9 @@ Carribrary-owned code is **source-available proprietary software**, not open sou
 
 ## Current preview
 
-Current public preview: **2.0.59-preview**, with owner-built Windows, Flatpak and Raspberry Pi installers on the release page. See [2.0.59 installer Help](Carribrary-Help-2.0.59.md) and [release instructions](home-library-native/distribution/RELEASE-2.0.59.md). Public preview testing is open; this is not the final stable launch or a Google Play release. Real-device, scanner/card-printing, kiosk and Raspberry Pi acceptance remain in progress. Keep a verified complete backup on another device: older programs cannot safely open the upgraded library format. Source downloads do not change an installed library.
+Current public preview: **2.0.60-preview**, with verified owner-built Windows, Flatpak and Raspberry Pi installers on the release page. See [current Help](Carribrary-Help-2.0.60.md), [release details](home-library-native/distribution/RELEASE-2.0.60.md) and [validation](home-library-native/distribution/VALIDATION-2.0.60.md). This is not the final stable launch or a Google Play release. Keep a verified portable complete backup on another device before updating. Each independent library needs its own backup.
+
+This preview adds guided **Libraries & network** setup for independent libraries on one computer or separate computers, plus an installable **household reader PWA**. Windows/Pi/iPhone and outside-network acceptance remain ongoing. Managed-slot complete recovery still needs assistance; see the documented limits before restoring.
 
 ## Questions and bug reports
 
@@ -28,16 +30,10 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 
 ## Developers and testers
 
-[Current release readiness](home-library-native/distribution/RELEASE-READINESS-2.0.59.md) records completed checks and the [remaining device tests](home-library-native/distribution/DEVICE-CHECKLIST-2.0.59.md).
+[Current validation](home-library-native/distribution/VALIDATION-2.0.60.md) records completed checks; use the [2.0.60 device checklist](home-library-native/distribution/DEVICE-CHECKLIST-2.0.60.md) for remaining real-device tests.
 
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
 
-The 2.0.59 preview includes the earlier setup/workflow improvements and repairs stale Quick Start and recovery version checks. Keep verified backups and use the supported recovery tools; do not bypass recovery guards.
+## Current source: 2.0.60
 
-## Current source: 2.0.59
-
-The latest source synchronizes the illustrated Quick Start labels and repairs stale program-only and complete-data recovery version checks. It accepts supported format-7 complete archives through 2.0.59 while keeping future/mismatched archives blocked. Program-only recovery remains current-version only. See [2.0.59 changes](home-library-native/distribution/RELEASE-2.0.59.md), [validation](home-library-native/distribution/VALIDATION-2.0.59.md) and [source Help](Carribrary-Help-2.0.59.md). Matching owner-built 2.0.59 installers are available from the preview release above. Real Windows GUI and physical-device acceptance remain ongoing.
-
-## Current source — 2.0.60
-
-The 2.0.60 source adds guided Libraries & network setup and household reader PWA installation. [Help](Carribrary-Help-2.0.60.md) · [Source changes and limits](home-library-native/distribution/RELEASE-2.0.60.md) · [Validation](home-library-native/distribution/VALIDATION-2.0.60.md). Published installers remain 2.0.59 until owner-built 2.0.60 packages are verified. Physical Windows/Pi/iPhone hosting acceptance remains open. Source downloads do not update an installed library.
+The source and published installers include Libraries & network, household reader installation, synchronized 97-topic Help and offline-safe recovery guidance. [Feature list](FEATURES.md) · [Help](Carribrary-Help-2.0.60.md) · [Release details and limits](home-library-native/distribution/RELEASE-2.0.60.md). Source downloads do not install or update Carribrary; most people should use an installer.

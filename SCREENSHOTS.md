@@ -1,6 +1,8 @@
 # Carribrary screenshots
 
-Actual **2.0.59-preview** browser screens from the fictional **Meadow House Library**. The records, people, book covers and decorative artwork are demonstration material; no private library was used. These are screenshots of the working interface, not conceptual mockups.
+Current installer release: **2.0.60-preview**. These earlier screenshots remain illustrative of the shared interface; they do not show the new Libraries & network wizard or household reader installation controls. See [current features](FEATURES.md) and [Help](Carribrary-Help-2.0.60.md) for those workflows.
+
+Gallery captured from **2.0.59-preview** browser screens from the fictional **Meadow House Library**. The records, people, book covers and decorative artwork are demonstration material; no private library was used. These are screenshots of the working interface, not conceptual mockups.
 
 Desktop images use a 1440-pixel-wide viewport. Mobile images use 390 × 844 browser viewports. The mobile companion image shows the hosted librarian browser/PWA interface; it is **not a native Android screenshot or a physical iPhone capture**. The theme shown is one sample configuration, not mandatory Carribrary branding.
 

@@ -4,9 +4,9 @@ Carribrary Server is free to use and is currently a public preview. Support is p
 
 ## Get started
 
-1. Download the installer for your computer from the [current preview releases](https://github.com/MadZombie83/Carribrary/releases).
+1. Download the installer for your computer from the [2.0.60 preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.60-preview).
 2. Follow the [installation guide](home-library-native/INSTALLER-GUIDE.txt). Most people do not need to download or build source code.
-3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [current help guide](Carribrary-Help-2.0.59.md) is also available here.
+3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [current help guide](Carribrary-Help-2.0.60.md) is also available here.
 4. Before updating or testing recovery, create and verify a complete backup and keep a copy on another device.
 
 ## Ask a question
@@ -29,3 +29,11 @@ Suspected security vulnerabilities should be [reported privately](SECURITY.md), 
 ## Android availability
 
 The optional paid Android librarian companion is planned for Google Play after testing. There is no public APK or AAB download here. Borrowers do not need to buy the companion; they use the library's free browser/PWA link.
+
+## Libraries & network and household reader installation
+
+For another library, open Settings & Tools → System & Advanced → Libraries & network on the server computer. Follow the appropriate same-computer or other-computer guide in Help. Never post the private connection file. Each independent library needs its own backup. The installed complete-recovery shortcut targets the main library; managed-slot restoration requires assistance.
+
+Household readers open their personal link, then This device → Install reader app. Borrowers keep Account → This device. iPhone users follow Safari’s Add to Home Screen instructions. Remembering a personal link is optional; use Forget saved reading link on a shared device.
+
+For testing, use the [current device checklist](home-library-native/distribution/DEVICE-CHECKLIST-2.0.60.md). Older versioned Help and release documents are historical; use the guide matching your installed version.
