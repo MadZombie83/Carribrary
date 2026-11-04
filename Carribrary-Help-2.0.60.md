@@ -2399,7 +2399,7 @@ No live router settings change automatically. Review the port table and enter th
 
 Pause stops only that additional library; Start resumes it without deleting its data. Extra libraries run while the main server runs. Back up every library separately from its own dashboard. The main complete backup does not include other libraries’ data. If an additional library’s data is missing after recovery, restore its own backup; Carribrary will not create an empty replacement automatically.
 
-Complete Backup Recovery from the application menu targets the MAIN installation. Do not restore an extra library’s archive over the main library. Moving an extra library to its own replacement computer is supported: install a fresh server there and rehearse/restore that extra library’s portable complete archive. Recovery into an additional-library slot on this same computer currently needs assisted recovery; contact support first. The additional dashboard explains this instead of opening the main recovery shortcut.
+Complete Backup Recovery from the application menu targets the MAIN installation. Do not restore an extra library’s archive over the main library. Moving an extra library to its own replacement computer is supported: install a fresh server there and rehearse/restore that extra library’s portable complete archive. Recovery into an additional-library slot on this same computer currently needs assisted recovery; contact support first. The additional dashboard explains this instead of opening the main recovery shortcut. If the server is not responding, the recovery guidance still explains these main-versus-additional limits without launching a recovery operation.
 
 ## Share two libraries through one home internet connection
 
