@@ -6,6 +6,14 @@ A self-hosted library for physical books. Keep the server on a Windows, Linux or
 
 [Full feature list](FEATURES.md) · [Screenshot gallery](SCREENSHOTS.md)
 
+## Try the temporary borrower demo
+
+[Open the public borrower test library](https://testlibrary.duckdns.org/s/L9PHAHbPWwiBki05Ad8ldyiY1ZN-AAUq/)
+
+**Public test library — use fictional names and contact details. Test data may be deleted or reset.** Browse the catalog, try borrowing requests, and optionally create a test account for TBR and reading tracking. No installation or purchase is required to try it in a browser.
+
+See [demo instructions and feedback](TESTING-DEMO.md), including phone Home-screen installation. The demo depends on a volunteer-hosted server and may be unavailable occasionally. Administrator testing is arranged individually; administrator pairing links are not published.
+
 [![Carribrary librarian dashboard — fictional sample library](docs/screenshots/2.0.59/01-librarian-dashboard.png)](SCREENSHOTS.md)
 
 ## Install

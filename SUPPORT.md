@@ -9,6 +9,10 @@ Carribrary Server is free to use and is currently a public preview. Support is p
 3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [current help guide](Carribrary-Help-2.0.60.md) is also available here.
 4. Before updating or testing recovery, create and verify a complete backup and keep a copy on another device.
 
+## Try the temporary public demo
+
+See [borrower demo instructions](TESTING-DEMO.md). Use fictional names and contact details; test data may be reset or deleted. The demo is free to try in a browser, and accounts are optional. Administrator trials are arranged individually.
+
 ## Ask a question
 
 Use [GitHub Discussions](https://github.com/MadZombie83/Carribrary/discussions) for installation, setup, troubleshooting and feedback. Mention your Carribrary version, operating system, installer type and what you are trying to do. A GitHub account is needed to post.
