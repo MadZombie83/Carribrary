@@ -148,6 +148,8 @@ def main(argv=None):
 
     try:
         run('synchronized-help-check', [sys.executable, PROJECT/'scripts/sync-help.py', '--check'])
+        if 'linux' in selected:
+            run('flatpak-version-metadata-check', [sys.executable, PROJECT/'tests/flatpak-metadata.py'])
         if 'windows' in selected:
             publish('win-x64', 'server')
             publish('win-x64', 'tray', tray=True)

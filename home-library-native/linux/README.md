@@ -59,3 +59,9 @@ Library format is 7, credentials 2. Old packages cannot open upgraded data safel
 After complete restore, review local accounts/devices, review cards and provision kiosks again. Repair the managed Caddy download and check networking as needed; its downloaded program/certificate directory is excluded from complete backups. Saved protected setup remains. Do not run two live servers with one restored identity.
 
 For limited terminal procedures and exact commands, use [the advanced guide](../ADVANCED-OPERATIONS.md). Ordinary borrowers and volunteer librarians do not need those commands for the GUI flows above.
+
+## Flatpak version labels and restarting after an update
+
+The browser footer reports the running server; Discover reports package metadata. The original 2.0.60 Flatpak contains the 2.0.60 server but mistakenly lists 2.0.59 in its software-manager metadata. The builder now generates that metadata from the server release automatically and checks it before Linux packaging. Rebuild only the Flatpak to correct its Discover label.
+
+If the browser itself shows an older version, use Carribrary’s Stop library server action, sign in and confirm, then relaunch the updated app. Closing a tab does not stop the server. Refresh with Ctrl+Shift+R if needed. Do not erase library data or uninstall to fix the label.

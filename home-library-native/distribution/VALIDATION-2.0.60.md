@@ -19,3 +19,7 @@ Developer evidence (local, not distributed): output/network-hosting-2.0.60; .bui
 ## Owner-built installer publication — November 4, 2026
 
 All three supplied server packages passed extraction/version/Help/license/critical-web-asset inspection and the known private-email/credential/runtime-file scan. Windows also contains the matching hosting assistant and recovery helper. The GitHub release is v2.0.60-preview, release ID 433829574, tagged at f9b36d63236fe472a7ffb61e9531c41cbd637e41. Published file names, sizes and GitHub SHA256 digests match the originals and the three-file checksum manifest. No APK/AAB uploaded; packages were not installed or executed during inspection. Publication does not mark the physical acceptance items above as complete.
+
+## Flatpak metadata correction
+
+Owner reported an old version label. Follow-up inspection found that the original published 2.0.60 Flatpak has current 2.0.60 server/Help/web assets but stale AppStream release metadata showing 2.0.59. The earlier audit checked the server payload and missed this separate software-manager label. Source now renders AppStream metadata from SetupStatus.Version and runs a stale-template/future-version regression check before Linux packaging. Existing public installers have not been silently replaced. A newly rebuilt Flatpak is needed for the corrected Discover label; browser version mismatches also require checking whether an older process is still running.

@@ -50,6 +50,8 @@ Use the x86_64 Flatpak for a normal Intel/AMD Linux desktop. The ARM64 DEB is fo
 
 If the menu entry is missing, sign out of the desktop and sign in again. Closing the browser does not stop the server. Desktop logout or restart does stop this Flatpak server. Use desktop Autostart if you want it to launch after login; keep the computer awake. Updates keep data unless you explicitly delete application data.
 
+After an update, an older server can keep running even after you close its browser tab. Use Carribrary’s Stop library server action, sign in and confirm the stop, then launch Carribrary again. If needed, refresh the page with Ctrl+Shift+R. The browser footer shows the running server version; Discover’s package listing is separate metadata. If the versions disagree, report which screen shows the old number. Do not uninstall or erase library data to fix a version label.
+
 ## Install the Raspberry Pi server
 
 Use a Raspberry Pi 4 or 5 with 64-bit Raspberry Pi OS and the ARM64 DEB. A 32-bit OS is not supported.

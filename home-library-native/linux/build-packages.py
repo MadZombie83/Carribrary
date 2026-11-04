@@ -2,6 +2,7 @@
 """Package already-published Linux payloads; no system installation or root required."""
 import os, pathlib, shutil, subprocess, argparse, re
 from PIL import Image
+from flatpak_metadata import render_metainfo
 root=pathlib.Path(__file__).resolve().parents[1]
 version=re.search(r'Version="([^"]+)"',(root/'server/SetupStatus.cs').read_text())[1]
 parser=argparse.ArgumentParser();parser.add_argument('--only',choices=['all','flatpak','pi'],default='all');only=parser.parse_args().only
@@ -27,7 +28,9 @@ if only in ['all','flatpak']:
  public=flat/'files/share/applications/com.household.HomeLibrary.PublicSharing.desktop'
  public.write_text('[Desktop Entry]\nType=Application\nName=Carribrary Public Sharing Setup\nComment=Guided hostname, HTTPS and router setup\nExec=home-library --public-sharing\nIcon=com.household.HomeLibrary\nCategories=Office;Network;\nTerminal=false\n')
  copy(root/'linux/flatpak/com.household.HomeLibrary.desktop',flat/f'files/share/applications/{app_id}.desktop')
- copy(root/'linux/flatpak/com.household.HomeLibrary.metainfo.xml',flat/f'files/share/metainfo/{app_id}.metainfo.xml')
+ metainfo=flat/f'files/share/metainfo/{app_id}.metainfo.xml'
+ metainfo.parent.mkdir(parents=True,exist_ok=True)
+ metainfo.write_text(render_metainfo((root/'linux/flatpak/com.household.HomeLibrary.metainfo.xml').read_text(),version))
  icon(flat/f'files/share/icons/hicolor/512x512/apps/{app_id}.png')
  copy(root/'distribution/INSTALLED-README.md',flat/'files/share/doc/home-library/README.md')
  copy(root/'ADVANCED-OPERATIONS.md',flat/'files/share/doc/home-library/ADVANCED-OPERATIONS.md')
