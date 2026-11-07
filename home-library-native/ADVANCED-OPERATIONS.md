@@ -1,10 +1,10 @@
-# Advanced operations — Carribrary 2.0.60
+# Advanced operations — Carribrary 2.0.61
 
 For a server owner or technical helper. Ordinary librarian tasks use Help in the running app and its GUI. Features are frozen. Commands here are not invitations to delete or merge databases.
 
 ## Data and compatibility
 
-Current library format is **7** and administrator credential format **2**. Program-only rollback currently permits 2.0.60; older programs reject or discard new fields. Guided Complete Backup Recovery accepts supported format-4 sources 2.0.43/44, format-5 2.0.45/46, format-6 2.0.47–52, and format-7 2.0.60, subject to platform/key protection. Prefer a verified portable complete archive made by the current version.
+Current library format is **7** and administrator credential format **2**. Program-only rollback currently permits 2.0.61; older programs reject or discard new fields. Guided Complete Backup Recovery accepts supported format-4 sources 2.0.43/44, format-5 2.0.45/46, format-6 2.0.47–52, and format-7 2.0.60, subject to platform/key protection. Prefer a verified portable complete archive made by the current version.
 
 New complete archives are portable format 2. Legacy format-1 Windows archives remain tied to the original Windows machine. Borrower vaults require their own private passphrase/recovery code even inside a complete backup. A private archive contains server identity/key material; do not share it or send it to support. Protect the password separately.
 
@@ -35,7 +35,7 @@ Custom paths/service accounts require checking the actual installation configura
 Only for Pi ARM64, not an Intel/AMD laptop:
 
 ```sh
-sudo apt install ./Carribrary-Pi-ARM64-2.0.60-preview.deb
+sudo apt install ./Carribrary-Pi-ARM64-2.0.61-preview.deb
 sudo systemctl status home-library
 sudo systemctl restart home-library
 ```

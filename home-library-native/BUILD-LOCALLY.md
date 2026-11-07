@@ -1,4 +1,4 @@
-# Build Carribrary 2.0.60 locally — developers only
+# Build Carribrary 2.0.61 locally — developers only
 
 Normal users install a server package from GitHub Releases and obtain the optional Android companion from Google Play when published. They do not need this guide. Invited APK testers use distribution/ANDROID-TESTING.md.
 

@@ -4,7 +4,7 @@ import {authenticateLocalAdmin} from './local-admin-fixture.mjs';
 import {openAdminTool} from './admin-tool-navigation.mjs';
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
 const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox','--ignore-certificate-errors']});
-const out='output/network-hosting-2.0.60';await mkdir(out,{recursive:true});
+const out='output/network-hosting-2.0.61';await mkdir(out,{recursive:true});
 try{
  const context=await browser.newContext({ignoreHTTPSErrors:true,viewport:{width:1440,height:1000}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));const base=process.env.LIBRARY_TEST_URL,publicBase=process.env.PUBLIC_TEST_URL;
  const anonymous=await browser.newContext();assert.equal((await anonymous.request.get(base+'/api/network-hosting')).status(),401);assert.equal((await anonymous.request.get(publicBase+'/api/network-hosting')).status(),404);await anonymous.close();

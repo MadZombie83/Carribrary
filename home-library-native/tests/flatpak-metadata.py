@@ -8,7 +8,7 @@ module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 template=(root/'linux/flatpak/com.household.HomeLibrary.metainfo.xml').read_text()
 version=re.search(r'Version="([^"]+)"',(root/'server/SetupStatus.cs').read_text())[1]
 # Simulate an unchanged old template while a future server is packaged.
-for current in [version,'2.0.61-preview']:
+for current in [version,'2.0.62-preview']:
  document=ET.fromstring(module.render_metainfo(template,current,'2026-11-04'))
  assert document.find('releases/release').get('version')==current
  assert len(document.findall(f"releases/release[@version='{current}']"))==1

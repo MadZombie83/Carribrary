@@ -139,6 +139,13 @@ Current source 2.0.43: batch ISBN acquisition/CSV mapping, borrower renewals and
 
 2.0.53 self-service boundary: run tests/SelfServiceTests.cs and self-service-ui.mjs alongside circulation, accounts/private-vault, backup/recovery, settings and platform regressions. Schema 7 requires permanent BorrowerUid and pending-return audit preservation. Public account identity is server-derived, and kiosk station/card/PIN generation/idle authorization is rechecked per request. Initialize PatronCards during recovery startup before access can resume. Cards are identifiers; never place PINs or login tokens in their QR. Kiosk browser credentials are distinct from paired-admin credentials. See distribution/SELF-SERVICE-SECURITY-REVIEW.md and the implementation report for evidence and unexecuted hardware checks.
 
+## 2.0.61 shared browser transport
+
+The account, kiosk, self-service and reading pages share `server/wwwroot/api-client.js`; per-surface
+error copy stays in each page script. Static files are served from explicit allowlists, so any new
+browser module must be registered in the account, kiosk and reading leaf switches or it returns 404.
+See distribution/RELEASE-2.0.61.md.
+
 ## 2.0.60 hosting safety
 
 See distribution/RELEASE-2.0.60.md and distribution/VALIDATION-2.0.60.md. Managed children require isolated ports/data/cookies, no nested managers, and graceful pause/shutdown. Only local password sessions configure hosting. Validate a peer certificate and identity before routing; never expose the admin listener or disable TLS verification. Recovery review/rehearsal blocks hosting activation. The complete-recovery launcher targets the main installation; managed-slot restoration requires assisted recovery and must not open that launcher from a child dashboard. Owner builds installers; physical Windows/Pi/iPhone acceptance remains required.

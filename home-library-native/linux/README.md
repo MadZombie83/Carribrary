@@ -1,11 +1,11 @@
-# Linux and Raspberry Pi — Carribrary 2.0.60
+# Linux and Raspberry Pi — Carribrary 2.0.61
 
-These are current installation instructions. Use [current Help](../../Carribrary-Help-2.0.60.md) for everyday lending and recovery.
+These are current installation instructions. Use [current Help](../../Carribrary-Help-2.0.61.md) for everyday lending and recovery.
 
 ## Choose the package
 
-- Intel/AMD Linux desktop, including Kubuntu: `Carribrary-Linux-x86_64-2.0.60-preview.flatpak`.
-- Pi 4/5 with 64-bit Raspberry Pi OS: `Carribrary-Pi-ARM64-2.0.60-preview.deb` (ARM64).
+- Intel/AMD Linux desktop, including Kubuntu: `Carribrary-Linux-x86_64-2.0.61-preview.flatpak`.
+- Pi 4/5 with 64-bit Raspberry Pi OS: `Carribrary-Pi-ARM64-2.0.61-preview.deb` (ARM64).
 
 Do not use the ARM64 DEB on an Intel/AMD laptop. These are alternative server hosts, not automatically synchronized libraries.
 
