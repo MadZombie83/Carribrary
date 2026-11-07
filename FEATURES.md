@@ -2,7 +2,7 @@
 
 **A shelf worth sharing.** Carribrary helps a household, church, reading group or small community organize physical books, lend them to people and keep reading together.
 
-Developed by **Chezburber Studios**. This inventory describes **2.0.60-preview source**, checked November 4, 2026. Matching **2.0.60-preview** Windows, Linux Flatpak and Raspberry Pi installers are published on GitHub Releases. Preview testing and real-device acceptance are ongoing. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md) and [current source Help](Carribrary-Help-2.0.60.md).
+Developed by **Chezburber Studios**. This inventory describes **2.0.61-preview source**, checked November 7, 2026. Matching **2.0.61-preview** Windows, Linux Flatpak and Raspberry Pi installers are published on GitHub Releases. Preview testing and real-device acceptance are ongoing. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md) and [current source Help](Carribrary-Help-2.0.61.md).
 
 ## 1. One library, several ways to use it
 
@@ -186,7 +186,7 @@ Developed by **Chezburber Studios**. This inventory describes **2.0.60-preview s
 - Local-administrator-only private connection wizard for sharing a library on another computer through one managed public HTTPS entry; certificate pinning and public-listener authorization stay enforced.
 - Per-hostname optional protected DuckDNS updater and explicit router/Android phone-port tables. Windows hosting assistant has review, scoped firewall/key preparation and legacy proxy undo.
 - Household personal-link PWA with separate manifest/scope, explicit device remembrance and Forget; no private offline cache.
-- Preview limits: physical Windows/Pi/iPhone tests remain open; in-place full recovery of a managed additional-library slot needs assistance. Each library requires its own backup. See [release details](home-library-native/distribution/RELEASE-2.0.60.md).
+- Preview limits: physical Windows/Pi/iPhone tests remain open; in-place full recovery of a managed additional-library slot needs assistance. Each library requires its own backup. See [release details](home-library-native/distribution/RELEASE-2.0.61.md).
 
 
 ## What it is—and what it is not

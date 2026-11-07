@@ -4,9 +4,9 @@ Carribrary Server is free to use and is currently a public preview. Support is p
 
 ## Get started
 
-1. Download the installer for your computer from the [2.0.60 preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.60-preview).
+1. Download the installer for your computer from the [2.0.61 preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.61-preview).
 2. Follow the [installation guide](home-library-native/INSTALLER-GUIDE.txt). Most people do not need to download or build source code.
-3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [current help guide](Carribrary-Help-2.0.60.md) is also available here.
+3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [current help guide](Carribrary-Help-2.0.61.md) is also available here.
 4. Before updating or testing recovery, create and verify a complete backup and keep a copy on another device.
 
 ## Try the temporary public demo
@@ -40,4 +40,4 @@ For another library, open Settings & Tools → System & Advanced → Libraries &
 
 Household readers open their personal link, then This device → Install reader app. Borrowers keep Account → This device. iPhone users follow Safari’s Add to Home Screen instructions. Remembering a personal link is optional; use Forget saved reading link on a shared device.
 
-For testing, use the [current device checklist](home-library-native/distribution/DEVICE-CHECKLIST-2.0.60.md). Older versioned Help and release documents are historical; use the guide matching your installed version.
+For testing, use the [current device checklist](home-library-native/distribution/DEVICE-CHECKLIST-2.0.61.md). Older versioned Help and release documents are historical; use the guide matching your installed version.
