@@ -1,6 +1,7 @@
+import {requestJson} from './api-client.js';
 import {scanCode,cancelScan} from '/account/scanner-ui.js';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const stage=document.getElementById('stage'),message=document.getElementById('kiosk-message');let state,returning=false,timer,receiptTimer,active=false,generation=0;
-async function api(path,body){const r=await fetch('/kiosk/'+path,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,cache:'no-store',signal:AbortSignal.timeout(15000)});const data=await r.json().catch(()=>{throw Error('The server reply could not be read. No success is confirmed.');});if(!r.ok){const error=Error(data.error||'The library cannot be reached. No success is confirmed. Please ask the librarian.');error.status=r.status;throw error;}return data;}
+function api(path,body){return requestJson('/kiosk/'+path,{body,timeoutMs:15000,withStatus:true,parseErrorText:'The server reply could not be read. No success is confirmed.',errorText:()=>'The library cannot be reached. No success is confirmed. Please ask the librarian.'});}
 async function transaction(path,body,version){try{return await api(path,body);}catch(error){if(error.status||version!==generation)throw error;await new Promise(resolve=>setTimeout(resolve,250));if(version!==generation)throw Error('Session ended.');return api(path,body);}}
 function idle(){clearTimeout(timer);if(active)timer=setTimeout(()=>reset('Your session ended. Please start again.'),Math.min(state?.settings.idleSeconds||90,300)*1000);}
 for(const event of ['pointerdown','keydown'])document.addEventListener(event,idle,{passive:true});

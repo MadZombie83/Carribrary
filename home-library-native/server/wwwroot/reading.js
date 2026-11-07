@@ -1,3 +1,4 @@
+import {requestJson} from './api-client.js';
 import {observeDialogFormWorkflow} from './form-workflow.js';
 import {mountSelfService} from './borrower-self-service.js';
 import {mountPurchaseSuggestions} from '/account/purchase-suggestions.js';
@@ -24,7 +25,7 @@ function syncCatalogControls(){
  $('#catalog-collection').innerHTML='<option value="">All collections</option>'+collections.map(c=>`<option value="${escape(c.id)}">${escape(c.name)}</option>`).join('');
  $('#catalog-collection').value=collections.some(c=>c.id===selected)?selected:'';
 }
-async function api(path,body){const r=await fetch(path,{method:body?'POST':'GET',credentials:'same-origin',headers:{...(!accountMode?{Authorization:'Bearer '+token}:{}),...(body?{'Content-Type':'application/json'}:{})},body:body?JSON.stringify(body):undefined,cache:'no-store'});let data={};try{data=await r.json();}catch{}if(!r.ok){if(accountMode&&r.status===401)location.reload();throw Error(data.error||`Request failed (HTTP ${r.status}). Please try again.`);}return data;}
+function api(path,body){return requestJson(path,{body,credentials:'same-origin',token:accountMode?'':token,errorText:status=>`Request failed (HTTP ${status}). Please try again.`,onUnauthorized:r=>{if(accountMode&&r.status===401)location.reload();}});}
 if(accountMode)vault=personalVault(api,()=>serverSnapshot,()=>{if(serverSnapshot){snapshot=vault.overlay(serverSnapshot);render();vault.mount();}},notice);
 const insight=(kind,copyId='')=>{if(!accountMode||navigator.doNotTrack==='1'||navigator.globalPrivacyControl)return;api('insights',{kind,copyId}).catch(()=>{});};let insightTimer;
 function connectedMessage(){return 'Connected · '+({catalog:'library catalog',reading:'your personal reading list',loans:'your loans and requests',account:'your account settings'}[tab]||'library');}

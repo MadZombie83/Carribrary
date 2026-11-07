@@ -1,6 +1,7 @@
+import {requestJson} from './api-client.js';
 import {qrSvg} from './qr.js';import {scanCode,cancelScan} from './scanner-ui.js';
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-async function api(path,body){const r=await fetch('/account/self-service'+path,{method:body?'POST':'GET',headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined,cache:'no-store'});const data=await r.json().catch(()=>{throw Error('The server reply could not be read. Check My loans before retrying.');});if(!r.ok)throw Error(data.error||'Self-service is unavailable. Please contact the librarian.');return data;}
+function api(path,body){return requestJson('/account/self-service'+path,{body,parseErrorText:'The server reply could not be read. Check My loans before retrying.',errorText:()=>'Self-service is unavailable. Please contact the librarian.'});}
 export async function mountSelfService(refresh){
  let status;try{status=await api('');}catch{document.getElementById('borrower-self-service')?.replaceChildren();const panel=document.getElementById('borrower-self-service-panel');if(panel)panel.hidden=true;return;}
  let tools=document.getElementById('borrower-self-service');if(!tools){tools=document.createElement('div');tools.id='borrower-self-service';tools.className='toolbar';(document.getElementById('borrower-quick-service')||document.getElementById('account-catalog-controls').parentElement).append(tools);}
