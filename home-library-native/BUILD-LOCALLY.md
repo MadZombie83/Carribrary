@@ -1,4 +1,4 @@
-# Build Carribrary 2.0.61 locally — developers only
+# Build Carribrary 2.0.63 locally — developers only
 
 Normal users install a server package from GitHub Releases and obtain the optional Android companion from Google Play when published. They do not need this guide. Invited APK testers use distribution/ANDROID-TESTING.md.
 
@@ -93,6 +93,22 @@ A successful build is not a physical Windows/Pi/phone/Safari test. Run appropria
 
 ## Current release and documentation revision
 
-This is the frozen 2.0.60 feature set. Documentation-only revisions keep that app version. Use a new empty extraction folder for each downloaded revision; do not overwrite an older work folder. GitHub Download ZIP may still use Carribrary-main, so rename that extracted work folder yourself before building. The versioned source archive includes the matching standalone Help.
+Build the version in the extracted source folder. For the Windows Shared HTTPS preview, build the Windows installer with the usual Windows target. Use a new empty extraction folder for each downloaded revision; do not overwrite an older work folder. GitHub Download ZIP may still use Carribrary-main, so rename that extracted work folder yourself before building. The versioned source archive includes the matching standalone Help.
 
 Build the updated server packages and native Android to deliver synchronized Help; browser PWAs receive it from the rebuilt server after refresh. Current library/credential formats are 7/2. Existing data and signing keys stay outside source folders. Create and verify a complete backup before installing your output. No source download itself updates an installed server.
+
+## Optional workspace launcher
+
+The repository root includes a packaging launcher for a Linux development
+workspace. Configure a private `.tools` directory or link there to the existing
+Carribrary compiler cache. Keep it out of source control. From the repository
+root, run:
+
+```sh
+python3 scripts/build-packages.py --check
+python3 scripts/build-packages.py
+```
+
+Finished files go to `release/VERSION/`. Add `--target windows` to build only
+the Windows installer. The original builder also accepts `--output-dir PATH`
+and keeps its existing output behavior when that option is omitted.

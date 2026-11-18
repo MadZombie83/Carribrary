@@ -42,6 +42,15 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
 
-## Current source: 2.0.60
+## Current source: 2.0.63-preview
 
-The source and published installers include Libraries & network, household reader installation, synchronized 97-topic Help and offline-safe recovery guidance. [Feature list](FEATURES.md) · [Help](Carribrary-Help-2.0.60.md) · [Release details and limits](home-library-native/distribution/RELEASE-2.0.60.md). Source downloads do not install or update Carribrary; most people should use an installer.
+The source adds **Shared HTTPS** with either Carribrary or Family Command Center
+as the Caddy host, plus named connections for other local web apps. Existing
+Carribrary-to-FCC settings carry forward. [Current source Help](Carribrary-Help-2.0.63.md)
+· [Source release notes](home-library-native/distribution/RELEASE-2.0.63.md)
+· [Validation and remaining tests](home-library-native/distribution/VALIDATION-2.0.63.md).
+
+Owner-built 2.0.63 installers are being prepared. The published downloads above
+remain 2.0.60 until the new packages are uploaded and verified. The root
+`scripts/build-packages.py` launcher uses a configured private `.tools` cache
+and places finished builds in `release/VERSION/`.

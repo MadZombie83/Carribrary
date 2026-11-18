@@ -19,7 +19,7 @@ public sealed class HostingState {
  public List<NetworkPeer> Peers{get;set;}=[];
  public NetworkJoin Join{get;set;}=new();
 }
-public sealed record HostedProxyRoute(string Id,string Hostname,string Address,int Port,string Certificate="",string ServerName="",string Token="");
+public sealed record HostedProxyRoute(string Id,string Hostname,string Address,int Port,string Certificate="",string ServerName="",string Token="",bool FamilyCommandCenter=false);
 
 // The host controls processes, not the content or sign-ins of its child libraries.
 // Child data is a sibling of the main data folder: each library needs its own backup.

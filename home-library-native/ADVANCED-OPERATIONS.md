@@ -1,10 +1,10 @@
-# Advanced operations — Carribrary 2.0.61
+# Advanced operations — Carribrary 2.0.63
 
 For a server owner or technical helper. Ordinary librarian tasks use Help in the running app and its GUI. Features are frozen. Commands here are not invitations to delete or merge databases.
 
 ## Data and compatibility
 
-Current library format is **7** and administrator credential format **2**. Program-only rollback currently permits 2.0.61; older programs reject or discard new fields. Guided Complete Backup Recovery accepts supported format-4 sources 2.0.43/44, format-5 2.0.45/46, format-6 2.0.47–52, and format-7 2.0.60, subject to platform/key protection. Prefer a verified portable complete archive made by the current version.
+Current library format is **7** and administrator credential format **2**. Program-only rollback currently permits 2.0.63; older programs reject or discard new fields. Guided Complete Backup Recovery accepts supported format-4 sources 2.0.43/44, format-5 2.0.45/46, format-6 2.0.47–52, and format-7 2.0.60, subject to platform/key protection. Prefer a verified portable complete archive made by the current version.
 
 New complete archives are portable format 2. Legacy format-1 Windows archives remain tied to the original Windows machine. Borrower vaults require their own private passphrase/recovery code even inside a complete backup. A private archive contains server identity/key material; do not share it or send it to support. Protect the password separately.
 
@@ -35,7 +35,7 @@ Custom paths/service accounts require checking the actual installation configura
 Only for Pi ARM64, not an Intel/AMD laptop:
 
 ```sh
-sudo apt install ./Carribrary-Pi-ARM64-2.0.61-preview.deb
+sudo apt install ./Carribrary-Pi-ARM64-2.0.63-preview.deb
 sudo systemctl status home-library
 sudo systemctl restart home-library
 ```
@@ -69,6 +69,23 @@ The normal independent Complete Backup Recovery GUI is preferred, even when the 
 The unpack command does not install a server or replace live data. Follow its recovered `RECOVERY-READ-ME.txt`; keep the full database/keyring set together. Custom platform paths and Flatpak file grants need careful owner review. Do not manually merge individual databases or use an older executable on new data.
 
 After any historical restore, review account/device access locally before reopening remote connections. Restored cards require review; station credentials are revoked. Known local card-revocation hashes merge during recovery. Another machine cannot infer revocations that happened after the archive date; review/replace questionable cards. Pause the original server before bringing a restored identity online. Reconfigure external router, certificates, service environment and paused message/backup schedules separately.
+
+## Shared HTTPS on Windows
+
+Use Shared HTTPS on the Windows computer running both apps. Each app needs its own public hostname. Both names point at the same home internet address. Keep the existing router rules for the app that already runs Caddy.
+
+When Carribrary already serves HTTPS:
+1. Open Settings & Tools → System & Advanced → Public sharing setup → Shared HTTPS.
+2. Choose Host another app. Enter its display name, public hostname, and local web port. Confirm that the app is ready to be publicly reachable, then choose Add app.
+3. Set the new hostname at your DNS provider. For Family Command Center, the setup shortcut can detect its saved address and reuse Carribrary's saved DuckDNS token if both names belong to the same DuckDNS account.
+
+When another app already serves HTTPS:
+1. In Carribrary's Shared HTTPS, choose Join an existing HTTPS host. Save Carribrary's hostname. An optional DuckDNS token keeps this name current.
+2. Open Windows Services, select Carribrary, and click Restart. Keep Carribrary's managed HTTPS off.
+3. In the host app, add Carribrary using its public web port shown in Shared HTTPS, normally 4174. In Family Command Center, open Settings → Server setup → Shared HTTPS, choose Carribrary, and click Find Carribrary, then Add app and Restart FCC to apply.
+4. Test both addresses with phone Wi-Fi off.
+
+Updates keep your saved host and sites. To intentionally change which app runs Caddy, first plan a cutover and turn off the old host's HTTPS yourself. To disconnect an app, remove its route in the HTTPS host first. The normal Carribrary local dashboard and Android phone connection remain separate.
 
 ## Manually managed Caddy / existing proxy deployments
 

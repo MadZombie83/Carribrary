@@ -103,6 +103,29 @@ if(args.Contains("--prepare-network-gateway")){_ = appGateway.Certificate;Window
 if(args.Contains("--prepare-windows-identity")){Console.WriteLine("Windows HTTPS identity prepared for the Carribrary service.");return;}
 if(args.Length>=2&&args[0] is "--import" or "--import-db"){store.Import(args[1],args[0]=="--import-db");Console.WriteLine($"Imported {store.Read().State.Books.Count} copies into {data}");return;}
 if(args.Length>=2&&args[0]=="--restore-encrypted"){var state=store.RestoreEncrypted(File.ReadAllBytes(args[1]));store.Apply(new("restore",JsonSerializer.SerializeToElement(state,Library.Json),store.Read().Revision));Console.WriteLine("Encrypted backup restored.");return;}
+// This discovery endpoint only answers a same-machine, direct request to the public listener.
+app.Use(async (context,next)=>{
+ if(context.Request.Path=="/api/shared-https-probe"){
+  if(context.Request.Method!="GET"||context.Connection.LocalPort!=settings.CatalogPort||
+     context.Connection.RemoteIpAddress is not {} remote||!IPAddress.IsLoopback(remote)||
+     context.Request.Host.Value!=$"127.0.0.1:{settings.CatalogPort}"||
+     context.Request.Headers.Keys.Any(key=>key.StartsWith("X-Forwarded-",StringComparison.OrdinalIgnoreCase))){
+   context.Response.StatusCode=404;return;
+  }
+  var connection=app.Services.GetRequiredService<PublicConnection>();
+  context.Response.Headers.CacheControl="no-store";
+  await context.Response.WriteAsJsonAsync(new{product="carribrary",sharedHttpsOrigin=
+   settings.RecoveryRehearsal||settings.RecoveryReviewRequired?null:connection.JoinedOrigin});
+  return;
+ }
+ if(context.Connection.LocalPort==settings.CatalogPort&&context.Request.Headers["X-Shared-Https-Guest"]=="carribrary"){
+  var origin=app.Services.GetRequiredService<PublicConnection>().JoinedOrigin;
+  if(settings.RecoveryRehearsal||settings.RecoveryReviewRequired||origin==""||"https://"+context.Request.Host.Value!=origin||context.Request.Headers["X-Forwarded-Proto"]!="https"){
+   context.Response.StatusCode=421;return;
+  }
+ }
+ await next();
+});
 app.UseWhen(c=>c.Connection.LocalPort==settings.CatalogPort,branch=>{var forwarded=new ForwardedHeadersOptions{ForwardedHeaders=ForwardedHeaders.XForwardedFor,ForwardLimit=1};forwarded.KnownProxies.Add(IPAddress.Loopback);forwarded.KnownProxies.Add(IPAddress.IPv6Loopback);branch.UseForwardedHeaders(forwarded);});
 app.UseRateLimiter();
 app.Use(async(context,next)=>{
@@ -137,7 +160,7 @@ app.Use(async(context,next)=>{
    context.Items["Carribrary.AdminAuthorized"]=signedIn||paired;
    if(!authenticationRoute&&!loginAsset&&!signedIn&&!paired){
     if(path.StartsWith("/api/",StringComparison.Ordinal)){context.Response.StatusCode=401;await context.Response.WriteAsJsonAsync(new{error="Sign in as the local administrator."});}
-    else context.Response.Redirect("/login"+(context.Request.Query["stop"]=="1"?"?stop=1":context.Request.Query["public-setup"]=="1"?"?public-setup=1":""));
+    else context.Response.Redirect("/login"+(context.Request.Query["stop"]=="1"?"?stop=1":context.Request.Query["shared-https"]=="1"?"?shared-https=1":context.Request.Query["public-setup"]=="1"?"?public-setup=1":""));
     return;
    }
   }else if(context.Connection.LocalPort==settings.CatalogPort){
@@ -207,6 +230,26 @@ bool ConnectionAdmin(HttpContext c)=>Admin(c)&&c.Connection.LocalPort==settings.
 app.MapGet("/api/public-connection",(HttpContext c,PublicConnection connection)=>ConnectionAdmin(c)?Results.Json(connection.Status(),Library.Json):Results.NotFound());
 app.MapPost("/api/public-connection",async(PublicConnectionInput input,HttpContext c,PublicConnection connection)=>{if(!ConnectionAdmin(c))return Results.NotFound();await connection.Configure(input,c.RequestAborted);return Results.Json(connection.Status(),Library.Json);});
 app.MapPost("/api/public-connection/check",async(HttpContext c,PublicConnection connection)=>{if(!ConnectionAdmin(c))return Results.NotFound();await connection.CheckHttps(c.RequestAborted);return Results.Json(connection.Status(),Library.Json);});
+app.MapGet("/api/shared-https",(HttpContext c,PublicConnection connection)=>ConnectionAdmin(c)?Results.Json(connection.SharedHttpsStatus(),Library.Json):Results.NotFound());
+app.MapGet("/api/shared-https/detect",async(HttpContext c)=>{
+ if(!ConnectionAdmin(c)||!OperatingSystem.IsWindows()||settings.ManagedInstance)return Results.NotFound();
+ return Results.Json(new{hostname=await SharedHttps.FindFamilyHostname(c.RequestAborted)},Library.Json);
+});
+app.MapPost("/api/shared-https",async(SharedHttpsInput input,HttpContext c,PublicConnection connection)=>{
+ if(!ConnectionAdmin(c))return Results.NotFound();
+ await connection.ConfigureSharedHttps(input,c.RequestAborted);
+ return Results.Json(connection.SharedHttpsStatus(),Library.Json);
+});
+app.MapPost("/api/shared-https/sites",async(SharedSiteChange input,HttpContext c,PublicConnection connection)=>{
+ if(!ConnectionAdmin(c))return Results.NotFound();
+ await connection.ChangeSharedSite(input,c.RequestAborted);
+ return Results.Json(connection.SharedHttpsStatus(),Library.Json);
+});
+app.MapPost("/api/shared-https/join",async(JoinSharedHttps input,HttpContext c,PublicConnection connection)=>{
+ if(!ConnectionAdmin(c))return Results.NotFound();
+ await connection.JoinHttps(input,c.RequestAborted);
+ return Results.Json(connection.SharedHttpsStatus(),Library.Json);
+});
 NetworkHostingEndpoints.Map(app,settings,ConnectionAdmin);
 SelfServiceEndpoints.Map(app,settings,store,Admin,Mobile);
 foreach(var prefix in new[]{"/api","/mobile"}){

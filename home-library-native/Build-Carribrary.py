@@ -43,6 +43,7 @@ def targets_for_host():
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--target', choices=['windows', 'linux', 'pi', 'android', 'all'])
+    parser.add_argument('--output-dir', type=Path, help='Folder for finished packages; defaults to the source parent.')
     parser.add_argument('--check', action='store_true', help='Check prerequisites; do not compile.')
     parser.add_argument('--dry-run', action='store_true', help='Show build phases; do not compile.')
     parser.add_argument('--offline', action='store_true', help='Reuse restored .NET assets and cached Gradle dependencies.')
@@ -70,7 +71,7 @@ def main(argv=None):
         return 2
     release = version()
     # All outputs remain in this source tree or its parent download folder.
-    output = WORKSPACE
+    output = args.output_dir.expanduser().resolve() if args.output_dir else WORKSPACE
     logs = PROJECT / '.build-cache' / ('logs-' + release)
     env = os.environ.copy()
     env['PYTHONUTF8'] = '1'  # Canonical help/source files are UTF-8 on Windows too.
@@ -127,6 +128,7 @@ def main(argv=None):
             print('Would build: '+name)
         print('Outputs: '+str(output)+'; logs: '+str(logs))
         return 0
+    output.mkdir(parents=True, exist_ok=True)
     logs.mkdir(parents=True, exist_ok=True)
     artifacts = []
     completed = []
@@ -173,7 +175,7 @@ def main(argv=None):
             if flatpak and Path(flatpak).resolve() == (TOOLS/'flatpak-tools/usr/bin/flatpak').resolve():
                 env['LD_LIBRARY_PATH'] = str(TOOLS/'flatpak-tools/usr/lib/x86_64-linux-gnu')+os.pathsep+env.get('LD_LIBRARY_PATH', '')
             only = 'all' if 'linux' in selected and 'pi' in selected else 'flatpak' if 'linux' in selected else 'pi'
-            run('linux-packages', [sys.executable, PROJECT/'linux/build-packages.py', '--only', only])
+            run('linux-packages', [sys.executable, PROJECT/'linux/build-packages.py', '--only', only, '--output-dir', str(output)])
             if 'linux' in selected:
                 artifacts.append(output/f'Carribrary-Linux-x86_64-{release}.flatpak')
             if 'pi' in selected:

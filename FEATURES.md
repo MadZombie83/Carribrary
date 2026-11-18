@@ -2,7 +2,7 @@
 
 **A shelf worth sharing.** Carribrary helps a household, church, reading group or small community organize physical books, lend them to people and keep reading together.
 
-Developed by **Chezburber Studios**. This inventory describes **2.0.61-preview source**, checked November 7, 2026. Matching **2.0.61-preview** Windows, Linux Flatpak and Raspberry Pi installers are published on GitHub Releases. Preview testing and real-device acceptance are ongoing. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md) and [current source Help](Carribrary-Help-2.0.61.md).
+Developed by **Chezburber Studios**. This inventory describes **2.0.63-preview source**, checked November 17, 2026. Published installers currently remain **2.0.60-preview** while owner-built 2.0.63 packages are prepared. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md), and [current source Help](Carribrary-Help-2.0.63.md).
 
 ## 1. One library, several ways to use it
 
@@ -186,7 +186,7 @@ Developed by **Chezburber Studios**. This inventory describes **2.0.61-preview s
 - Local-administrator-only private connection wizard for sharing a library on another computer through one managed public HTTPS entry; certificate pinning and public-listener authorization stay enforced.
 - Per-hostname optional protected DuckDNS updater and explicit router/Android phone-port tables. Windows hosting assistant has review, scoped firewall/key preparation and legacy proxy undo.
 - Household personal-link PWA with separate manifest/scope, explicit device remembrance and Forget; no private offline cache.
-- Preview limits: physical Windows/Pi/iPhone tests remain open; in-place full recovery of a managed additional-library slot needs assistance. Each library requires its own backup. See [release details](home-library-native/distribution/RELEASE-2.0.61.md).
+- Preview limits: physical Windows/Pi/iPhone tests remain open; in-place full recovery of a managed additional-library slot needs assistance. Each library requires its own backup. See [release details](home-library-native/distribution/RELEASE-2.0.63.md).
 
 
 ## What it is—and what it is not
@@ -194,3 +194,13 @@ Developed by **Chezburber Studios**. This inventory describes **2.0.61-preview s
 Carribrary manages **physical books and real lending**. It is not a hosted ebook store, an ebook-content service or an enterprise integrated library system. MARC support is not currently included. A library's own always-on server and any optional email/remote-access services remain the owner's responsibility.
 
 The server is **free and source-available proprietary software**, not open source. See [LICENSE.txt](LICENSE.txt); third-party licenses remain separate. Screenshots use fictional records and original sample artwork. Features marked optional require setup/permission, and some browser/device capabilities vary.
+
+
+### Shared HTTPS on Windows
+
+- Either Carribrary or Family Command Center can run Caddy for both apps.
+- A generic app connection records its name, public hostname and loopback web port.
+- Existing hosting roles and the earlier Carribrary-to-FCC route remain configured during an upgrade.
+- Changes require local administrator approval. Private administrative and reserved ports are rejected.
+- The host validates combined Caddy configuration before saving route changes.
+- Shared HTTPS hosting changes still require the documented restart and real Windows/cellular checks.

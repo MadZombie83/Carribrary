@@ -5,7 +5,9 @@ from PIL import Image
 from flatpak_metadata import render_metainfo
 root=pathlib.Path(__file__).resolve().parents[1]
 version=re.search(r'Version="([^"]+)"',(root/'server/SetupStatus.cs').read_text())[1]
-parser=argparse.ArgumentParser();parser.add_argument('--only',choices=['all','flatpak','pi'],default='all');only=parser.parse_args().only
+parser=argparse.ArgumentParser();parser.add_argument('--only',choices=['all','flatpak','pi'],default='all');parser.add_argument('--output-dir',default=None);options=parser.parse_args();only=options.only
+output=pathlib.Path(options.output_dir).expanduser().resolve() if options.output_dir else root.parent
+output.mkdir(parents=True,exist_ok=True)
 stage=root/'release/linux-packages'
 stage.mkdir(parents=True,exist_ok=True)
 app_id='com.household.HomeLibrary'
@@ -66,7 +68,7 @@ if only in ['all','pi']:
  desktop=deb/f'usr/share/applications/{app_id}.desktop';desktop.parent.mkdir(parents=True,exist_ok=True)
  desktop.write_text(f'[Desktop Entry]\nType=Application\nName=Carribrary\nComment=Open the household library admin\nExec=home-library\nIcon={app_id}\nCategories=Office;Database;\nTerminal=false\n')
  icon(deb/f'usr/share/icons/hicolor/512x512/apps/{app_id}.png')
- subprocess.run(['dpkg-deb','--root-owner-group','--build',str(deb),str(root.parent/f'Carribrary-Pi-ARM64-{version}.deb')],check=True)
+ subprocess.run(['dpkg-deb','--root-owner-group','--build',str(deb),str(output/f'Carribrary-Pi-ARM64-{version}.deb')],check=True)
 if only in ['all','flatpak']:
  flatpak=os.environ.get('FLATPAK','flatpak')
  compose=os.environ.get('APPSTREAM_COMPOSE','appstreamcli')
@@ -80,5 +82,5 @@ if only in ['all','flatpak']:
  subprocess.run([flatpak,'build-finish',str(flat)],check=True)
  subprocess.run([flatpak,'build-export',str(repo),str(flat),'stable'],check=True)
  subprocess.run([flatpak,'build-update-repo',str(repo)],check=True)
- subprocess.run([flatpak,'build-bundle','--runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo',str(repo),str(root.parent/f'Carribrary-Linux-x86_64-{version}.flatpak'),app_id,'stable'],check=True)
+ subprocess.run([flatpak,'build-bundle','--runtime-repo=https://dl.flathub.org/repo/flathub.flatpakrepo',str(repo),str(output/f'Carribrary-Linux-x86_64-{version}.flatpak'),app_id,'stable'],check=True)
  print('Created requested Linux/Pi packages.')

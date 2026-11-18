@@ -6,6 +6,45 @@ static class PublicConnectionTests {
   foreach(var host in new[]{"https://books.example.org","books.example.org:443","x.example.org\n{ admin :9999 }","127.0.0.1","localhost","a.local","a..org","-a.example.org"})Reject(()=>PublicConnection.Hostname(host));
   Check(PublicConnection.Hostname(" BOOKS.EXAMPLE.ORG ")=="books.example.org","public hostname normalized without config injection");
   var config=PublicConnection.Render("books.example.org",19875);Check(config.Contains("admin off")&&config.Contains("http_port 8080")&&config.Contains("https_port 8443")&&config.Contains("127.0.0.1:19875")&&!config.Contains("4173")&&config.Contains("https://books.example.org{uri}"),"unprivileged public proxy includes root and only catalog upstream; no Caddy admin API");
+  var peer=new HostedProxyRoute(Guid.NewGuid().ToString("N"),"peer.duckdns.org","127.0.0.1",4214);
+  foreach(var invalid in new[]{"books.duckdns.org","peer.duckdns.org","https://family.duckdns.org","example.org"})
+   Reject(()=>SharedHttps.ValidateHostname(invalid,"books.duckdns.org",[peer]));
+  var family=SharedHttps.ValidateHostname(" FAMILY.DUCKDNS.ORG ","books.duckdns.org",[peer]);
+  var combined=HostedProxyConfig.Render("books.duckdns.org",4174,SharedHttps.WithFamilyRoute([peer],new(family)),root,true);
+  Check(combined.Contains("127.0.0.1:4174")&&combined.Contains("127.0.0.1:4214")&&combined.Contains("127.0.0.1:8123")&&
+   combined.Contains("X-Carribrary-Shared-Https 1")&&!combined.Contains(":4173"),"shared HTTPS keeps established library routes and adds only the FCC loopback backend");
+  var existing=JsonSerializer.Deserialize<PublicConnectionSaved>("""{"enabled":true,"hostname":"books.duckdns.org"}""",Library.Json)!;
+  Check(existing.FamilyCommandCenter==null&&existing.Enabled,"existing managed setup loads with no shared FCC route");
+  var roundTrip=JsonSerializer.Deserialize<PublicConnectionSaved>(JsonSerializer.Serialize(existing with {FamilyCommandCenter=new(family,true)},Library.Json),Library.Json);
+  Check(roundTrip?.FamilyCommandCenter==new SharedHttpsInput(family,true),"FCC hostname and DNS choice persist across restart");
+  var generic=SharedHttps.ValidateSite(new("Recipe box"," recipes.example.org ",5821),"books.duckdns.org",[peer.Hostname,family],[]);
+  Check(generic.Hostname=="recipes.example.org"&&SharedHttps.RenderSite(generic).Contains("127.0.0.1:5821"),"arbitrary web app uses a separate hostname and loopback only");
+  foreach(var port in new[]{2019,4173,4174,7443,8124,5821})
+   Reject(()=>SharedHttps.ValidateSite(new("Unsafe app","app.example.org",port),"books.duckdns.org",[],[5821]));
+  Reject(()=>SharedHttps.ValidateSite(new("Duplicate",peer.Hostname,5821),"books.duckdns.org",[peer.Hostname],[]));
+  var migrated=JsonSerializer.Deserialize<PublicConnectionSaved>(
+   """{"enabled":true,"hostname":"books.duckdns.org","familyCommandCenter":{"hostname":"family.duckdns.org","useDuckDns":true}}""",Library.Json)!;
+  Check(migrated.Enabled&&migrated.FamilyCommandCenter==new SharedHttpsInput(family,true)&&migrated.JoinedHostname=="",
+   "an existing Carribrary-hosted FCC setup keeps its owner, route, and DNS choice");
+  var joining=Path.Combine(root,"joining");Directory.CreateDirectory(joining);
+  File.WriteAllText(Path.Combine(joining,"public-connection.json"),
+   JsonSerializer.Serialize(existing with{Enabled=false,JoinedHostname="joined.duckdns.org"},Library.Json));
+  var joinedSettings=new Settings();PublicConnection.ApplyOrigin(joinedSettings,joining);
+  Check(joinedSettings.PublicCatalogOrigin=="https://joined.duckdns.org"&&!PublicConnection.Load(joining).Enabled,
+   "joining another HTTPS host sets the public origin without starting Carribrary's Caddy");
+  var reviewSettings=new Settings{RecoveryReviewRequired=true};PublicConnection.ApplyOrigin(reviewSettings,joining);
+  Check(reviewSettings.PublicCatalogOrigin=="","recovery review blocks joined public origin");
+  combined+=SharedHttps.RenderSite(generic);
+  var caddy=Environment.GetEnvironmentVariable("CARRIBRARY_CADDY_TEST_BINARY");
+  if(!string.IsNullOrEmpty(caddy)){
+   var file=Path.Combine(root,"Caddyfile");
+   File.WriteAllText(file,combined);
+   var info=new System.Diagnostics.ProcessStartInfo(caddy){UseShellExecute=false};
+   foreach(var arg in new[]{"validate","--config",file,"--adapter","caddyfile"})info.ArgumentList.Add(arg);
+   using var proc=System.Diagnostics.Process.Start(info)!;
+   await proc.WaitForExitAsync();
+   Check(proc.ExitCode==0,"Caddy validates combined Windows HTTPS configuration");
+  }
   if(!OperatingSystem.IsLinux())return;
   var settings=new Settings{AdminPort=19873,CatalogPort=19875,PhonePort=19874};var handler=new Handler();using var http=new HttpClient(handler);var c=new PublicConnection(root,settings,protection,http);
   try{await c.Configure(new(true,"books.example.org"),default);throw new Exception("Download should require permission");}catch(LibraryError e){Check(e.Message.Contains("Approve"),"Caddy download requires explicit GUI consent");}

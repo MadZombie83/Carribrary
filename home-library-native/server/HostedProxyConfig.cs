@@ -9,7 +9,12 @@ public static class HostedProxyConfig {
   b.Append(hostname).Append(" {\n    reverse_proxy 127.0.0.1:").Append(catalogPort).Append("\n}\nhttp://").Append(hostname).Append(" {\n    redir https://").Append(hostname).Append("{uri} 308\n}\n");
   foreach(var route in routes){var host=PublicConnection.Hostname(route.Hostname);if(!Guid.TryParseExact(route.Id,"N",out _)||!names.Add(host)||route.Port is <1024 or >65535)throw new LibraryError("Every connected library needs its own hostname and valid listener.");
    b.Append(host).Append(" {\n");
-   if(route.Certificate==""){if(route.Address!="127.0.0.1"||route.Token!=""||route.Port==catalogPort)throw new LibraryError("Invalid local library route.");b.Append("    reverse_proxy 127.0.0.1:").Append(route.Port).Append('\n');}
+   if(route.FamilyCommandCenter){
+    if(!windows||route.Address!="127.0.0.1"||route.Port!=SharedHttps.FamilyPort||route.Port==catalogPort||
+       route.Certificate!=""||route.Token!="")throw new LibraryError("Invalid Family Command Center route.");
+    b.Append("    reverse_proxy 127.0.0.1:").Append(SharedHttps.FamilyPort)
+     .Append(" {\n        header_up X-Carribrary-Shared-Https 1\n    }\n");
+   }else if(route.Certificate==""){if(route.Address!="127.0.0.1"||route.Token!=""||route.Port==catalogPort)throw new LibraryError("Invalid local library route.");b.Append("    reverse_proxy 127.0.0.1:").Append(route.Port).Append('\n');}
    else{
     if(!NetworkHosting.PrivateAddress(route.Address)||!System.Text.RegularExpressions.Regex.IsMatch(route.Token,@"^[A-F0-9]{64}$"))throw new LibraryError("Invalid private library route.");NetworkGateway.ValidateCertificate(route.Certificate,route.ServerName);
     Directory.CreateDirectory(directory);if(OperatingSystem.IsLinux())File.SetUnixFileMode(directory,UnixFileMode.UserRead|UnixFileMode.UserWrite|UnixFileMode.UserExecute);

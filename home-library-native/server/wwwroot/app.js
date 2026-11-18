@@ -4,7 +4,7 @@ import {mountServerUpdates} from './server-updates.js';
 import {installDashboardDrawer} from './dashboard-shell.js';
 import {patronCards,cardBorrower} from './patron-cards.js';
 import {selfServiceAdmin} from './self-service-admin.js';
-import {publicConnectionSetup} from './public-connection.js';
+import {publicConnectionSetup,sharedHttpsSetup} from './public-connection.js';
 import {mountLibraryInsights} from './library-insights.js';
 import {progressMarkup,pageFields,statsMarkup,readingDetails,goalDialog} from './reading-features.js';
 import {libraryIdentity} from './appearance.js';
@@ -515,6 +515,7 @@ settingsNavigation.start();
 
 document.addEventListener('click',event=>{if(event.target.id!=='complete-recovery-review')return;openForm('Review restored access',`<form><p>Restoring an older snapshot can bring back deleted accounts and revoked devices. Review Borrower accounts, Dashboard administrators, Android phone pairing and iPhone/browser pairing. Revoke or block any access that should remain removed.</p><label><input type="checkbox" name="checked" required> I reviewed the restored accounts and paired devices.</label><label>Type RESUME REMOTE ACCESS<input name="confirmation" autocomplete="off" required></label><p>Recording this review permits the independent recovery wizard to restart the service with normal remote access. Email/push settings remain paused until separately configured.</p>${errorHTML}<button type="submit">Record local review</button></form>`,async input=>{await request('/api/recovery-review/complete',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({confirmation:input.confirmation,checked:!!input.checked})});$('#form-dialog').close();toast('Review recorded. Return to Complete Backup Recovery and select Restart after local review.');});});
 
+if(new URL(location.href).searchParams.get("shared-https")==="1")refresh().then(()=>sharedHttpsSetup({request,openForm,toast}));
 if(new URL(location.href).searchParams.get("public-setup")==="1")refresh().then(()=>publicConnectionSetup({request,openForm,toast}));
 
 installDashboardDrawer();mountServerUpdates();
