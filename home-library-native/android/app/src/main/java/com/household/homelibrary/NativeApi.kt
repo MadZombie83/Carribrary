@@ -65,6 +65,9 @@ class NativeApi(private val context:Context) {
  suspend fun createPairing()=withContext(Dispatchers.IO){currentRequest("/mobile/devices/pair",JSONObject().put("serverUrl",serverAddress))}
  suspend fun revokeDevice(id:String)=withContext(Dispatchers.IO){currentRequest("/mobile/devices/revoke",JSONObject().put("deviceId",id))}
  val deviceName get()=prefs.getString("name","My phone")!!
+ var batchAutomaticLookup:Boolean
+  get()=prefs.getBoolean("batchAutomaticLookup",true)
+  set(value){prefs.edit().putBoolean("batchAutomaticLookup",value).apply()}
  var cameraId:String
   get()=prefs.getString("camera","")!!
   set(value){prefs.edit().putString("camera",value).apply()}

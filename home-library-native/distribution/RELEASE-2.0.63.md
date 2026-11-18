@@ -15,6 +15,6 @@ rules. Test both sites over cellular before sharing.
 The local packaging launcher accepts a private compiler cache and puts builds in
 release/VERSION. Linux packaging now honors the requested output folder too.
 
-Owner-built installer uploads are pending. See [validation](VALIDATION-2.0.63.md)
+Owner-built Windows, Flatpak and Pi installers are published on the [preview release page](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.63-preview). See [validation](VALIDATION-2.0.63.md)
 and [current source Help](../../Carribrary-Help-2.0.63.md). Match the Help version
 to the package actually installed.

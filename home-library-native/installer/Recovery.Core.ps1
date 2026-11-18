@@ -33,7 +33,7 @@ function Get-CarribraryHash([string]$Path) {
 }
 function Test-CarribraryCompatible([string]$Version) {
     # Format-7 boundary: older programs discard permanent borrower identities and pending self-returns.
-    return $Version -match '^2\.0\.63(?:[.+-].*)?$'
+    return $Version -match '^2\.0\.64(?:[.+-].*)?$'
 }
 function Get-CarribraryProgramVersion([string]$Root) {
     $Dll=Join-Path $Root 'server/HomeLibrary.Server.dll'

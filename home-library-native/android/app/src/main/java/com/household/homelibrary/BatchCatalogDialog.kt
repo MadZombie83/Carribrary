@@ -9,6 +9,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.KeyEventType
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.type
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -22,19 +32,44 @@ internal val csvFieldLabels=linkedMapOf("isbn" to "ISBN / EAN","title" to "Title
 @OptIn(ExperimentalLayoutApi::class)
 @Composable fun BatchCatalogDialog(api:NativeApi,initial:JSONObject,onChanged:(JSONObject)->Unit,onClose:()->Unit){
  val context=LocalContext.current;val scope=rememberCoroutineScope();val rows=remember{mutableStateListOf<JSONObject>()};var code by remember{mutableStateOf("")};var note by remember{mutableStateOf("")};var scanning by remember{mutableStateOf(false)};var busy by remember{mutableStateOf(false)};var activeLookups by remember{mutableStateOf(0)};var paused by remember{mutableStateOf(false)};var page by remember{mutableStateOf(0)};var edit by remember{mutableStateOf<Int?>(null)};var csv by remember{mutableStateOf<JSONObject?>(null)};val mapping=remember{mutableStateMapOf<String,Int>()};var preview by remember{mutableStateOf<JSONObject?>(null)};var confirmed by remember{mutableStateOf(false)};var revision by remember{mutableStateOf(initial.optLong("revision"))};var collection by remember{mutableStateOf("general")};var collectionMenu by remember{mutableStateOf(false)}
+ var automaticLookup by remember{mutableStateOf(api.batchAutomaticLookup)}
+ val isbnFocus=remember{FocusRequester()}
+ fun changeAutomaticLookup(enabled:Boolean){automaticLookup=enabled;api.batchAutomaticLookup=enabled}
+ @Composable fun LookupToggle(){
+  Row(verticalAlignment=Alignment.CenterVertically){
+   Switch(checked=automaticLookup,onCheckedChange=::changeAutomaticLookup)
+   Text("Look up new ISBNs automatically",Modifier.padding(start=8.dp))
+  }
+ }
  val pending=remember{Channel<JSONObject>(Channel.UNLIMITED)};val collections=initial.optJSONObject("state")?.optJSONArray("collections")?.objects()?:emptyList()
  fun dirty(){preview=null;confirmed=false}
  fun task(work:suspend()->Unit){scope.launch{busy=true;try{work()}catch(e:Exception){note=e.message?:"Could not complete this action"}finally{busy=false}}}
- fun add(isbn:String=""){if(rows.size>=1000){note="Save or reduce this batch before adding more than 1000 rows.";return};val row=JSONObject().put("fields",JSONObject().put("isbn",isbn.replace("-","").trim()).put("title","").put("author","").put("collectionId",collection)).put("keepDuplicate",false);rows.add(row);dirty();if(isbn.isNotBlank())pending.trySend(row)}
- LaunchedEffect(Unit){for(row in pending){while(paused)delay(200);if(row !in rows)continue;activeLookups++;try{val info=api.batchLookup(row.getJSONObject("fields").optString("isbn"));if(row in rows){val fields=row.getJSONObject("fields");for(key in info.keys()){if(fields.optString(key).isBlank())fields.put(key,info.get(key))};row.put("lookupError",if(fields.optString("title").isBlank())"No match: enter title manually" else "");dirty()}}catch(e:Exception){row.put("lookupError","Lookup unavailable: enter details or retry")};activeLookups--;delay(1100)}}
+ fun add(isbn:String=""){if(rows.size>=1000){note="Save or reduce this batch before adding more than 1000 rows.";return};val row=JSONObject().put("fields",JSONObject().put("isbn",isbn.replace("-","").trim()).put("title","").put("author","").put("collectionId",collection)).put("keepDuplicate",false);rows.add(row);dirty();if(isbn.isNotBlank()&&automaticLookup)pending.trySend(row)}
+ LaunchedEffect(Unit){for(row in pending){while(paused)delay(200);if(row !in rows)continue;activeLookups++;try{val lookedUpIsbn=row.getJSONObject("fields").optString("isbn");val info=api.batchLookup(lookedUpIsbn);if(row in rows&&row.getJSONObject("fields").optString("isbn")==lookedUpIsbn){val fields=row.getJSONObject("fields");for(key in info.keys()){if(fields.optString(key).isBlank())fields.put(key,info.get(key))};row.put("lookupError",if(fields.optString("title").isBlank())"No match: enter title manually" else "");dirty()}}catch(e:Exception){row.put("lookupError","Lookup unavailable: enter details or retry")};activeLookups--;delay(1100)}}
  val report=rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")){uri->if(uri!=null)task{withContext(Dispatchers.IO){context.contentResolver.openOutputStream(uri)!!.use{it.write((preview?.toString(2)?:"{}").toByteArray())}};note="Review report saved"}}
  val file=rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()){uri->if(uri!=null)task{val text=withContext(Dispatchers.IO){context.contentResolver.openInputStream(uri)!!.use{input->val output=java.io.ByteArrayOutputStream();val buffer=ByteArray(8192);while(true){val size=input.read(buffer);if(size<0)break;require(output.size()+size<=10*1024*1024){"CSV must be under 10 MB"};output.write(buffer,0,size)};output.toString("UTF-8")}};csv=api.tools("catalog-batch/csv",JSONObject().put("text",text));mapping.clear();val headers=csv!!.getJSONArray("headers");for(key in csvFieldLabels.keys){val aliases=when(key){"isbn"->listOf("isbn13","isbn","isbn10","ean","upc");"title"->listOf("title","booktitle","name");"author"->listOf("author","authors","primaryauthor");"sourceCopyId"->listOf("copyid","catalognumber","bookid");"importNotes"->listOf("notes","comments","comment");"shelf"->listOf("shelf","shelves","location","bookshelves");else->listOf(key.lowercase())};mapping[key]=(0 until headers.length()).firstOrNull{headers.getString(it).lowercase().replace(Regex("[^a-z0-9]"),"") in aliases}?:-1};note="Map columns, then load rows. Existing library records are not replaced."}}
  Dialog(onDismissRequest={if(!busy)onClose()},properties=DialogProperties(usePlatformDefaultWidth=false)){Surface(Modifier.fillMaxSize()){
  Column(Modifier.fillMaxSize().safeDrawingPadding().padding(16.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(10.dp)){
  Row(verticalAlignment=Alignment.CenterVertically){Text("Batch add / CSV import",style=MaterialTheme.typography.titleLarge,modifier=Modifier.weight(1f));TextButton(enabled=!busy,onClick=onClose){Text("Close")}}
  Text("Queue books, review matches and duplicates, then save together. Nothing is added until confirmation. Up to 1000 rows per batch.")
- OutlinedTextField(code,{code=it},enabled=!busy,label={Text("ISBN / EAN")},modifier=Modifier.fillMaxWidth())
- FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)){Button(enabled=!busy,onClick={if(code.isNotBlank()){add(code);code=""}}){Text("Queue ISBN")};OutlinedButton(enabled=!busy,onClick={scanning=true}){Text("Continuous scan")};OutlinedButton(enabled=!busy,onClick={add()}){Text("Add without ISBN")};OutlinedButton(enabled=!busy,onClick={file.launch(arrayOf("text/*","application/csv","application/vnd.ms-excel","application/octet-stream"))}){Text("Choose CSV")}}
+ fun queueTypedCode(){
+  if(code.isNotBlank()){add(code);code=""}
+ }
+ LaunchedEffect(scanning){if(!scanning)isbnFocus.requestFocus()}
+ OutlinedTextField(
+  code,{code=it},enabled=!busy,singleLine=true,label={Text("ISBN / EAN")},
+  keyboardOptions=KeyboardOptions(imeAction=ImeAction.Done),
+  keyboardActions=KeyboardActions(onDone={queueTypedCode()}),
+  modifier=Modifier.fillMaxWidth().focusRequester(isbnFocus).onPreviewKeyEvent{event->
+   if((event.key==Key.Enter||event.key==Key.NumPadEnter)&&!busy){
+    if(event.type==KeyEventType.KeyUp)queueTypedCode()
+    true
+   }else false
+  }
+ )
+ LookupToggle()
+ Text("Bluetooth or USB keyboard scanners: tap the ISBN field and scan. Configure the scanner to send Enter after each code.",style=MaterialTheme.typography.bodySmall)
+ FlowRow(horizontalArrangement=Arrangement.spacedBy(8.dp)){Button(enabled=!busy,onClick={queueTypedCode();isbnFocus.requestFocus()}){Text("Queue ISBN")};OutlinedButton(enabled=!busy,onClick={scanning=true}){Text("Continuous scan")};OutlinedButton(enabled=!busy,onClick={add()}){Text("Add without ISBN")};OutlinedButton(enabled=!busy,onClick={file.launch(arrayOf("text/*","application/csv","application/vnd.ms-excel","application/octet-stream"))}){Text("Choose CSV")}}
  Box{OutlinedButton(enabled=!busy,onClick={collectionMenu=true}){Text("Collection: "+(collections.find{it.optString("id")==collection}?.optString("name")?:"General"))};DropdownMenu(expanded=collectionMenu,onDismissRequest={collectionMenu=false}){collections.forEach{c->DropdownMenuItem(text={Text(c.optString("name"))},onClick={collection=c.optString("id");collectionMenu=false;rows.forEach{it.getJSONObject("fields").put("collectionId",collection)};dirty()})}}}
  csv?.let{parsed->PhonePanel{Text("CSV column mapping",style=MaterialTheme.typography.titleLarge);Text("Source IDs and unsupported columns stay in private import notes. New Carribrary IDs are assigned. Loans are not imported.");val headers=parsed.getJSONArray("headers");for((key,label)in csvFieldLabels){var menu by remember(key){mutableStateOf(false)};Box{OutlinedButton(onClick={menu=true}){Text(label+": "+(mapping[key]?.takeIf{it>=0}?.let{headers.getString(it)}?:"Not present"))};DropdownMenu(expanded=menu,onDismissRequest={menu=false}){DropdownMenuItem(text={Text("Not present")},onClick={mapping[key]=-1;menu=false});for(i in 0 until headers.length())DropdownMenuItem(text={Text(headers.getString(i))},onClick={mapping[key]=i;menu=false})}}};var replace by remember{mutableStateOf(false)};if(rows.isNotEmpty())Row{Checkbox(replace,{replace=it});Text("Replace my unsaved queue with these CSV rows")};Button(enabled=rows.isEmpty()||replace,onClick={rows.clear();val records=parsed.getJSONArray("records");for(i in 0 until records.length()){val source=records.getJSONArray(i);val fields=JSONObject().put("collectionId",collection);for(key in csvFieldLabels.keys)fields.put(key,mapping[key]?.takeIf{it>=0}?.let{source.optString(it)}?:"");fields.put("isbn",fields.optString("isbn").removePrefix("=\"").removeSuffix("\"").replace(Regex("[\\s-]"),"").uppercase());val used=mapping.values.filter{it>=0}.toSet();val extra=(0 until headers.length()).filter{it !in used&&source.optString(it).isNotBlank()}.joinToString("\n"){headers.getString(it)+": "+source.optString(it)};fields.put("importNotes",listOf(fields.optString("importNotes"),extra).filter{it.isNotBlank()}.joinToString("\n"));rows.add(JSONObject().put("fields",fields).put("keepDuplicate",false))};csv=null;page=0;dirty()}){Text("Load mapped rows")}}}
  Text("${rows.size} queued · ${rows.count{it.getJSONObject("fields").optString("title").isNotBlank()}} with titles · $activeLookups looking up")
@@ -50,5 +85,5 @@ internal val csvFieldLabels=linkedMapOf("isbn" to "ISBN / EAN","title" to "Title
  }
  }}
  edit?.let{index->if(index in rows.indices){var draft by remember(index){mutableStateOf(JSONObject(rows[index].getJSONObject("fields").toString()))};AlertDialog(onDismissRequest={edit=null},title={Text("Edit queued book")},text={Column(Modifier.verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(8.dp)){for((key,label)in csvFieldLabels)OutlinedTextField(draft.optString(key),{draft=JSONObject(draft.toString()).put(key,it)},label={Text(label)},modifier=Modifier.fillMaxWidth())}},confirmButton={TextButton(onClick={rows[index]=JSONObject(rows[index].toString()).put("fields",draft);dirty();edit=null}){Text("Keep changes")}},dismissButton={TextButton(onClick={edit=null}){Text("Cancel")}})}else edit=null}
- if(scanning)Dialog(onDismissRequest={scanning=false},properties=DialogProperties(usePlatformDefaultWidth=false)){Surface(Modifier.fillMaxSize()){Scanner(api,"batch-isbn",onRead={add(it);note="Queued $it. Move to the next book."},onClose={scanning=false})}}
+ if(scanning)Dialog(onDismissRequest={scanning=false},properties=DialogProperties(usePlatformDefaultWidth=false)){Surface(Modifier.fillMaxSize()){Scanner(api,"batch-isbn",onRead={add(it);note="Queued $it. Move to the next book."},onClose={scanning=false},extraControls={LookupToggle()})}}
 }

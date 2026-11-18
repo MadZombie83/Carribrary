@@ -2,7 +2,7 @@
 
 **A shelf worth sharing.** Carribrary helps a household, church, reading group or small community organize physical books, lend them to people and keep reading together.
 
-Developed by **Chezburber Studios**. This inventory describes **2.0.63-preview source**, checked November 17, 2026. Published installers currently remain **2.0.60-preview** while owner-built 2.0.63 packages are prepared. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md), and [current source Help](Carribrary-Help-2.0.63.md).
+Developed by **Chezburber Studios**. This inventory describes **2.0.64-preview source**, checked November 17, 2026. Published server installers are **2.0.63-preview**. See [downloads](https://github.com/MadZombie83/Carribrary/releases), [screenshots](SCREENSHOTS.md), and [current source Help](Carribrary-Help-2.0.64.md).
 
 ## 1. One library, several ways to use it
 
@@ -204,3 +204,5 @@ The server is **free and source-available proprietary software**, not open sourc
 - Changes require local administrator approval. Private administrative and reserved ports are rejected.
 - The host validates combined Caddy configuration before saving route changes.
 - Shared HTTPS hosting changes still require the documented restart and real Windows/cellular checks.
+
+- Android 2.0.64 source adds a persistent automatic batch ISBN lookup preference, camera controls outside the bounded preview, and Enter-to-queue support for keyboard scanners. Device acceptance is pending.

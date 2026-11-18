@@ -4,9 +4,9 @@ Carribrary Server is free to use and is currently a public preview. Support is p
 
 ## Get started
 
-1. Download the installer for your computer from the [2.0.60 preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.60-preview).
+1. Download the installer for your computer from the [2.0.63 preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.63-preview).
 2. Follow the [installation guide](home-library-native/INSTALLER-GUIDE.txt). Most people do not need to download or build source code.
-3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [installed 2.0.60 help guide](Carribrary-Help-2.0.60.md) is also available here.
+3. Open Help in Carribrary for step-by-step setup and everyday tasks. The [installed 2.0.63 help guide](Carribrary-Help-2.0.63.md) is also available here.
 4. Before updating or testing recovery, create and verify a complete backup and keep a copy on another device.
 
 ## Try the temporary public demo
@@ -47,6 +47,8 @@ For testing, use the [current device checklist](home-library-native/distribution
 
 Use [2.0.63 Help](Carribrary-Help-2.0.63.md) and the
 [Shared HTTPS validation notes](home-library-native/distribution/VALIDATION-2.0.63.md)
-when testing a locally built 2.0.63 package. Its installers are being prepared.
+when testing a locally built 2.0.63 package. Its server installers are published.
 For two apps on one Windows computer, open **Public sharing setup → Shared HTTPS**
 on the local dashboard. The app already running Caddy can keep hosting.
+
+For locally built 2.0.64 Android previews, use [2.0.64 Help](Carribrary-Help-2.0.64.md) and [scanner validation notes](home-library-native/distribution/VALIDATION-2.0.64.md).

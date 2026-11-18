@@ -18,7 +18,7 @@ See [demo instructions and feedback](TESTING-DEMO.md), including phone Home-scre
 
 ## Install
 
-Download the free server installer from the [2.0.60 public preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.60-preview): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. This is a testing release; make a complete backup before updating an existing library. The optional Android librarian companion is planned as a one-time US$15 Google Play purchase and is not yet publicly available. No Android APK or AAB is distributed here. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion.
+Download the free server installer from the [2.0.60 public preview](https://github.com/MadZombie83/Carribrary/releases/tag/v2.0.63-preview): Windows EXE, Linux x86_64 Flatpak, or Pi ARM64 DEB. This is a testing release; make a complete backup before updating an existing library. The optional Android librarian companion is planned as a one-time US$15 Google Play purchase and is not yet publicly available. No Android APK or AAB is distributed here. Borrowers use their free browser/PWA link. iPhone librarians use the hosted Safari companion.
 
 Most users do not need source code or build tools. Follow [installation instructions](home-library-native/INSTALLER-GUIDE.txt), then Help in the app.
 
@@ -28,7 +28,7 @@ Carribrary-owned code is **source-available proprietary software**, not open sou
 
 ## Current preview
 
-Current public preview: **2.0.60-preview**, with verified owner-built Windows, Flatpak and Raspberry Pi installers on the release page. See [current Help](Carribrary-Help-2.0.60.md), [release details](home-library-native/distribution/RELEASE-2.0.60.md) and [validation](home-library-native/distribution/VALIDATION-2.0.60.md). This is not the final stable launch or a Google Play release. Keep a verified portable complete backup on another device before updating. Each independent library needs its own backup.
+Current public preview: **2.0.63-preview**, with verified owner-built Windows, Flatpak and Raspberry Pi installers on the release page. See [current Help](Carribrary-Help-2.0.63.md), [release details](home-library-native/distribution/RELEASE-2.0.63.md) and [validation](home-library-native/distribution/VALIDATION-2.0.63.md). This is not the final stable launch or a Google Play release. Keep a verified portable complete backup on another device before updating. Each independent library needs its own backup.
 
 This preview adds guided **Libraries & network** setup for independent libraries on one computer or separate computers, plus an installable **household reader PWA**. Windows/Pi/iPhone and outside-network acceptance remain ongoing. Managed-slot complete recovery still needs assistance; see the documented limits before restoring.
 
@@ -38,19 +38,22 @@ Use [Discussions](https://github.com/MadZombie83/Carribrary/discussions) for set
 
 ## Developers and testers
 
-[Current validation](home-library-native/distribution/VALIDATION-2.0.60.md) records completed checks; use the [2.0.60 device checklist](home-library-native/distribution/DEVICE-CHECKLIST-2.0.60.md) for remaining real-device tests.
+[Current validation](home-library-native/distribution/VALIDATION-2.0.63.md) records completed checks; use the [Shared HTTPS testing checklist](home-library-native/distribution/VALIDATION-2.0.63.md) for remaining real-device tests.
 
 [Build source](home-library-native/BUILD-LOCALLY.md) or follow [Android test instructions](home-library-native/distribution/ANDROID-TESTING.md). Extract a source download to a new folder; do not merge it into installed programs or old build folders. Keep keys, library data and private configuration out of Git. Older Help/release files are historical records, not current setup directions.
 
-## Current source: 2.0.63-preview
+## Current source: 2.0.64-preview
 
-The source adds **Shared HTTPS** with either Carribrary or Family Command Center
-as the Caddy host, plus named connections for other local web apps. Existing
-Carribrary-to-FCC settings carry forward. [Current source Help](Carribrary-Help-2.0.63.md)
-· [Source release notes](home-library-native/distribution/RELEASE-2.0.63.md)
-· [Validation and remaining tests](home-library-native/distribution/VALIDATION-2.0.63.md).
+Android batch scanning keeps Close in a fixed toolbar with a bounded camera
+preview. The automatic ISBN lookup switch can be changed in the batch queue or
+camera view and remembers its setting on the phone. The batch ISBN field accepts
+Enter from keyboard/HID barcode scanners.
 
-Owner-built 2.0.63 installers are being prepared. The published downloads above
-remain 2.0.60 until the new packages are uploaded and verified. The root
-`scripts/build-packages.py` launcher uses a configured private `.tools` cache
-and places finished builds in `release/VERSION/`.
+[Current source Help](Carribrary-Help-2.0.64.md)
+· [Source release notes](home-library-native/distribution/RELEASE-2.0.64.md)
+· [Validation](home-library-native/distribution/VALIDATION-2.0.64.md).
+
+The published 2.0.63 server installers are available above. Android source
+compilation passed for 2.0.64. Physical camera/scanner testing remains pending.
+The root `scripts/build-packages.py` launcher uses a configured private `.tools`
+cache and places finished builds in `release/VERSION/`.

@@ -1,6 +1,6 @@
 # Carribrary screenshots
 
-Current published installer release: **2.0.60-preview**; current source: **2.0.63-preview**. These earlier screenshots remain illustrative of the shared interface; they do not show the new Libraries & network wizard or household reader installation controls. See [current features](FEATURES.md) and [source Help](Carribrary-Help-2.0.63.md) for those workflows.
+Current published installer release: **2.0.63-preview**; current source: **2.0.64-preview**. These earlier screenshots remain illustrative of the shared interface; they do not show the new Libraries & network wizard or household reader installation controls. See [current features](FEATURES.md) and [source Help](Carribrary-Help-2.0.64.md) for those workflows.
 
 Gallery captured from **2.0.59-preview** browser screens from the fictional **Meadow House Library**. The records, people, book covers and decorative artwork are demonstration material; no private library was used. These are screenshots of the working interface, not conceptual mockups.
 

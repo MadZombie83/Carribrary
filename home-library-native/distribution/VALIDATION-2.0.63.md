@@ -16,7 +16,7 @@ Completed during source development:
 
 The local routing fixture used temporary certificates. It does not prove
 public certificate issuance, router setup, or Windows service behavior.
-Owner-built EXE, Flatpak, DEB and Android package audits/uploads are pending.
+Owner-built EXE, Flatpak and DEB were extracted and audited, then published as v2.0.63-preview. All server versions, Help, license, critical web assets and Flatpak AppStream labels matched. A private-data scan had zero findings for known owner email and common embedded credential patterns. Android packages were excluded from GitHub.
 
 Before public installer publication, verify in a disposable Windows deployment:
 1. Upgrade an existing Carribrary-hosted FCC connection without losing its route.
